@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">MyRestaurantApp</string>
+
+    <!-- activity_contact-->
+    <string name="phoneTextString">Hivj fel minket!</string>
+    <string name="phoneNumberString">+36308563576</string>
+    <string name="phoneButtonString">Hivás inditása</string>
+    <string name="contactEmailTextString">Küldj nekünk üzenetet!</string>
+    <string name="contactEmailEditTextString">Gépelj bátran!</string>
+    <string name="contactEmailButtonString">Elküld</string>
+
+    <!-- activity_gallery -->
+    <string name="galleryTextString">Scrollozz még több képért!</string>
+
+
+    <!-- -->
+
+    <!--activity_shared_menu_layout -->
+    <string name="shared_menu_layout_tocart_button_text">Fasza, mehet(nek) a kosárba!</string>
+    <string name="shared_menu_layout_price_text">Nincs kiválasztva tétel</string>
+
+    <!-- -->
+</resources>

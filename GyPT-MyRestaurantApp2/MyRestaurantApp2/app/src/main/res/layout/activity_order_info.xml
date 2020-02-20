@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="20dp"
+    android:paddingTop="20dp"
+    android:paddingRight="20dp"
+    tools:context=".OrderInfoActivity">
+
+
+    <TextView
+        android:id="@+id/order_info_headline"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingBottom="20dp"
+        android:text="Rendelési információk"
+        android:gravity="center"
+
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+
+        app:layout_constraintHeight_percent="0.1"/>
+
+
+    <TextView
+        android:id="@+id/order_info_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="20dp"
+        android:paddingBottom="50dp"
+        android:text="Név:"
+
+        app:layout_constraintTop_toBottomOf="@id/order_info_headline"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <EditText
+        android:id="@+id/order_info_name_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""
+        app:layout_constraintBaseline_toBaselineOf="@id/order_info_name"
+        app:layout_constraintLeft_toRightOf="@id/order_info_name"
+        app:layout_constraintRight_toRightOf="parent"
+/>
+
+    <TextView
+        android:id="@+id/order_info_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="20dp"
+        android:paddingBottom="50dp"
+        android:text="Szállítási cím:"
+
+        app:layout_constraintTop_toBottomOf="@id/order_info_name"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <EditText
+        android:id="@+id/order_info_address_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""
+        app:layout_constraintBaseline_toBaselineOf="@id/order_info_address"
+        app:layout_constraintLeft_toRightOf="@id/order_info_address"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+
+    <TextView
+        android:id="@+id/order_info_phonenumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="20dp"
+        android:paddingBottom="50dp"
+        android:text="Telefonszám:"
+
+        app:layout_constraintTop_toBottomOf="@id/order_info_address"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <EditText
+        android:id="@+id/order_info_phonenumber_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="phone"
+        android:text=""
+        app:layout_constraintBaseline_toBaselineOf="@id/order_info_phonenumber"
+        app:layout_constraintLeft_toRightOf="@id/order_info_phonenumber"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+
+    <TextView
+        android:id="@+id/order_info_additionalinfos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="20dp"
+        android:paddingBottom="50dp"
+        android:text="Egyéb megjegyzés:"
+
+        app:layout_constraintTop_toBottomOf="@id/order_info_phonenumber"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <EditText
+        android:id="@+id/order_info_additionalinfos_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        app:layout_constraintBaseline_toBaselineOf="@id/order_info_additionalinfos"
+        app:layout_constraintLeft_toRightOf="@id/order_info_additionalinfos"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:id="@+id/order_info_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="backtocart"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <Button
+        android:id="@+id/order_info_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send order"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        />
+
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="System_notification_bar">#212121</color>
+    <color name="Header_bar">#9e9e9e</color>
+    <color name="MyCustomColorShade_1">#111307</color>
+    <color name="MyCustomColorShade_2">#211810</color>
+    <color name="MyCustomColorShade_3">#442323</color>
+    <color name="MyCustomColorShade_4">#984D3E</color>
+    <color name="MyCustomColorShade_5">#C46350</color>
+    <color name="MyWarningColor">#D50000</color>
+    <color name="MyCartColor">#55BB55</color>
+</resources>
