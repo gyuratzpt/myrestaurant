@@ -19,7 +19,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         DataProcessor dp = new DataProcessor();
 
-//  lenyitható lista peldanyositasa(spinner), feltoltese egy ArrayList objektumból, viselkedes beallitas
+
+
+
+//  spinner (lenyitható lista) peldanyositasa, feltoltese egy ArrayList objektumból, viselkedes beallitas
         menuSpinner  = findViewById(R.id.menu_spinner);
         ArrayAdapter menuSpinnerArrayAdapter = new ArrayAdapter(MainActivity.this, R.layout.spinner_item, dp.getSpinnerList());
         menuSpinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
@@ -53,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
 //spinner vege
 
 
+
+
+
+
 //Grafikus elemek példányosítása
         ImageView logo_imageView = findViewById(R.id.logo);
         ImageView actual_story_imageView = findViewById(R.id.actual_story);
@@ -64,6 +71,10 @@ public class MainActivity extends AppCompatActivity {
         actual_story_imageView.setImageResource(R.drawable.actual_story2);
         gallery_imageView.setImageResource(R.drawable.gallery);
         contact_imageView.setImageResource(R.drawable.contact);
+
+
+
+
 
 
 //Akciók implementálása
@@ -87,20 +98,31 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+
+
+
 //Ellenőrző lépések
-        Log.v("Main", "OK");
+//Csak teszt miatt
+        Log.v("MyLog", "Main: finish");
         for (SingleMenuItem x : dp.getFoodsList()){
-            Log.v("Food tartalma", x.getName());
+            Log.v("MyLog", "Food tartalma: " + x.getName());
         }
         for (SingleMenuItem x : dp.getDrinksList()){
-            Log.v("Drinks tartalma", x.getName());
+            Log.v("MyLog","Drinks tartalma: " + x.getName());
         }
         for (SingleMenuItem x : dp.getCart()){
-            Log.v("Cart tartalma", x.getName());
+            Log.v("MyLog", "Cart tartalma: " + x.getName());
         }
     }
     //konstruktor vége
 }
+
+
+
+
+
+
 
 
 /*

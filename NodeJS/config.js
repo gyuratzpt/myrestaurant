@@ -5,7 +5,7 @@ module.exports = Object.freeze({
     dbPort: 3306,
     dbHost: 'localhost',
     dbDriver: 'mysql2',
-    dbName: 'hobby',
+    dbName: 'products',
     dbUser: 'root',
     dbPassword: 'root',
     tokenKey: 'secretkey',

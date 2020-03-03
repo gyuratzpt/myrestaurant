@@ -22,7 +22,7 @@ public class ContactActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        Log.v("ContactActivity", "OK");
+        Log.v("MyLog","ContactActivity OK");
     }
 
     public void sendEmail(View view) {

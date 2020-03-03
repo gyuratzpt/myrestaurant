@@ -41,7 +41,7 @@ public class AdapterForRecyclerView extends RecyclerView.Adapter<AdapterForRecyc
     public AdapterForRecyclerView(){}
 
     @Override
-    //létrehozza az egyes sorokat
+//létrehozza az egyes sorokat
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recyclerview_item_layout_v3, parent, false);
@@ -54,7 +54,7 @@ public class AdapterForRecyclerView extends RecyclerView.Adapter<AdapterForRecyc
     }
 
     @Override
-    //adatfeltöltés az egyes elemekhez
+//adatfeltöltés az egyes elemekhez
     public void onBindViewHolder(ViewHolder holder, int position) {
         final SingleMenuItem smi = dp.getCart().get(position);
 
@@ -107,7 +107,7 @@ public class AdapterForRecyclerView extends RecyclerView.Adapter<AdapterForRecyc
             }
         });
 
-        Log.v("AdapterForRecyclerView5", "OK");
+        Log.v("MyLog","AdapterForRecyclerView5 OK");
     }
 
     @Override
@@ -117,6 +117,8 @@ public class AdapterForRecyclerView extends RecyclerView.Adapter<AdapterForRecyc
     }
 
 }
+
+
 
 /* v2
 
@@ -145,7 +147,7 @@ public class AdapterForRecyclerView extends RecyclerView.Adapter<AdapterForRecyc
                 recyclerviewItemAmount,
                 recyclerviewItemAmountIncrease,
                 recyclerviewItemPrice,
-                recyclerviewDeleteButton;
+                recyclerviewDeleteButton;PP
 
 
         public ViewHolder(View itemView){

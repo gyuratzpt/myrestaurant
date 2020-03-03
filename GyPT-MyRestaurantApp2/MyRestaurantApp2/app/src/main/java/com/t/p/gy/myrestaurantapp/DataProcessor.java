@@ -3,8 +3,20 @@ package com.t.p.gy.myrestaurantapp;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
 
 
 public class DataProcessor extends Application {
@@ -13,17 +25,78 @@ public class DataProcessor extends Application {
     static final private ArrayList<String> spinnerList = new ArrayList<String>();
     private static ArrayList<SingleMenuItem> cart = new ArrayList<SingleMenuItem>();
 
+    ProductsBackend myAPI;
+    Gson gson = new GsonBuilder().setLenient().create();
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+
     //drinks feltoltese adatbazisbol
     //food feltotltese adatbazisbol
 
     public DataProcessor(){
+
+        Retrofit retrofit = RetrofitClient.getInstance();
+
         if (spinnerList.isEmpty()) {
             spinnerList.add("MENÜ");
             spinnerList.add("Ételek");
             spinnerList.add("Italok");
             spinnerList.add("Cart");
 
-            drinks.add(new SingleMenuItem(1, "Cola", "szensavas", 250, R.drawable.cola));
+            myAPI = retrofit.create(ProductsBackend.class);
+            compositeDisposable.add(myAPI.getProducts()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(response -> {
+                        if (response.code() >= 200 && response.code() < 300) {
+                            JsonArray allUsersJsonArray = response.body().getAsJsonArray("product");
+                            JsonObject jsonamount = allUsersJsonArray.get(0).getAsJsonObject();
+                            System.out.println(jsonamount.get("price").toString().replaceAll("\"", "") + " HUF");
+
+
+                            List<Integer> idList = new ArrayList<Integer>();
+                            List<String> nameList = new ArrayList<>();
+                            List<String> detailList = new ArrayList<>();
+                            List<Integer> priceList = new ArrayList<>();
+
+                            for(int i = 0; i < allUsersJsonArray.size(); i++){
+                                idList.add(Integer.parseInt(allUsersJsonArray.get(i).getAsJsonObject().get("id").toString().replaceAll("\"", "")));
+                                nameList.add(allUsersJsonArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""));
+                                detailList.add(allUsersJsonArray.get(i).getAsJsonObject().get("detail").toString().replaceAll("\"", ""));
+                                priceList.add(Integer.parseInt(allUsersJsonArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", "")));
+                            }
+
+
+                            Integer[] idArray = new Integer[idList.size()];
+                            idArray = idList.toArray(idArray);
+
+                            String[] nameArray = new String[nameList.size()];
+                            nameArray = nameList.toArray(nameArray);
+
+                            String[] detailArray = new String[detailList.size()];
+                            detailArray = detailList.toArray(detailArray);
+
+                            Integer[] priceArray = new Integer[priceList.size()];
+                            priceArray = priceList.toArray(priceArray);
+
+
+                            int id;
+                            String name;
+                            String detail;
+                            int price;
+
+                            for(int i = 0; i < allUsersJsonArray.size(); i++) {
+                                id = idArray[i];
+                                name = nameArray[i];
+                                detail = detailArray[i];
+                                price = priceArray[i];
+                                drinks.add(new SingleMenuItem(id, name, detail, price,  R.drawable.cola));
+                            }
+                        }
+                        else {
+                            System.out.println(response.code() + " " + response.errorBody().string());
+                        }                }));
+
+                        /*
             drinks.add(new SingleMenuItem(2, "Fanta", "szensavas", 250, R.drawable.fanta));
             drinks.add(new SingleMenuItem(3, "Sprite", "szensavas", 250, R.drawable.sprite));
             drinks.add(new SingleMenuItem(4, "Hell", "energiaital", 300, R.drawable.hell));
@@ -32,6 +105,7 @@ public class DataProcessor extends Application {
             drinks.add(new SingleMenuItem(11, "Kilkenny", "vegre egy sor", 730, R.drawable.kilkenny));
             drinks.add(new SingleMenuItem(13, "Stella Artois", "egynek jo", 550, R.drawable.stella));
             drinks.add(new SingleMenuItem(14, "Wizard", "ismeretlen", 890, R.drawable.wizard));
+             */
 
             foods.add(new SingleMenuItem(24, "Normál hamburger", "150gr marhahús pogácsa, paradicsom, uborka, sajt", 1600, R.drawable.hamburger));
             foods.add(new SingleMenuItem(25, "Extra hamburger", "300gr marhahús pogácsa, paradicsom, uborka, sajt", 2100, R.drawable.extrahamburger));
@@ -44,8 +118,10 @@ public class DataProcessor extends Application {
             foods.add(new SingleMenuItem(32, "Kakaós tekercs", "sima, egyszerű kakaóscsiga - yetiknek", 240, R.drawable.csiga));
 
 
-            cart.add(drinks.get(0));
-            cart.get(0).setCartAmount(3);
+
+
+//            cart.add(drinks.get(0));
+//            cart.get(0).setCartAmount(3);
 /*
             cart.add(foods.get(0));
             cart.add(foods.get(3));

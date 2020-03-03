@@ -42,7 +42,7 @@ public class GalleryActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        Log.v("Gallery", "OK");
+        Log.v("MyLog","Gallery OK");
     }
 
     public class ImageAdapter extends BaseAdapter {

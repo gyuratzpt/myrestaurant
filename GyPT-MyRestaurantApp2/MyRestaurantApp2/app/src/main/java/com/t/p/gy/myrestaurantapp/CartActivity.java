@@ -23,11 +23,14 @@ public class CartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
-        //vissza gomb
+
+
+//vissza gomb
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
 
         Button nextPage = (Button) findViewById(R.id.cart_layout_button);
         nextPage.setOnClickListener(new View.OnClickListener() {
@@ -47,10 +50,12 @@ public class CartActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewAdapter = new AdapterForRecyclerView();
         recyclerView.setAdapter(recyclerViewAdapter);
-        Log.v("CartActivity", "Konstruktor kész");
+        Log.v("MyLog","CartActivity Konstruktor kész");
     }
 
-    //vissza gomb
+
+
+//vissza gomb
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -59,6 +64,7 @@ public class CartActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     public static void refreshCartFinalPrice(){
         tv_price.setText(String.valueOf(dp.getActualCartPrice())+"Ft");

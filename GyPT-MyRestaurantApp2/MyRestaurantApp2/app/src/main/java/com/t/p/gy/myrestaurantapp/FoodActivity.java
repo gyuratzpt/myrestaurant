@@ -20,11 +20,12 @@ public class FoodActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.food_menu_layout);
-        //vissza gomb
+//vissza gomb
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
 
         final ItemAdapter_v2 itemAdapter_v2 = new ItemAdapter_v2(this, dp.getFoodsList(), R.color.MyCustomColorShade_4);
         listView = (ListView) findViewById(R.id.shared_menu_layout_listview);
@@ -34,6 +35,12 @@ public class FoodActivity extends AppCompatActivity {
         tv_SummedPrice = (TextView) findViewById(R.id.shared_menu_layout_price);
         tv_SummedPrice.setText(R.string.shared_menu_layout_price_text);
 
+
+/*
+A kiválasztott tételeket ebben az Activityben egyszerre lehet a kosárhoz adni!
+
+
+ */
         Button button = (Button) findViewById(R.id.shared_menu_layout_tocart_button);
         button.setText(R.string.shared_menu_layout_tocart_button_text);
         button.setOnClickListener(new View.OnClickListener() {
@@ -54,7 +61,7 @@ public class FoodActivity extends AppCompatActivity {
         for(SingleMenuItem x : dp.getFoodsList()){
             x.resetOrderAmount(); //el és visszanavigálás után törli a korábbi értékeket
         }
-        Log.i("MainActivity", "onResume");
+        Log.i("MyLog","MainActivity onResume");
     }
 
 
