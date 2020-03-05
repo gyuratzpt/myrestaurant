@@ -3,7 +3,8 @@
 import express from 'express';
 import { json, urlencoded } from 'body-parser';
 const app = express();
-import productRoutes from './src/route/drinks-route';
+import drinksRoutes from './src/route/drinks-route';
+import foodsRoutes from './src/route/foods-route';
 const device = require('express-device');
 const config = require('./config');
 
@@ -30,7 +31,8 @@ app.use(function(req, res, next) {
 
 // PREFIXING ROUTES
 const router = express.Router();
-productRoutes(router);
+drinksRoutes(router);
+foodsRoutes(router);
 app.use(config.appVersion, router);
 
 // START APPLICATION
