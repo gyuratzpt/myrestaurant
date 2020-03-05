@@ -3,7 +3,7 @@
 import express from 'express';
 import { json, urlencoded } from 'body-parser';
 const app = express();
-import productRoutes from '../NodeJS/src/route/product-route';
+import productRoutes from './src/route/drinks-route';
 const device = require('express-device');
 const config = require('./config');
 

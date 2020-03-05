@@ -18,6 +18,21 @@ import retrofit2.http.Path;
 
 public interface ProductsBackend {
 
-    @GET("/api/v1/products")
-    Observable<Response<JsonObject>> getProducts();
+    @GET("/api/v1/foods")
+    Observable<Response<JsonObject>> getFoods();
+	
+	@GET("/api/v1/drinks")
+    Observable<Response<JsonObject>> getDrinks();
+	
+	@FormUrlEncoded
+	@POST("/api/v1/foods")
+    Observable<Response<JsonObject>> addFoods(@Field("product_category") String name,
+                                              @Field("amount") String description,
+                                              @Field("currency") Integer price);
+
+	@FormUrlEncoded	
+	@POST("/api/v1/drinks")
+    Observable<Response<JsonObject>> addDrinks(@Field("product_category") String name,
+                                              @Field("amount") String description,
+                                              @Field("currency") Integer price);
 }
