@@ -11,7 +11,7 @@ package com.t.p.gy.myrestaurantapp;
 
 
 public class AdapterForRecyclerView extends RecyclerView.Adapter<AdapterForRecyclerView.ViewHolder>{
-    DataProcessor dp = new DataProcessor();
+    DrinkProcessor dp = new DrinkProcessor();
 
 
     protected class ViewHolder extends RecyclerView.ViewHolder{

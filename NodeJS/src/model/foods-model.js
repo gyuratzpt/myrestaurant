@@ -2,9 +2,9 @@ import { conn } from '../../app';
 
 export default class Foods {
     constructor(foodItem) {
-        this.itemName = foodItem.itemName;
-        this.itemName = foodItem.itemDescription;
-        this.itemName = foodItem.itemPrice;
+        this.name = foodItem.name;
+        this.detail = foodItem.detail;
+        this.price = foodItem.price;
         
     }
     static getAllFoodsItems(res) {
@@ -24,11 +24,11 @@ export default class Foods {
 
     static addFoodItem(newItem, res) {
         conn.query(
-            'INSERT INTO `foods` (`name`, `description`, `price`) ' +
-                'VALUES (?, ?, ?, ?)',
+            'INSERT INTO `foods` (`name`, `detail`, `price`) ' +
+                'VALUES (?, ?, ?)',
             [
                 newItem.name,
-                newItem.description,
+                newItem.detail,
                 newItem.price
             ],
             function(err, response) {

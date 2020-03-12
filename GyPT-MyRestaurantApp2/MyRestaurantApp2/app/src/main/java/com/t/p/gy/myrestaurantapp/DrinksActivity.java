@@ -6,20 +6,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
 public class DrinksActivity extends AppCompatActivity {
-    static DataProcessor dp = new DataProcessor();
+    static DrinkProcessor dp = new DrinkProcessor();
     ProductsBackend myAPI;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     Gson gson = new GsonBuilder().setLenient().create();
@@ -45,22 +40,7 @@ public class DrinksActivity extends AppCompatActivity {
         listView.setAdapter(itemAdapter);
         Log.i("MyLog", "DrinksActivity: itemadapter finish");
 
-        myAPI = retrofit.create(ProductsBackend.class);
-        compositeDisposable.add(myAPI.getProducts()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    if (response.code() >= 200 && response.code() < 300) {
-                        JsonArray allUsersJsonArray = response.body().getAsJsonArray("product");
-                        JsonObject jsonamount = allUsersJsonArray.get(0).getAsJsonObject();
-                        Toast.makeText(DrinksActivity.this, jsonamount.get("price").toString().replaceAll("\"", "") + " HUF", Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                        Toast.makeText(DrinksActivity.this, response.code() + " " + response.errorBody().string(), Toast.LENGTH_LONG).show();
-                    }                }));
     }
-
-
 
 //vissza gomb
     public boolean onOptionsItemSelected(MenuItem item){

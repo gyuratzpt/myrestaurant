@@ -14,11 +14,10 @@ package com.t.p.gy.myrestaurantapp;
         import android.widget.Toast;
 
         import java.util.ArrayList;
-        import java.util.Collection;
 
 public class ItemAdapter extends ArrayAdapter<SingleMenuItem> {
     private int mColorResourceID; //hatter szine
-    DataProcessor dp = new DataProcessor();
+    DrinkProcessor dp = new DrinkProcessor();
 
     public ItemAdapter(Activity context, ArrayList<SingleMenuItem> inputList, int colorResourceID) {
         super(context, 0, inputList);

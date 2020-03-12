@@ -8,13 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class ItemAdapter_v2 extends ArrayAdapter<SingleMenuItem> {
     private int mColorResourceID; //hatter szine
-    DataProcessor dp = new DataProcessor();
+    DrinkProcessor dp = new DrinkProcessor();
 
     public ItemAdapter_v2(Activity context, ArrayList<SingleMenuItem> inputList, int colorResourceID) {
         super(context, 0, inputList);

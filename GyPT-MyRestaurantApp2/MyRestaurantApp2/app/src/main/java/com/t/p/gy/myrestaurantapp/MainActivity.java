@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DataProcessor dp = new DataProcessor();
+        DrinkProcessor dp = new DrinkProcessor();
 
 
 
@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 //Ellenőrző lépések
 //Csak teszt miatt
         Log.v("MyLog", "Main: finish");
+        /*
         for (SingleMenuItem x : dp.getFoodsList()){
             Log.v("MyLog", "Food tartalma: " + x.getName());
         }
@@ -114,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
         for (SingleMenuItem x : dp.getCart()){
             Log.v("MyLog", "Cart tartalma: " + x.getName());
         }
+
+         */
     }
     //konstruktor vége
 }

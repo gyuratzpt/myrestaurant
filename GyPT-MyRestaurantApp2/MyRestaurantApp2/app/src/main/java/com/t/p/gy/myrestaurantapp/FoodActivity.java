@@ -14,7 +14,7 @@ import android.widget.Toast;
 public class FoodActivity extends AppCompatActivity {
     static ListView listView;
     static TextView tv_SummedPrice;
-    static DataProcessor dp = new DataProcessor();
+    static FoodProcessor dp = new FoodProcessor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -13,8 +13,8 @@ export function read_all_food_items(req, res) {
 }
 
 export function create_food_item(req, res) {
-    const newItem = new Loan(req.body);
-    Drinks.addDrinkItem(newItem, function(err, insertId) {
+    const newItem = new Foods(req.body);
+    Foods.addFoodItem(newItem, function(err, insertId) {
         if (err) {
             res.status(400).send(err);
             return;

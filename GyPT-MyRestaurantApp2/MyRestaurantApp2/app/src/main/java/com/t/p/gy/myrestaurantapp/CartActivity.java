@@ -17,7 +17,7 @@ public class CartActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerViewAdapter;
     private static TextView tv_price;
-    private static DataProcessor dp = new DataProcessor();
+    private static DrinkProcessor dp = new DrinkProcessor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
