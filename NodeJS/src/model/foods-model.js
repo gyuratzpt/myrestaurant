@@ -1,10 +1,14 @@
+'use strict';
 import { conn } from '../../app';
+import getFilesizeInBytes from '../image/file-size-reader';
+import { getImageMimeType } from '../image/image-mimetype';
 
 export default class Foods {
     constructor(foodItem) {
         this.name = foodItem.name;
         this.detail = foodItem.detail;
         this.price = foodItem.price;
+        this.picture = foodItem.picture;
         
     }
     static getAllFoodsItems(res) {
@@ -19,6 +23,23 @@ export default class Foods {
                     res(null, result);
                 }
             }
+        );
+    }
+
+    static downloadpicture(res){
+        conn.query(`SELECT picture FROM foods`,
+        [],
+        function (error, blob){
+            if(error){
+                res(error, null);
+            } else if (blob[0]['picture'] !== null){
+                const imageData = blob[0]['picture'];
+                const imageMime = getImageMimeType(imageData);
+                res(null, {imageData, imageMime});
+            } else {
+                res(null, { message: 'No picture of that'});
+            }
+        }
         );
     }
 
@@ -41,4 +62,5 @@ export default class Foods {
             }
         );
     }
+
 }

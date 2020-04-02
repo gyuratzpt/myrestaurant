@@ -1,3 +1,4 @@
+'use strict';
 import Foods from "../model/foods-model";
 
 export function read_all_food_items(req, res) {
@@ -7,6 +8,23 @@ export function read_all_food_items(req, res) {
             return;
         } else {
             res.json({ food });
+            return;
+        }
+    });
+}
+
+export function download_picture(req, res) {
+    Foods.downloadpicture(function(err, resp){
+        if(err) {
+            res.status(400).send(err);
+            return;
+        } else if (resp.message){
+            res.status(404).send(resp);
+            return;
+        } else { 
+            res.type(resp.ImageMime)
+                .status(200)
+                .send(resp.imageData);
             return;
         }
     });

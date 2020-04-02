@@ -2,6 +2,8 @@ package com.t.p.gy.myrestaurantapp;
 
 
 import android.app.Application;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -80,14 +82,14 @@ public class FoodProcessor extends Application {
                             String name;
                             String detail;
                             int price;
-                            int image;
+                            int picture;
 
                             for(int i = 0; i < allUsersJsonArray.size(); i++) {
                                 id = idArray[i];
                                 name = nameArray[i];
                                 detail = detailArray[i];
                                 price = priceArray[i];
-                                foods.add(new SingleMenuItem(id, name, detail, price,  R.drawable.hamburger));
+                                foods.add(new SingleMenuItem(id, name, detail, price, R.drawable.hamburger));
                             }
                         }
                         else {
