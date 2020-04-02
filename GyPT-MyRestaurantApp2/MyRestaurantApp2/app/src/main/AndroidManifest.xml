@@ -40,6 +40,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".OrderInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AdminActivity"
             android:screenOrientation="portrait" >
         </activity>
         <uses-library

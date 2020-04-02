@@ -7,6 +7,7 @@ package com.t.p.gy.myrestaurantapp;
         import android.view.View;
         import android.widget.AdapterView;
         import android.widget.ArrayAdapter;
+        import android.widget.Button;
         import android.widget.ImageView;
         import android.widget.Spinner;
 
@@ -59,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
 //Grafikus elemek példányosítása
         ImageView logo_imageView = findViewById(R.id.logo);
         ImageView actual_story_imageView = findViewById(R.id.actual_story);
@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
+
 //  CONTACT megnyitasa
         contact_imageView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
@@ -99,25 +100,20 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        //ADMIN feature
+        Button adminButton = findViewById(R.id.admin_button);
+        adminButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View arg0) {
+                // Start Admin
+                Intent myIntent = new Intent(MainActivity.this,
+                        AdminActivity.class);
+                startActivity(myIntent);
+            }
+        });
 
-
-
-//Ellenőrző lépések
-//Csak teszt miatt
+//Ellenőrző lépések, csak teszt miatt
         Log.v("MyLog", "Main: finish");
-        /*
-        for (SingleMenuItem x : dp.getFoodsList()){
-            Log.v("MyLog", "Food tartalma: " + x.getName());
-        }
-        for (SingleMenuItem x : dp.getDrinksList()){
-            Log.v("MyLog","Drinks tartalma: " + x.getName());
-        }
-        for (SingleMenuItem x : dp.getCart()){
-            Log.v("MyLog", "Cart tartalma: " + x.getName());
-        }
-
-         */
-    }
+     }
     //konstruktor vége
 }
 

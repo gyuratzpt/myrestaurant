@@ -22,6 +22,17 @@
         app:layout_constraintTop_toTopOf="@id/base_layout"
         />
 
+    <Button
+        android:id="@+id/admin_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADMIN"
+        android:layout_marginRight="11dp"
+        android:layout_marginTop="11dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
     <LinearLayout
         android:id="@+id/select_bar"
         android:layout_width="match_parent"
