@@ -36,12 +36,6 @@ public class FoodProcessor extends Application {
 
         Retrofit retrofit = RetrofitClient.getInstance();
 
-        if (spinnerList.isEmpty()) {
-            spinnerList.add("MENÜ");
-            spinnerList.add("Ételek");
-            spinnerList.add("Italok");
-            spinnerList.add("Cart");
-
             myAPI = retrofit.create(ProductsBackend.class);
             compositeDisposable.add(myAPI.getFoods()
                     .subscribeOn(Schedulers.io())
@@ -52,17 +46,18 @@ public class FoodProcessor extends Application {
                             JsonObject jsonamount = allUsersJsonArray.get(0).getAsJsonObject();
                             System.out.println(jsonamount.get("price").toString().replaceAll("\"", "") + " HUF");
 
-
                             List<Integer> idList = new ArrayList<Integer>();
                             List<String> nameList = new ArrayList<>();
                             List<String> detailList = new ArrayList<>();
                             List<Integer> priceList = new ArrayList<>();
+                            List<String> pictureList = new ArrayList<>();
 
                             for(int i = 0; i < allUsersJsonArray.size(); i++){
                                 idList.add(Integer.parseInt(allUsersJsonArray.get(i).getAsJsonObject().get("id").toString().replaceAll("\"", "")));
                                 nameList.add(allUsersJsonArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""));
                                 detailList.add(allUsersJsonArray.get(i).getAsJsonObject().get("detail").toString().replaceAll("\"", ""));
                                 priceList.add(Integer.parseInt(allUsersJsonArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", "")));
+                                pictureList.add(allUsersJsonArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", ""));
                             }
 
 
@@ -78,6 +73,9 @@ public class FoodProcessor extends Application {
                             Integer[] priceArray = new Integer[priceList.size()];
                             priceArray = priceList.toArray(priceArray);
 
+                            String[] pictureArray = new String[pictureList.size()];
+                            pictureArray = pictureList.toArray(pictureArray);
+
                             int id;
                             String name;
                             String detail;
@@ -89,7 +87,9 @@ public class FoodProcessor extends Application {
                                 name = nameArray[i];
                                 detail = detailArray[i];
                                 price = priceArray[i];
-                                foods.add(new SingleMenuItem(id, name, detail, price, R.drawable.hamburger));
+                                picture = FoodActivity.listView.getResources().getIdentifier(pictureArray[i], "drawable", "com.t.p.gy.myrestaurantapp");
+
+                                foods.add(new SingleMenuItem(id, name, detail, price, picture));
                             }
                         }
                         else {
@@ -118,7 +118,6 @@ public class FoodProcessor extends Application {
             foods.add(new SingleMenuItem(32, "Kakaós tekercs", "sima, egyszerű kakaóscsiga - yetiknek", 240, R.drawable.csiga));
             */
 
-        }
     }
 
     public ArrayList<String> getSpinnerList(){

@@ -1,31 +1,40 @@
 package com.t.p.gy.myrestaurantapp;
 
-        import android.content.Intent;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.AdapterView;
-        import android.widget.ArrayAdapter;
-        import android.widget.Button;
-        import android.widget.ImageView;
-        import android.widget.Spinner;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Spinner;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private Spinner menuSpinner; //spinner objektum
+    static final private ArrayList<String> spinnerList = new ArrayList<String>();
+
+    public ArrayList<String> getSpinnerList(){
+        return spinnerList;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DrinkProcessor dp = new DrinkProcessor();
 
-
+        spinnerList.add("MENÜ");
+        spinnerList.add("Ételek");
+        spinnerList.add("Italok");
+        spinnerList.add("Cart");
 
 
 //  spinner (lenyitható lista) peldanyositasa, feltoltese egy ArrayList objektumból, viselkedes beallitas
         menuSpinner  = findViewById(R.id.menu_spinner);
-        ArrayAdapter menuSpinnerArrayAdapter = new ArrayAdapter(MainActivity.this, R.layout.spinner_item, dp.getSpinnerList());
+        ArrayAdapter menuSpinnerArrayAdapter = new ArrayAdapter(MainActivity.this, R.layout.spinner_item, getSpinnerList());
         menuSpinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         menuSpinner.setAdapter(menuSpinnerArrayAdapter);
         menuSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
