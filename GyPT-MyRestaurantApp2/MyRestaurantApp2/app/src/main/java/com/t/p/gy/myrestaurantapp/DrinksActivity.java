@@ -14,18 +14,13 @@ import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Retrofit;
 
 public class DrinksActivity extends AppCompatActivity {
+    static ListView listView;
     static DrinkProcessor dp = new DrinkProcessor();
-    ProductsBackend myAPI;
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
-    Gson gson = new GsonBuilder().setLenient().create();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drink_menu_layout);
-        Retrofit retrofit = RetrofitClient.getInstance();
-        myAPI = retrofit.create(ProductsBackend.class);
-
 //vissza gomb
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -33,12 +28,11 @@ public class DrinksActivity extends AppCompatActivity {
         }
 
 
-
-        Log.i("MyLog", "DrinksActivity: itemadapter start");
-        ItemAdapter itemAdapter = new ItemAdapter(this, dp.getDrinksList(), R.color.MyCustomColorShade_5);
-        ListView listView = (ListView) findViewById(R.id.drink_menu_layout);
+        //Log.i("MyLog", "DrinksActivity: itemadapter start");
+        final ItemAdapter itemAdapter = new ItemAdapter(this, dp.getDrinksList(), R.color.MyCustomColorShade_5);
+        listView = (ListView) findViewById(R.id.drink_menu_layout);
         listView.setAdapter(itemAdapter);
-        Log.i("MyLog", "DrinksActivity: itemadapter finish");
+        //Log.i("MyLog", "DrinksActivity: itemadapter finish");
 
     }
 

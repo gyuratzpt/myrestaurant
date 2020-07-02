@@ -26,13 +26,23 @@ public interface ProductsBackend {
 	
 	@FormUrlEncoded
 	@POST("/api/v1/foods")
-    Observable<Response<JsonObject>> addFoods(@Field("product_category") String name,
-                                              @Field("amount") String description,
-                                              @Field("currency") Integer price);
+    Observable<Response<JsonObject>> addFoods(@Field("name") String name,
+                                              @Field("detail") String detail,
+                                              @Field("price") Integer price);
 
 	@FormUrlEncoded	
 	@POST("/api/v1/drinks")
-    Observable<Response<JsonObject>> addDrinks(@Field("product_category") String name,
-                                              @Field("amount") String description,
-                                              @Field("currency") Integer price);
+    Observable<Response<JsonObject>> addDrinks(@Field("name") String name,
+                                              @Field("detail") String detail,
+                                              @Field("price") Integer price);
+
+    @FormUrlEncoded
+    @POST("/api/v1/login")
+    Observable<Response<JsonObject>> login(@Field("email") String email,
+                                               @Field("password") String password);
+
+    @FormUrlEncoded
+    @POST("/api/v1/register")
+    Observable<Response<JsonObject>> registration(@Field("email") String email,
+                                           @Field("password") String password);
 }

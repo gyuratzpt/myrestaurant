@@ -2,6 +2,7 @@ package com.t.p.gy.myrestaurantapp;
 
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 
@@ -21,7 +22,6 @@ import retrofit2.Retrofit;
 
 public class DrinkProcessor extends Application {
     private static final ArrayList<SingleMenuItem> drinks = new ArrayList<SingleMenuItem>();
-    static final private ArrayList<String> spinnerList = new ArrayList<String>();
     private static ArrayList<SingleMenuItem> cart = new ArrayList<SingleMenuItem>();
 
     ProductsBackend myAPI;
@@ -34,12 +34,6 @@ public class DrinkProcessor extends Application {
     public DrinkProcessor(){
 
         Retrofit retrofit = RetrofitClient.getInstance();
-
-        if (spinnerList.isEmpty()) {
-            spinnerList.add("MENÜ");
-            spinnerList.add("Ételek");
-            spinnerList.add("Italok");
-            spinnerList.add("Cart");
 
             myAPI = retrofit.create(ProductsBackend.class);
             compositeDisposable.add(myAPI.getDrinks()
@@ -56,12 +50,14 @@ public class DrinkProcessor extends Application {
                             List<String> nameList = new ArrayList<>();
                             List<String> detailList = new ArrayList<>();
                             List<Integer> priceList = new ArrayList<>();
+                            List<String> pictureList = new ArrayList<>();
 
                             for(int i = 0; i < allUsersJsonArray.size(); i++){
                                 idList.add(Integer.parseInt(allUsersJsonArray.get(i).getAsJsonObject().get("id").toString().replaceAll("\"", "")));
                                 nameList.add(allUsersJsonArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""));
                                 detailList.add(allUsersJsonArray.get(i).getAsJsonObject().get("detail").toString().replaceAll("\"", ""));
                                 priceList.add(Integer.parseInt(allUsersJsonArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", "")));
+                                pictureList.add(allUsersJsonArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", ""));
                             }
 
 
@@ -77,18 +73,23 @@ public class DrinkProcessor extends Application {
                             Integer[] priceArray = new Integer[priceList.size()];
                             priceArray = priceList.toArray(priceArray);
 
+                            String[] pictureArray = new String[pictureList.size()];
+                            pictureArray = pictureList.toArray(pictureArray);
+
                             int id;
                             String name;
                             String detail;
                             int price;
-                            int image;
+                            int picture;
 
                             for(int i = 0; i < allUsersJsonArray.size(); i++) {
                                 id = idArray[i];
                                 name = nameArray[i];
                                 detail = detailArray[i];
                                 price = priceArray[i];
-                                drinks.add(new SingleMenuItem(id, name, detail, price,  R.drawable.cola));
+                                picture = DrinksActivity.listView.getResources().getIdentifier(pictureArray[i], "drawable", "com.t.p.gy.myrestaurantapp");
+
+                                drinks.add(new SingleMenuItem(id, name, detail, price, picture));
                             }
                         }
                         else {
@@ -117,11 +118,6 @@ public class DrinkProcessor extends Application {
             foods.add(new SingleMenuItem(32, "Kakaós tekercs", "sima, egyszerű kakaóscsiga - yetiknek", 240, R.drawable.csiga));
             */
 
-        }
-    }
-
-    public ArrayList<String> getSpinnerList(){
-        return spinnerList;
     }
 
     public ArrayList<SingleMenuItem> getDrinksList(){
