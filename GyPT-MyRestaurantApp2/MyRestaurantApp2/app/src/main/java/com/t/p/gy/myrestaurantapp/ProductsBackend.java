@@ -35,4 +35,14 @@ public interface ProductsBackend {
     Observable<Response<JsonObject>> addDrinks(@Field("name") String name,
                                               @Field("detail") String detail,
                                               @Field("price") Integer price);
+
+    @FormUrlEncoded
+    @POST("/api/v1/login")
+    Observable<Response<JsonObject>> login(@Field("email") String email,
+                                               @Field("password") String password);
+
+    @FormUrlEncoded
+    @POST("/api/v1/register")
+    Observable<Response<JsonObject>> registration(@Field("email") String email,
+                                           @Field("password") String password);
 }

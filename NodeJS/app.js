@@ -5,6 +5,7 @@ import { json, urlencoded } from 'body-parser';
 const app = express();
 import drinksRoutes from './src/route/drinks-route';
 import foodsRoutes from './src/route/foods-route';
+import usersRoutes from './src/route/users-route';
 const device = require('express-device');
 const config = require('./config');
 
@@ -33,6 +34,7 @@ app.use(function(req, res, next) {
 const router = express.Router();
 drinksRoutes(router);
 foodsRoutes(router);
+usersRoutes(router);
 app.use(config.appVersion, router);
 
 // START APPLICATION

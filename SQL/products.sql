@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net
 --
 -- Gép: localhost
--- Létrehozás ideje: 2020. Jún 30. 13:37
+-- Létrehozás ideje: 2020. Júl 02. 13:39
 -- Kiszolgáló verziója: 5.5.60-MariaDB
 -- PHP verzió: 5.4.16
 
@@ -64,6 +64,29 @@ INSERT INTO `foods` (`id`, `name`, `detail`, `price`, `picture`) VALUES
 (1, 'hamburger', 'sajtos', 750, 'hamburger'),
 (2, 'durum', 'durum', 1500, 'durum');
 
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `users`
+--
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `is_admin` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- A tábla adatainak kiíratása `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `password`, `updated_at`, `is_admin`) VALUES
+(1, 'vizirider@gmail.com', 'Almakarika01', '2020-07-02 00:00:00', 1),
+(2, 'johndoe@valami.com', 'Almakarika02', '2020-07-02 00:00:00', 0),
+(3, 'alice@product.local', 'Valami01', '2020-07-02 15:37:57', 0);
+
 --
 -- Indexek a kiírt táblákhoz
 --
@@ -81,6 +104,12 @@ ALTER TABLE `foods`
   ADD PRIMARY KEY (`id`);
 
 --
+-- A tábla indexei `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- A kiírt táblák AUTO_INCREMENT értéke
 --
 
@@ -94,6 +123,11 @@ ALTER TABLE `drinks`
 --
 ALTER TABLE `foods`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT a táblához `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
