@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button adminButton = findViewById(R.id.admin_button);
         spinnerList.add("MENÜ");
         spinnerList.add("Ételek");
         spinnerList.add("Italok");
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
         //ADMIN feature
         if(user.getIs_admin() == 1) {
-            Button adminButton = findViewById(R.id.admin_button);
+            adminButton.setVisibility(View.VISIBLE);
             adminButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View arg0) {
                     // Start Admin
@@ -139,6 +140,9 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(myIntent);
                 }
             });
+        }
+        else {
+            adminButton.setVisibility(View.GONE);
         }
 
 //Ellenőrző lépések, csak teszt miatt
