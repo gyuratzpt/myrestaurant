@@ -1,7 +1,11 @@
 package com.t.p.gy.myrestaurantapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,9 +15,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.ArrayList;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 public class MainActivity extends AppCompatActivity {
+    ProductsBackend myAPI;
+    Gson gson = new GsonBuilder().setLenient().create();
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
     private Spinner menuSpinner; //spinner objektum
     static final private ArrayList<String> spinnerList = new ArrayList<String>();
 
@@ -21,16 +33,24 @@ public class MainActivity extends AppCompatActivity {
         return spinnerList;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button adminButton = findViewById(R.id.admin_button);
         spinnerList.add("MENÜ");
         spinnerList.add("Ételek");
         spinnerList.add("Italok");
         spinnerList.add("Cart");
 
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        final User user = gson.fromJson(settings.getString("user","{}"), User.class);
+
+        if (user.getEmail() == null) {
+            logout();
+        }
 
 //  spinner (lenyitható lista) peldanyositasa, feltoltese egy ArrayList objektumból, viselkedes beallitas
         menuSpinner  = findViewById(R.id.menu_spinner);
@@ -110,28 +130,36 @@ public class MainActivity extends AppCompatActivity {
 
 
         //ADMIN feature
-        Button adminButton = findViewById(R.id.admin_button);
-        adminButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View arg0) {
-                // Start Admin
-                Intent myIntent = new Intent(MainActivity.this,
-                        AdminActivity.class);
-                startActivity(myIntent);
-            }
-        });
+        if(user.getIs_admin() == 1) {
+            adminButton.setVisibility(View.VISIBLE);
+            adminButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View arg0) {
+                    // Start Admin
+                    Intent myIntent = new Intent(MainActivity.this,
+                            AdminActivity.class);
+                    startActivity(myIntent);
+                }
+            });
+        }
+        else {
+            adminButton.setVisibility(View.GONE);
+        }
 
 //Ellenőrző lépések, csak teszt miatt
         Log.v("MyLog", "Main: finish");
      }
     //konstruktor vége
+    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
+    public void logout() {
+        Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
+        MainActivity.this.startActivity(myIntent);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        settings.edit().remove("token").apply();
+        settings.edit().remove("user").apply();
+
+        finish();
+    }
 }
-
-
-
-
-
-
-
 
 /*
 valtoztatni:
