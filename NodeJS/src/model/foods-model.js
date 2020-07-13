@@ -63,4 +63,32 @@ export default class Foods {
         );
     }
 
+    static modifyFoodItem(name, detail, price, picture, res) {
+        conn.query(
+            'UPDATE foods SET name = ?, detail = ?, price = ?, picture = ? WHERE name = ?',
+            [name, detail, price, picture, name],
+            function(err, result) {
+                if (err) {
+                    console.log('Error: ', err);
+                    res(err, null);
+                } else {
+                    res(null, result);
+                }
+            }
+        );
+    }
+
+    static deleteFoodsItemByName(name, res) {
+        conn.query(
+            'DELETE FROM foods WHERE name = ?',
+            [name],
+            function(err, result) {
+                if (err) {
+                    res(err, null);
+                } else {
+                    res(null, result);
+                }
+            }
+        );
+    }
 }

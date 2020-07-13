@@ -36,11 +36,8 @@ public class AdminActivity extends AppCompatActivity{
 
         //editText-ek példányosítása
         EditText eTName = (EditText) findViewById(R.id.admin_edittextName);
-        eTName.setText("teszt -T- étel");
         EditText eTDescription = (EditText) findViewById(R.id.admin_edittextDescription);
-        eTDescription.setText("teszt, teszt, teszt");
         EditText eTPrice = (EditText) findViewById(R.id.admin_edittextPrice);
-        eTPrice.setText("500");
         //add gomb példányosítása
         Button addButton = (Button) findViewById(R.id.admin_button_add);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -50,8 +47,6 @@ public class AdminActivity extends AppCompatActivity{
                 String tmpDescription = eTDescription.getText().toString();
                 int tmpPrice = Integer.valueOf(eTPrice.getText().toString()); //input ellenőrzést később megcsinálni!!
                 Toast.makeText(view.getContext(), "Add button pressed!", Toast.LENGTH_LONG).show();
-
-
             }
         });
 
@@ -70,22 +65,15 @@ public class AdminActivity extends AppCompatActivity{
         adminSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                adminSpinner.setSelection(0);
                 if (i!=0) {
                     switch (i) {
                         case 1:
                         //Foods kiválasztása esetén mi történjen
                         Toast.makeText(view.getContext(), "Foods kiválasztva!", Toast.LENGTH_LONG).show();
-                            eTName.setText("testFood");
-                            eTDescription.setText("foodteszt, foodteszt, foodteszt");
-                            eTPrice.setText("1");
                             break;
                         case 2:
                         //Drinks kiválasztása esetén mi történjen
                         Toast.makeText(view.getContext(), "Drinks kiválasztva!", Toast.LENGTH_LONG).show();
-                            eTName.setText("testDrink");
-                            eTDescription.setText("drinkteszt, drinkteszt, drinkteszt");
-                            eTPrice.setText("100");
                             break;
                     }
                 }
@@ -96,12 +84,7 @@ public class AdminActivity extends AppCompatActivity{
         });
 //spinner vege
 
-
-
-
     }
-
-
 
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {

@@ -16,5 +16,13 @@ export default function(router) {
         '/foods',
         foods.create_food_item
     );
-
+    router
+        .put(
+            '/foods/:name',
+            foods.update_food
+        );
+    router.delete(
+        '/foods/items/:name',
+        foods.delete_foods_item
+    );
 }

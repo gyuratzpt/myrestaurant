@@ -30,11 +30,33 @@ public interface ProductsBackend {
                                               @Field("detail") String detail,
                                               @Field("price") Integer price);
 
+    @FormUrlEncoded
+    @HTTP(method = "PUT", path = "/api/v1/foods/{name}", hasBody = true)
+    Observable<Response<ResponseBody>> updateFoods(@Path("name") String namepath,
+                                                       @Field("name") String name,
+                                                       @Field("detail") String detail,
+                                                       @Field("price") String price,
+                                                       @Field("picture") String picture);
+
+    @HTTP(method = "DELETE", path = "/api/v1/foods/items/{name}", hasBody = true)
+    Observable<Response<ResponseBody>> deleteFoods(@Path("name") String namepath);
+
 	@FormUrlEncoded	
 	@POST("/api/v1/drinks")
     Observable<Response<JsonObject>> addDrinks(@Field("name") String name,
                                               @Field("detail") String detail,
                                               @Field("price") Integer price);
+
+    @FormUrlEncoded
+    @HTTP(method = "PUT", path = "/api/v1/drinks/{name}", hasBody = true)
+    Observable<Response<ResponseBody>> updateDrinks(@Path("name") String namepath,
+                                                       @Field("name") String name,
+                                                       @Field("detail") String detail,
+                                                       @Field("price") String price,
+                                                       @Field("picture") String picture);
+
+    @HTTP(method = "DELETE", path = "/api/v1/drinks/items/{name}", hasBody = true)
+    Observable<Response<ResponseBody>> deleteDrinks(@Path("name") String namepath);
 
     @FormUrlEncoded
     @POST("/api/v1/login")
