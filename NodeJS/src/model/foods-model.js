@@ -46,7 +46,7 @@ export default class Foods {
     static addFoodItem(newItem, res) {
         conn.query(
             'INSERT INTO `foods` (`name`, `detail`, `price`) ' +
-                'VALUES (?, ?, ?)',
+                'VALUES (?, ?, ?, ?)',
             [
                 newItem.name,
                 newItem.detail,

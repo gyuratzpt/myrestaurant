@@ -2,6 +2,8 @@ package com.t.p.gy.myrestaurantapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,15 +19,24 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
+
 
 public class AdminActivity extends AppCompatActivity{
     static final private ArrayList<String> adminSpinnerList = new ArrayList<String>();
-
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+    ProductsBackend myAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_layout);
+
+        Retrofit retrofit = RetrofitClient.getInstance();
+        myAPI = retrofit.create(ProductsBackend.class);
 
         //vissza gomb
         ActionBar actionBar = getSupportActionBar();
@@ -38,17 +49,11 @@ public class AdminActivity extends AppCompatActivity{
         EditText eTName = (EditText) findViewById(R.id.admin_edittextName);
         EditText eTDescription = (EditText) findViewById(R.id.admin_edittextDescription);
         EditText eTPrice = (EditText) findViewById(R.id.admin_edittextPrice);
+        EditText eTPic = (EditText) findViewById(R.id.admin_edittextPicture);
         //add gomb példányosítása
         Button addButton = (Button) findViewById(R.id.admin_button_add);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String tmpName = eTName.getText().toString();
-                String tmpDescription = eTDescription.getText().toString();
-                int tmpPrice = Integer.valueOf(eTPrice.getText().toString()); //input ellenőrzést később megcsinálni!!
-                Toast.makeText(view.getContext(), "Add button pressed!", Toast.LENGTH_LONG).show();
-            }
-        });
+        Button changeButton = (Button) findViewById(R.id.admin_button_change);
+        Button deleteButton = (Button) findViewById(R.id.admin_button_delete);
 
         //  spinner (lenyitható lista) peldanyositasa, feltoltese egy ArrayList objektumból, viselkedes beallitas
         Spinner adminSpinner  = findViewById(R.id.admin_spinner);
@@ -68,12 +73,51 @@ public class AdminActivity extends AppCompatActivity{
                 if (i!=0) {
                     switch (i) {
                         case 1:
-                        //Foods kiválasztása esetén mi történjen
-                        Toast.makeText(view.getContext(), "Foods kiválasztva!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(view.getContext(), "Foods kiválasztva!", Toast.LENGTH_LONG).show();
+                        changeButton.setOnClickListener( v -> {
+                            String tmpName = eTName.getText().toString();
+                            String tmpDescription = eTDescription.getText().toString();
+                            int tmpPrice = Integer.valueOf(eTPrice.getText().toString());
+                            String tmpPic = eTPic.getText().toString();
+                            areFieldsFilled(eTName, eTDescription, eTPrice);
+                            changeFoodItem(tmpName, tmpDescription, tmpPrice, tmpPic);
+                        });
+                        addButton.setOnClickListener( v -> {
+                            String tmpName = eTName.getText().toString();
+                            String tmpDescription = eTDescription.getText().toString();
+                            int tmpPrice = Integer.valueOf(eTPrice.getText().toString());
+                            String tmpPic = eTPic.getText().toString();
+                            areFieldsFilled(eTName, eTDescription, eTPrice);
+                            createFoodItem(tmpName, tmpDescription, tmpPrice, tmpPic);
+                        });
+                            deleteButton.setOnClickListener( v -> {
+                                String tmpName = eTName.getText().toString();
+                                deleteFoodItem(tmpName);
+                            });
+
                             break;
                         case 2:
-                        //Drinks kiválasztása esetén mi történjen
-                        Toast.makeText(view.getContext(), "Drinks kiválasztva!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(view.getContext(), "Drinks kiválasztva!", Toast.LENGTH_LONG).show();
+                            changeButton.setOnClickListener( v -> {
+                                String tmpName = eTName.getText().toString();
+                                String tmpDescription = eTDescription.getText().toString();
+                                int tmpPrice = Integer.valueOf(eTPrice.getText().toString());
+                                String tmpPic = eTPic.getText().toString();
+                                areFieldsFilled(eTName, eTDescription, eTPrice);
+                                changeDrinkItem(tmpName, tmpDescription, tmpPrice, tmpPic);
+                            });
+                            addButton.setOnClickListener( v -> {
+                                String tmpName = eTName.getText().toString();
+                                String tmpDescription = eTDescription.getText().toString();
+                                int tmpPrice = Integer.valueOf(eTPrice.getText().toString());
+                                String tmpPic = eTPic.getText().toString();
+                                areFieldsFilled(eTName, eTDescription, eTPrice);
+                                createDrinkItem(tmpName, tmpDescription, tmpPrice, tmpPic);
+                            });
+                            deleteButton.setOnClickListener( v -> {
+                                String tmpName = eTName.getText().toString();
+                                deleteDrinkItem(tmpName);
+                            });
                             break;
                     }
                 }
@@ -86,6 +130,17 @@ public class AdminActivity extends AppCompatActivity{
 
     }
 
+
+
+    private boolean areFieldsFilled(EditText editText1, EditText editText2, EditText editText3){
+        if (editText1.getText().toString().equals("") || editText2.getText().toString().equals("") || editText3.getText().toString().equals("")) {
+            Toast.makeText(AdminActivity.this, "Fields cannot be empty!", Toast.LENGTH_LONG).show();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -93,5 +148,95 @@ public class AdminActivity extends AppCompatActivity{
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void createDrinkItem(final String name, final String description, final Integer price,final String picture){
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
+
+        compositeDisposable.add(myAPI.addDrinks(name, description, price, picture)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                                        if (response.code() >= 200 && response.code() < 300){
+                                            Toast.makeText(AdminActivity.this, "Drink added successfully!", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(AdminActivity.this, "" + response.code(), Toast.LENGTH_SHORT).show();
+                                        }
+                }));
+    }
+
+    private void createFoodItem(final String name, final String description, final Integer price,final String picture){
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
+
+        compositeDisposable.add(myAPI.addFoods(name, description, price, picture)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.code() >= 200 && response.code() < 300){
+                        Toast.makeText(AdminActivity.this, "Food added successfully!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(AdminActivity.this, "" + response.code(), Toast.LENGTH_SHORT).show();
+                    }
+                }));
+    }
+
+    private void changeDrinkItem(final String name, final String description, final Integer price,final String picture){
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
+
+        compositeDisposable.add(myAPI.updateDrinks(name, name, description, price, picture)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.code() >= 200 && response.code() < 300){
+                        Toast.makeText(AdminActivity.this, "Drink change successfully!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(AdminActivity.this, "" + response.code(), Toast.LENGTH_SHORT).show();
+                    }
+                }));
+    }
+
+    private void changeFoodItem(final String name, final String description, final Integer price,final String picture){
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
+
+        compositeDisposable.add(myAPI.updateFoods(name, name, description, price, picture)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.code() >= 200 && response.code() < 300){
+                        Toast.makeText(AdminActivity.this, "Food change successfully!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(AdminActivity.this, "" + response.code(), Toast.LENGTH_SHORT).show();
+                    }
+                }));
+    }
+
+    private void deleteDrinkItem(final String name){
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
+
+        compositeDisposable.add(myAPI.deleteDrinks(name)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.code() >= 200 && response.code() < 300){
+                        Toast.makeText(AdminActivity.this, "Drink delete successfully!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(AdminActivity.this, "" + response.code(), Toast.LENGTH_SHORT).show();
+                    }
+                }));
+    }
+
+    private void deleteFoodItem(final String name){
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
+
+        compositeDisposable.add(myAPI.deleteFoods(name)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.code() >= 200 && response.code() < 300){
+                        Toast.makeText(AdminActivity.this, "Food delete successfully!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(AdminActivity.this, "" + response.code(), Toast.LENGTH_SHORT).show();
+                    }
+                }));
     }
 }

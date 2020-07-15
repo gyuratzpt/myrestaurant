@@ -179,6 +179,30 @@
         android:layout_marginRight="10dp"
         />
 
+    <TextView
+        android:id="@+id/admin_textPicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kép"
+
+        app:layout_constraintLeft_toLeftOf="@id/admin_button_add"
+        app:layout_constraintTop_toBottomOf="@id/admin_textDescription"
+        android:layout_marginTop="190dp" />
+
+    <EditText
+        android:id="@+id/admin_edittextPicture"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Kép neve ide"
+
+        app:layout_constraintLeft_toRightOf="@id/admin_textPrice"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/admin_textPicture"
+        android:layout_marginRight="10dp"
+        />
 
 
 </android.support.constraint.ConstraintLayout>
