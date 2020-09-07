@@ -1,9 +1,5 @@
 package com.t.p.gy.myrestaurantapp;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,14 +12,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import java.util.ArrayList;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
+import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
+import com.t.p.gy.myrestaurantapp.connection.RetrofitClient;
 
 public class AdminActivity extends AppCompatActivity{
     static final private ArrayList<String> adminSpinnerList = new ArrayList<String>();
@@ -43,20 +41,48 @@ public class AdminActivity extends AppCompatActivity{
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        Log.v("MyLog","Gallery OK");
+        Log.v("MyLog", "Gallery OK");
 
         //editText-ek példányosítása
-        EditText eTName = (EditText) findViewById(R.id.admin_edittextName);
-        EditText eTDescription = (EditText) findViewById(R.id.admin_edittextDescription);
-        EditText eTPrice = (EditText) findViewById(R.id.admin_edittextPrice);
-        EditText eTPic = (EditText) findViewById(R.id.admin_edittextPicture);
+        EditText eTName = (EditText) findViewById(R.id.admin_input_Name);
+        EditText eTDescription = (EditText) findViewById(R.id.admin_input_Desc);
+        EditText eTPrice = (EditText) findViewById(R.id.admin_input_Price);
+        EditText eTPic = (EditText) findViewById(R.id.admin_input_Image);
         //add gomb példányosítása
         Button addButton = (Button) findViewById(R.id.admin_button_add);
         Button changeButton = (Button) findViewById(R.id.admin_button_change);
         Button deleteButton = (Button) findViewById(R.id.admin_button_delete);
+        Button testButton = findViewById(R.id.main_testbutton);
+        initSpinner(eTName, eTDescription, eTPrice, eTPic, addButton, changeButton, deleteButton);
 
-        //  spinner (lenyitható lista) peldanyositasa, feltoltese egy ArrayList objektumból, viselkedes beallitas
-        Spinner adminSpinner  = findViewById(R.id.admin_spinner);
+
+        //metódus teszteléshez ideiglenes gomb
+        testButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                compositeDisposable.add(myAPI.getFoodKebab()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response -> {
+                            Log.i("myLog", "response: " + response.toString());
+                            if (response.code() >= 200 && response.code() < 300) {
+                                JsonArray allUsersJsonArray = response.body().getAsJsonArray("foodNames");
+                                Log.i("myLog", "Teszt, foodNames input mérete: " + allUsersJsonArray.size());
+                                Log.i("myLog", "Teszt, foodNAmes input elemei: " + allUsersJsonArray.toString());
+
+                                JsonObject jsonamount = allUsersJsonArray.get(0).getAsJsonObject();
+                                Log.i("myLog", "Teszt, jsonamount input mérete: " + jsonamount.size());
+                                Log.i("myLog", "Teszt, jsonamount input elemei: " + jsonamount.toString());
+
+                            } else {
+                                Log.i("myLog", "HIBA!!!" + response.code() + " " + response.errorBody().string());
+                            }
+                        }));
+            }
+        });
+    }
+
+    private void initSpinner(EditText eTName, EditText eTDescription, EditText eTPrice, EditText eTPic, Button addButton, Button changeButton, Button deleteButton) {
+        Spinner adminSpinner = findViewById(R.id.admin_spinner);
 
         if (adminSpinnerList.isEmpty()) {
             adminSpinnerList.add("Choose category");
@@ -70,27 +96,27 @@ public class AdminActivity extends AppCompatActivity{
         adminSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i!=0) {
+                if (i != 0) {
                     switch (i) {
                         case 1:
                             Toast.makeText(view.getContext(), "Foods kiválasztva!", Toast.LENGTH_LONG).show();
-                        changeButton.setOnClickListener( v -> {
-                            String tmpName = eTName.getText().toString();
-                            String tmpDescription = eTDescription.getText().toString();
-                            int tmpPrice = Integer.valueOf(eTPrice.getText().toString());
-                            String tmpPic = eTPic.getText().toString();
-                            areFieldsFilled(eTName, eTDescription, eTPrice);
-                            changeFoodItem(tmpName, tmpDescription, tmpPrice, tmpPic);
-                        });
-                        addButton.setOnClickListener( v -> {
-                            String tmpName = eTName.getText().toString();
-                            String tmpDescription = eTDescription.getText().toString();
-                            int tmpPrice = Integer.valueOf(eTPrice.getText().toString());
-                            String tmpPic = eTPic.getText().toString();
-                            areFieldsFilled(eTName, eTDescription, eTPrice);
-                            createFoodItem(tmpName, tmpDescription, tmpPrice, tmpPic);
-                        });
-                            deleteButton.setOnClickListener( v -> {
+                            changeButton.setOnClickListener(v -> {
+                                String tmpName = eTName.getText().toString();
+                                String tmpDescription = eTDescription.getText().toString();
+                                int tmpPrice = Integer.valueOf(eTPrice.getText().toString());
+                                String tmpPic = eTPic.getText().toString();
+                                areFieldsFilled(eTName, eTDescription, eTPrice);
+                                changeFoodItem(tmpName, tmpDescription, tmpPrice, tmpPic);
+                            });
+                            addButton.setOnClickListener(v -> {
+                                String tmpName = eTName.getText().toString();
+                                String tmpDescription = eTDescription.getText().toString();
+                                int tmpPrice = Integer.valueOf(eTPrice.getText().toString());
+                                String tmpPic = eTPic.getText().toString();
+                                areFieldsFilled(eTName, eTDescription, eTPrice);
+                                createFoodItem(tmpName, tmpDescription, tmpPrice, tmpPic);
+                            });
+                            deleteButton.setOnClickListener(v -> {
                                 String tmpName = eTName.getText().toString();
                                 deleteFoodItem(tmpName);
                             });
@@ -98,7 +124,7 @@ public class AdminActivity extends AppCompatActivity{
                             break;
                         case 2:
                             Toast.makeText(view.getContext(), "Drinks kiválasztva!", Toast.LENGTH_LONG).show();
-                            changeButton.setOnClickListener( v -> {
+                            changeButton.setOnClickListener(v -> {
                                 String tmpName = eTName.getText().toString();
                                 String tmpDescription = eTDescription.getText().toString();
                                 int tmpPrice = Integer.valueOf(eTPrice.getText().toString());
@@ -106,7 +132,7 @@ public class AdminActivity extends AppCompatActivity{
                                 areFieldsFilled(eTName, eTDescription, eTPrice);
                                 changeDrinkItem(tmpName, tmpDescription, tmpPrice, tmpPic);
                             });
-                            addButton.setOnClickListener( v -> {
+                            addButton.setOnClickListener(v -> {
                                 String tmpName = eTName.getText().toString();
                                 String tmpDescription = eTDescription.getText().toString();
                                 int tmpPrice = Integer.valueOf(eTPrice.getText().toString());
@@ -114,7 +140,7 @@ public class AdminActivity extends AppCompatActivity{
                                 areFieldsFilled(eTName, eTDescription, eTPrice);
                                 createDrinkItem(tmpName, tmpDescription, tmpPrice, tmpPic);
                             });
-                            deleteButton.setOnClickListener( v -> {
+                            deleteButton.setOnClickListener(v -> {
                                 String tmpName = eTName.getText().toString();
                                 deleteDrinkItem(tmpName);
                             });
@@ -122,15 +148,12 @@ public class AdminActivity extends AppCompatActivity{
                     }
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
-//spinner vege
-
     }
-
-
 
     private boolean areFieldsFilled(EditText editText1, EditText editText2, EditText editText3){
         if (editText1.getText().toString().equals("") || editText2.getText().toString().equals("") || editText3.getText().toString().equals("")) {
@@ -151,22 +174,22 @@ public class AdminActivity extends AppCompatActivity{
     }
 
     private void createDrinkItem(final String name, final String description, final Integer price,final String picture){
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
+        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
 
         compositeDisposable.add(myAPI.addDrinks(name, description, price, picture)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-                                        if (response.code() >= 200 && response.code() < 300){
-                                            Toast.makeText(AdminActivity.this, "Drink added successfully!", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(AdminActivity.this, "" + response.code(), Toast.LENGTH_SHORT).show();
-                                        }
+                    if (response.code() >= 200 && response.code() < 300){
+                        Toast.makeText(AdminActivity.this, "Drink added successfully!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(AdminActivity.this, "" + response.code(), Toast.LENGTH_SHORT).show();
+                    }
                 }));
     }
 
     private void createFoodItem(final String name, final String description, final Integer price,final String picture){
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
+        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
 
         compositeDisposable.add(myAPI.addFoods(name, description, price, picture)
                 .subscribeOn(Schedulers.io())
@@ -181,7 +204,7 @@ public class AdminActivity extends AppCompatActivity{
     }
 
     private void changeDrinkItem(final String name, final String description, final Integer price,final String picture){
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
+        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
 
         compositeDisposable.add(myAPI.updateDrinks(name, name, description, price, picture)
                 .subscribeOn(Schedulers.io())
@@ -196,7 +219,7 @@ public class AdminActivity extends AppCompatActivity{
     }
 
     private void changeFoodItem(final String name, final String description, final Integer price,final String picture){
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
+        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
 
         compositeDisposable.add(myAPI.updateFoods(name, name, description, price, picture)
                 .subscribeOn(Schedulers.io())
@@ -211,7 +234,7 @@ public class AdminActivity extends AppCompatActivity{
     }
 
     private void deleteDrinkItem(final String name){
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
+        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
 
         compositeDisposable.add(myAPI.deleteDrinks(name)
                 .subscribeOn(Schedulers.io())
@@ -226,7 +249,7 @@ public class AdminActivity extends AppCompatActivity{
     }
 
     private void deleteFoodItem(final String name){
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
+        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
 
         compositeDisposable.add(myAPI.deleteFoods(name)
                 .subscribeOn(Schedulers.io())

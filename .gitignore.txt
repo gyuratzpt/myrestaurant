@@ -1,0 +1,3 @@
+.gitignore
+NodeJS/node_modules
+GyPT-MyRestaurantApp2/MyRestaurantApp2/app/build

@@ -11,6 +11,23 @@ export default class Foods {
         this.picture = foodItem.picture;
         
     }
+
+    static getAllFoodNames(res) {
+        conn.query(
+            `SELECT * FROM foods WHERE WHERE name = 'Kebab'`,
+            [],
+            function(err, result) {
+                if (err) {
+                    console.log('Error: ', err);
+                    res(err, null);
+                } else {
+                    res(null, result);
+                }
+            }
+        );
+    }
+
+
     static getAllFoodsItems(res) {
         conn.query(
             `SELECT * FROM foods`,
@@ -45,12 +62,13 @@ export default class Foods {
 
     static addFoodItem(newItem, res) {
         conn.query(
-            'INSERT INTO `foods` (`name`, `detail`, `price`) ' +
+            'INSERT INTO `foods` (`name`, `detail`, `price`, `picture`) ' +
                 'VALUES (?, ?, ?, ?)',
             [
                 newItem.name,
                 newItem.detail,
-                newItem.price
+                newItem.price,
+                newItem.picture
             ],
             function(err, response) {
                 if (err) {

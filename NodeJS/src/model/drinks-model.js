@@ -8,6 +8,7 @@ export default class Drinks {
         this.picture = drinkItem.picture;
         
     }
+    
     static getAllDrinksItems(res) {
         conn.query(
             `SELECT * FROM drinks`,

@@ -13,6 +13,8 @@ package com.t.p.gy.myrestaurantapp;
         import android.widget.Button;
         import android.widget.TextView;
 
+        import com.t.p.gy.myrestaurantapp.adapter.AdapterForRecyclerView;
+
 public class CartActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerViewAdapter;

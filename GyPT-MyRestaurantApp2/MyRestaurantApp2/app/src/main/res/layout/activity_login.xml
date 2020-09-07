@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.t.p.gy.myrestaurantapp.MainActivity">
+    tools:context="com.t.p.gy.myrestaurantapp.LoginActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="5dp"
-            android:text="forgot your password"
+            android:text="Elfelejtett jelszó..."
             android:textColor="@color/md_black_1000"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/guideline9"

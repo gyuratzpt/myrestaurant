@@ -2,6 +2,9 @@
 require('babel-register')({
     presets: ['env'],
 });
+//ez valami kötelező?
+
 
 // Import the rest of our application.
 module.exports = require('./app.js');
+//egyetlen dolgot importálunk, a saját app-ot?? require

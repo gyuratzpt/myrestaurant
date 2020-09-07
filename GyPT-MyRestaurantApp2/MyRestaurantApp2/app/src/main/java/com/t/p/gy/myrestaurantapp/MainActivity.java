@@ -17,29 +17,33 @@ import android.widget.Spinner;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
 
 import java.util.ArrayList;
 
 import io.reactivex.disposables.CompositeDisposable;
 
 public class MainActivity extends AppCompatActivity {
-    ProductsBackend myAPI;
     Gson gson = new GsonBuilder().setLenient().create();
     CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    ProductsBackend myAPI; //kell ez ide? nincs használva??
     private Spinner menuSpinner; //spinner objektum
-    static final private ArrayList<String> spinnerList = new ArrayList<String>();
+    static final private ArrayList<String> spinnerList = new ArrayList<String>(); //adatbázisból lehúyni
 
     public ArrayList<String> getSpinnerList(){
         return spinnerList;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Button adminButton = findViewById(R.id.admin_button);
+
         spinnerList.add("MENÜ");
         spinnerList.add("Ételek");
         spinnerList.add("Italok");
@@ -52,7 +56,61 @@ public class MainActivity extends AppCompatActivity {
             logout();
         }
 
-//  spinner (lenyitható lista) peldanyositasa, feltoltese egy ArrayList objektumból, viselkedes beallitas
+//Grafikus elemek példányosítása
+        ImageView logo_imageView = findViewById(R.id.logo);
+        ImageView actual_story_imageView = findViewById(R.id.actual_story);
+        ImageView gallery_imageView = findViewById(R.id.gallery);
+        ImageView contact_imageView = findViewById(R.id.contact);
+//Grafikus elemek forrásának beállítása
+        logo_imageView.setImageResource(R.drawable.logo);
+        actual_story_imageView.setImageResource(R.drawable.actual_story2);
+        gallery_imageView.setImageResource(R.drawable.gallery);
+        contact_imageView.setImageResource(R.drawable.contact);
+        initSpinner();
+        initButtons(gallery_imageView, contact_imageView);
+
+        //ADMIN feature
+        if(user.getIs_admin() == 1) {
+            adminButton.setVisibility(View.VISIBLE);
+            adminButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View arg0) {
+                    // Start Admin
+                    Intent myIntent = new Intent(MainActivity.this,
+                            AdminActivity.class);
+                    startActivity(myIntent);
+                }
+            });
+        }
+        else {
+            adminButton.setVisibility(View.GONE);
+        }
+
+
+        //Ellenőrző lépések, csak teszt miatt
+        Log.v("MyLog", "Main: finish");
+     }
+
+    private void initButtons(ImageView gallery_imageView, ImageView contact_imageView) {
+        //  GALLERY megnyitasa
+        gallery_imageView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                Intent myIntent = new Intent(MainActivity.this,
+                        GalleryActivity.class);
+                startActivity(myIntent);
+            }
+        });
+
+//  CONTACT megnyitasa
+        contact_imageView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                Intent myIntent = new Intent(MainActivity.this,
+                        ContactActivity.class);
+                startActivity(myIntent);
+            }
+        });
+    }
+    private void initSpinner() {
+        //  spinner (lenyitható lista) peldanyositasa, feltoltese egy ArrayList objektumból, viselkedes beallitas
         menuSpinner  = findViewById(R.id.menu_spinner);
         ArrayAdapter menuSpinnerArrayAdapter = new ArrayAdapter(MainActivity.this, R.layout.spinner_item, getSpinnerList());
         menuSpinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
@@ -84,71 +142,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 //spinner vege
+    }
 
 
-
-
-
-//Grafikus elemek példányosítása
-        ImageView logo_imageView = findViewById(R.id.logo);
-        ImageView actual_story_imageView = findViewById(R.id.actual_story);
-        ImageView gallery_imageView = findViewById(R.id.gallery);
-        ImageView contact_imageView = findViewById(R.id.contact);
-
-//Grafikus elemek forrásának beállítása
-        logo_imageView.setImageResource(R.drawable.logo);
-        actual_story_imageView.setImageResource(R.drawable.actual_story2);
-        gallery_imageView.setImageResource(R.drawable.gallery);
-        contact_imageView.setImageResource(R.drawable.contact);
-
-
-
-
-
-
-//Akciók implementálása
-//  GALLERY megnyitasa
-        gallery_imageView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-                Intent myIntent = new Intent(MainActivity.this,
-                        GalleryActivity.class);
-                startActivity(myIntent);
-            }
-        });
-
-//  CONTACT megnyitasa
-        contact_imageView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-
-                // Start NewActivity.class
-                Intent myIntent = new Intent(MainActivity.this,
-                        ContactActivity.class);
-                startActivity(myIntent);
-            }
-        });
-
-
-
-        //ADMIN feature
-        if(user.getIs_admin() == 1) {
-            adminButton.setVisibility(View.VISIBLE);
-            adminButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View arg0) {
-                    // Start Admin
-                    Intent myIntent = new Intent(MainActivity.this,
-                            AdminActivity.class);
-                    startActivity(myIntent);
-                }
-            });
-        }
-        else {
-            adminButton.setVisibility(View.GONE);
-        }
-
-//Ellenőrző lépések, csak teszt miatt
-        Log.v("MyLog", "Main: finish");
-     }
-    //konstruktor vége
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     public void logout() {
         Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
@@ -156,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         settings.edit().remove("token").apply();
         settings.edit().remove("user").apply();
-
         finish();
     }
 }
@@ -199,18 +194,25 @@ valtoztatni:
 
 /*
 
+2020.06: user
 
-2108.10.06-08 layout változtatás gombok hozzáadása
+2020.02-03: adatbázis első verzió, drink, food
+
+2019.03: spinner, activity v1
+
+
+2018.11.04-11 Cart design és algoritmus
+2018.11.12 - cart v1 algoritmus (felülír, hozzáad)
+
 
 2018.10.14 - dataprocesor probléma, közös list használata globálisan? többszörös öröklődés hiánya miatt
 2018.10.24 - cart layout
 2018.10.25 - layout átalakítás, recyclerview implementálás kezdés
 2018.10.26 - frameview próba, nem vált be, contact redesign
 
+2018.10.06-08 layout változtatás gombok hozzáadása
 
 
-2018.11.04-11 Cart design és algoritmus
-2018.11.12 - cart v1 algoritmus (felülír, hozzáad)
 
  */
 

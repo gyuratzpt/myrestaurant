@@ -1,4 +1,4 @@
-package com.t.p.gy.myrestaurantapp;
+package com.t.p.gy.myrestaurantapp.connection;
 
 import com.google.gson.JsonObject;
 
@@ -17,6 +17,9 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface ProductsBackend {
+
+    @GET("/api/v1/foodnames")
+    Observable<Response<JsonObject>> getFoodKebab();
 
     @GET("/api/v1/foods")
     Observable<Response<JsonObject>> getFoods();
