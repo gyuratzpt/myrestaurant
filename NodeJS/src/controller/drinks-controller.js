@@ -1,3 +1,4 @@
+'use strict';
 import Drinks from "../model/drinks-model";
 
 export function read_all_drink_items(req, res) {
@@ -11,8 +12,9 @@ export function read_all_drink_items(req, res) {
         }
     });
 }
-    export function create_drink_item(req, res) {
-        const newItem = new Drinks(req.body);
+
+export function create_drink_item(req, res) {
+    const newItem = new Drinks(req.body);
         Drinks.addDrinkItem(newItem, function(err, insertId) {
             if (err) {
                 res.status(400).send(err);

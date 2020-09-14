@@ -9,24 +9,7 @@ export default class Foods {
         this.detail = foodItem.detail;
         this.price = foodItem.price;
         this.picture = foodItem.picture;
-        
     }
-
-    static getAllFoodNames(res) {
-        conn.query(
-            `SELECT * FROM foods WHERE WHERE name = 'Kebab'`,
-            [],
-            function(err, result) {
-                if (err) {
-                    console.log('Error: ', err);
-                    res(err, null);
-                } else {
-                    res(null, result);
-                }
-            }
-        );
-    }
-
 
     static getAllFoodsItems(res) {
         conn.query(
@@ -42,6 +25,32 @@ export default class Foods {
             }
         );
     }
+
+
+
+
+
+
+
+
+    
+
+    static getFoodKebab(res) {
+        conn.query(
+            `SELECT * FROM foods WHERE name = mars`,
+            [],
+            function(err, result) {
+                if (err) {
+                    console.log('Error: ', err);
+                    res(err, null);
+                } else {
+                    res(null, result);
+                }
+            }
+        );
+    }
+
+
 
     static downloadpicture(res){
         conn.query(`SELECT picture FROM foods`,

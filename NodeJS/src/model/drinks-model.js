@@ -1,4 +1,7 @@
+'use strict';
 import { conn } from '../../app';
+
+
 
 export default class Drinks {
     constructor(drinkItem) {
@@ -6,7 +9,6 @@ export default class Drinks {
         this.detail = drinkItem.detail;
         this.price = drinkItem.price;
         this.picture = drinkItem.picture;
-        
     }
     
     static getAllDrinksItems(res) {
@@ -23,6 +25,18 @@ export default class Drinks {
             }
         );
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     static addDrinkItem(newItem, res) {
         conn.query(

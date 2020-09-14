@@ -23,7 +23,7 @@
         />
 
     <Button
-        android:id="@+id/main_testbutton"
+        android:id="@+id/admin_temp_testbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Test method"
@@ -34,183 +34,63 @@
         />
 
     <Button
-        android:id="@+id/admin_button_add"
+        android:id="@+id/admin_activity_addbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/admin_button_change"
+        app:layout_constraintEnd_toStartOf="@id/admin_activity_filter"
         app:layout_constraintHorizontal_chainStyle="spread"
         android:layout_marginTop="20dp"
 
-        app:layout_constraintBaseline_toBaselineOf="@id/admin_button_change"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/admin_button_change"
-
+        app:layout_constraintBaseline_toBaselineOf="@id/admin_activity_filter"
  />
 
-
-
     <Button
-        android:id="@+id/admin_button_change"
+        android:id="@+id/admin_activity_filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Change"
+        android:text="Szűrés"
         android:gravity="center"
 
-        app:layout_constraintStart_toEndOf="@id/admin_button_add"
-        app:layout_constraintEnd_toStartOf="@id/admin_button_delete"
+        app:layout_constraintStart_toEndOf="@id/admin_activity_addbutton"
+        app:layout_constraintEnd_toStartOf="@id/admin_activity_search"
         app:layout_constraintHorizontal_chainStyle="spread"
         android:layout_marginTop="20dp"
 
         app:layout_constraintTop_toBottomOf="@id/admin_title"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         />
 
     <Button
-        android:id="@+id/admin_button_delete"
+        android:id="@+id/admin_activity_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete"
+        android:text="Keresés"
 
-        app:layout_constraintStart_toEndOf="@id/admin_button_change"
+        app:layout_constraintStart_toEndOf="@id/admin_activity_filter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
         android:layout_marginTop="20dp"
 
-        app:layout_constraintBaseline_toBaselineOf="@id/admin_button_change"
-        app:layout_constraintLeft_toRightOf="@id/admin_button_change"
-        app:layout_constraintRight_toRightOf="parent"
-
+        app:layout_constraintBaseline_toBaselineOf="@id/admin_activity_filter"
     />
 
-    <Spinner
-        android:id="@+id/admin_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        app:layout_constraintTop_toBottomOf="@id/admin_button_change"
-        android:layout_marginTop="30dp"
-        />
-
-
-    <ScrollView
-        android:id="@+id/admin_scrollview"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/admin_activity_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
 
-        app:layout_constraintTop_toBottomOf="@id/admin_spinner"
+        app:layout_constraintTop_toBottomOf="@id/admin_activity_filter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/admin_constraintlayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        />
 
-            <TextView
-                android:id="@+id/admin_title_Name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Név"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/admin_input_Name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-
-                android:hint="Név ide"
-                android:inputType="textPersonName"
-                app:layout_constraintStart_toEndOf="@id/admin_title_Name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBaseline_toBaselineOf="@id/admin_title_Name" />
-
-
-            <TextView
-                android:id="@+id/admin_title_Desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Leírás"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/admin_title_Name" />
-
-            <EditText
-                android:id="@+id/admin_input_Desc"
-                android:layout_width="0dp"
-                android:layout_height="128dp"
-
-                android:ems="10"
-                android:gravity="start|top"
-                android:inputType="textMultiLine"
-
-                app:layout_constraintTop_toTopOf="@id/admin_title_Desc"
-
-                app:layout_constraintStart_toEndOf="@id/admin_title_Desc"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
-
-            <TextView
-                android:id="@+id/admin_title_Price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Ár"
-                app:layout_constraintTop_toBottomOf="@id/admin_input_Desc"
-                app:layout_constraintStart_toStartOf="parent"
-                />
-
-            <EditText
-                android:id="@+id/admin_input_Price"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="10dp"
-                android:ems="10"
-
-                android:hint="Ár ide"
-                android:inputType="textPersonName"
-
-                app:layout_constraintBaseline_toBaselineOf="@id/admin_title_Price"
-
-                app:layout_constraintStart_toEndOf="@id/admin_title_Price"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <TextView
-                android:id="@+id/admin_title_Image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Kép"
-                app:layout_constraintTop_toBottomOf="@id/admin_title_Price"
-                app:layout_constraintStart_toStartOf="parent"
-                />
-
-            <EditText
-                android:id="@+id/admin_input_Image"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="10dp"
-                android:ems="10"
-
-                android:hint="Kép neve ide"
-                android:inputType="textPersonName"
-                app:layout_constraintBaseline_toBaselineOf="@id/admin_title_Image"
-                app:layout_constraintStart_toEndOf="@id/admin_title_Image"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-
-
-        </android.support.constraint.ConstraintLayout>
-
-    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

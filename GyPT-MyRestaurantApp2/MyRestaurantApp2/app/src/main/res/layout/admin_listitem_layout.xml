@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <ImageView
+        android:id="@+id/admin_listitem_imageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1"
+        tools:srcCompat="@tools:sample/avatars"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/admin_listitem_guideline_left"
+        />
+
+    <TextView
+        android:id="@+id/admin_listitem_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Proba"
+        android:textSize="24sp"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/admin_listitem_guideline_left"
+        app:layout_constraintEnd_toStartOf="@id/admin_listitem_guideline_right"
+        />
+
+    <TextView
+        android:id="@+id/admin_listitem_detail"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="ez egy hosszu szoveg teszt miatt beallitva de semmi komoly adatértéke nincs, nem kell komolyan venni"
+
+        app:layout_constraintTop_toBottomOf="@id/admin_listitem_name"
+        app:layout_constraintBottom_toTopOf="@id/admin_listitem_price"
+        app:layout_constraintStart_toEndOf="@id/admin_listitem_guideline_left"
+        app:layout_constraintEnd_toStartOf="@id/admin_listitem_guideline_right"
+        />
+
+    <TextView
+        android:id="@+id/admin_listitem_pricetitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ár:"
+        android:textSize="24sp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/admin_listitem_guideline_left"
+        app:layout_constraintEnd_toStartOf="@id/admin_listitem_price"
+        />
+
+    <TextView
+        android:id="@+id/admin_listitem_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9876"
+        android:textSize="24sp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/admin_listitem_pricetitle"
+        app:layout_constraintEnd_toStartOf="@id/admin_listitem_guideline_right"
+        />
+
+    <CheckBox
+        android:id="@+id/admin_listitem_isakcioscheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Akciós?"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/admin_listitem_guideline_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <Button
+        android:id="@+id/admin_listitem_modifybutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Módosítás"
+
+        app:layout_constraintBottom_toTopOf="@id/admin_listitem_deletebutton"
+        app:layout_constraintStart_toEndOf="@id/admin_listitem_guideline_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <Button
+        android:id="@+id/admin_listitem_deletebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Törlés"
+        android:background="@color/md_red_A700"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/admin_listitem_guideline_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+
+
+
+    <android.support.constraint.Guideline
+        android:id="@+id/admin_listitem_guideline_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/admin_listitem_guideline_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.7" />
+</android.support.constraint.ConstraintLayout>

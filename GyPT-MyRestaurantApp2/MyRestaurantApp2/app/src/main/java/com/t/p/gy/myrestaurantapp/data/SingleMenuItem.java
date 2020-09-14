@@ -52,14 +52,14 @@ public class SingleMenuItem {
     public void setOrderAmount(boolean bool){
         Log.i("Bool is", String.valueOf(bool));
         if (bool) {
-            Log.i("Infók:", this.mName + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
+            Log.i("Előtte:", this.mName + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
             mOrderAmount++;
-            Log.i("Infók:", this.mName + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
+            Log.i("Utána:", this.mName + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
         }
         else if (!bool && mOrderAmount>0){
-            Log.i("Infók:", this.mName + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
+            Log.i("Előtte:", this.mName + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
             mOrderAmount--;
-            Log.i("Infók:", this.mName + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
+            Log.i("Utána:", this.mName + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
         }
     }
 

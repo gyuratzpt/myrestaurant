@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(myIntent);
                             break;
                         case 2:
-                            myIntent = new Intent(MainActivity.this, DrinksActivity.class);
+                            myIntent = new Intent(MainActivity.this, DrinkActivity.class);
                             startActivity(myIntent);
                             break;
                         case 3:
@@ -191,6 +191,30 @@ valtoztatni:
 //https://www.freakyjolly.com/how-to-add-back-arrow-in-android-activity/
 
 */
+
+
+
+            /*
+            foods.add(new SingleMenuItem(24, "Normál hamburger", "150gr marhahús pogácsa, paradicsom, uborka, sajt", 1600, R.drawable.hamburger));
+            foods.add(new SingleMenuItem(25, "Extra hamburger", "300gr marhahús pogácsa, paradicsom, uborka, sajt", 2100, R.drawable.extrahamburger));
+            foods.add(new SingleMenuItem(26, "Dupla hamburger", "2x300gr marhahús pogácsa, paradicsom, uborka, sajt", 3300, R.drawable.duplahamburger));
+            foods.add(new SingleMenuItem(27, "Döner Kebab", "borjúhús, paradicsom, uborka, káposzta, öntet, házi pitában", 900, R.drawable.donerkebab));
+            foods.add(new SingleMenuItem(28, "Dürüm", "borjúhús, paradicsom, uborka, káposzta, öntet, tortillalapban", 900, R.drawable.durum));
+            foods.add(new SingleMenuItem(29, "Dürüm2", "csirkehús, paradicsom, uborka, káposzta, öntet, tortillalapban", 900, R.drawable.durum));
+            foods.add(new SingleMenuItem(30, "Dürüm3", "borjúhús, hagyma, paradicsom, uborka, káposzta, öntet, tortillalapban", 900, R.drawable.durum));
+            foods.add(new SingleMenuItem(31, "Dürüm4", "csirkehús, hagyma, paradicsom, uborka, káposzta, öntet, tortillalapban", 900, R.drawable.durum));
+            foods.add(new SingleMenuItem(32, "Kakaós tekercs", "sima, egyszerű kakaóscsiga - yetiknek", 240, R.drawable.csiga));
+
+            drinks.add(new SingleMenuItem(2, "Fanta", "szensavas", 250, R.drawable.fanta));
+            drinks.add(new SingleMenuItem(3, "Sprite", "szensavas", 250, R.drawable.sprite));
+            drinks.add(new SingleMenuItem(4, "Hell", "energiaital", 300, R.drawable.hell));
+            drinks.add(new SingleMenuItem(5, "Birra Moretti", "olasz lotty", 450, R.drawable.birramoretti));
+            drinks.add(new SingleMenuItem(9, "Corona", "kukoricasor", 660, R.drawable.corona));
+            drinks.add(new SingleMenuItem(11, "Kilkenny", "vegre egy sor", 730, R.drawable.kilkenny));
+            drinks.add(new SingleMenuItem(13, "Stella Artois", "egynek jo", 550, R.drawable.stella));
+            drinks.add(new SingleMenuItem(14, "Wizard", "ismeretlen", 890, R.drawable.wizard));
+             */
+
 
 /*
 

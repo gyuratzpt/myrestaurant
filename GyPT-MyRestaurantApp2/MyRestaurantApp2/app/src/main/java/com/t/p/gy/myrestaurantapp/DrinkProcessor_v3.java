@@ -3,43 +3,40 @@ package com.t.p.gy.myrestaurantapp;
 import android.app.Application;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
+import com.t.p.gy.myrestaurantapp.connection.RetrofitClient;
+import com.t.p.gy.myrestaurantapp.data.Cart;
+import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
-import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
-import com.t.p.gy.myrestaurantapp.connection.RetrofitClient;
-import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
-import com.t.p.gy.myrestaurantapp.data.Cart;
-
-public class DrinkProcessor extends Application {
+public class DrinkProcessor_v3 extends Application {
     final private static ArrayList<SingleMenuItem> drinks = new ArrayList<SingleMenuItem>();
-    private static ArrayList<SingleMenuItem> cart = new ArrayList<SingleMenuItem>();
-
     ProductsBackend myAPI;
-    Gson gson = new GsonBuilder().setLenient().create();
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     Cart myCart = Cart.getInstance();
 
-    //drinks feltoltese adatbazisbol
-
-    public DrinkProcessor(){
-        Log.i("myLog","Drinkprocessor start");
+    public DrinkProcessor_v3(){
+        Log.i("myLog","Drinkprocessor_v2 start");
         Retrofit retrofit = RetrofitClient.getInstance();
+        myAPI = retrofit.create(ProductsBackend.class);
 
-            myAPI = retrofit.create(ProductsBackend.class);
+
             compositeDisposable.add(myAPI.getDrinks()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response.code() >= 200 && response.code() < 300) {
+                        Log.i("myLog", "DrinkProcessor_v2 response: " + response.toString());
+                        Log.i("myLog", "DrinkProcessor_v2 response: " + response.body().toString());
                         JsonArray allUsersJsonArray = response.body().getAsJsonArray("drink");
                         Log.i("myLog", "Teszt, drinks input mérete: " + allUsersJsonArray.size());
                         Log.i("myLog", "Teszt, drinks input elemei: " + allUsersJsonArray.toString());
@@ -87,7 +84,7 @@ public class DrinkProcessor extends Application {
                             name = nameArray[i];
                             detail = detailArray[i];
                             price = priceArray[i];
-                            picture = DrinkActivity_old.listView.getResources().getIdentifier(pictureArray[i], "drawable", "com.t.p.gy.myrestaurantapp");
+                            picture = DrinkActivity.listView.getResources().getIdentifier(pictureArray[i], "drawable", "com.t.p.gy.myrestaurantapp");
 
                             drinks.add(new SingleMenuItem(id, name, detail, price, picture));
                         }
@@ -97,66 +94,31 @@ public class DrinkProcessor extends Application {
                     }
                 }));
         Log.i("myLog","Drinkprocessor vége");
+        Log.i("myLog","Drinkprocessor tartalma: " + drinks.toString());
     }
 
     public ArrayList<SingleMenuItem> getDrinksList(){
         return drinks;
     }
 
-    public ArrayList<SingleMenuItem> getCart(){
-        return cart;
-    }
-
-    public void addToCart(int itemId){
-            cart.add(lookForIDinLists(itemId));
-    }
-
-    public void modifyCartItem(int itemID, int value){
-        Log.i("mylogline", String.valueOf(itemID) + " " + String.valueOf(value));
-        Log.i("mylogline:", String.valueOf(lookForIDinCart(itemID)));
-        cart.get(cart.indexOf(lookForIDinCart(itemID))).setCartAmount(value);
-    }
-
-    public void deleteFromCart(int itemID){
-        cart.get(cart.indexOf(lookForIDinCart(itemID))).setCartAmount(0);
-        cart.remove(lookForIDinCart(itemID));
-    }
-
-    public int getActualCartPrice(){
-        int tmp = 0;
-        for(SingleMenuItem x : cart){
-            tmp+=(x.getPrice()*x.getCartAmount());
+    //csak a foodban van,a más layout miatt
+    public int refreshActualOrderPrice(){
+        int sum=0;
+        for(SingleMenuItem x : drinks){
+            if (x.getOrderAmount()>0) sum+=x.getOrderAmount()*x.getPrice();
         }
-        return tmp;
+        return sum;
     }
 
-    private SingleMenuItem lookForIDinLists(int id){
-        for (SingleMenuItem x : drinks){
-            if (x.getID() == id){
-                return x;
+    public void addSelectedItemsToCart() {
+        for (SingleMenuItem x : drinks) {
+            if (x.getOrderAmount() > 0) {
+                x.setCartAmount(x.getOrderAmount());
+                x.resetOrderAmount();
+                myCart.addToCart(x);
             }
         }
-        return null;
-    }
-
-    private SingleMenuItem lookForIDinCart(int id){
-        for (SingleMenuItem x : cart){
-            if (x.getID() == id){
-                return x;
-            }
-        }
-        return null;
     }
 }
 
 
-                        /*
-            drinks.add(new SingleMenuItem(2, "Fanta", "szensavas", 250, R.drawable.fanta));
-            drinks.add(new SingleMenuItem(3, "Sprite", "szensavas", 250, R.drawable.sprite));
-            drinks.add(new SingleMenuItem(4, "Hell", "energiaital", 300, R.drawable.hell));
-            drinks.add(new SingleMenuItem(5, "Birra Moretti", "olasz lotty", 450, R.drawable.birramoretti));
-            drinks.add(new SingleMenuItem(9, "Corona", "kukoricasor", 660, R.drawable.corona));
-            drinks.add(new SingleMenuItem(11, "Kilkenny", "vegre egy sor", 730, R.drawable.kilkenny));
-            drinks.add(new SingleMenuItem(13, "Stella Artois", "egynek jo", 550, R.drawable.stella));
-            drinks.add(new SingleMenuItem(14, "Wizard", "ismeretlen", 890, R.drawable.wizard));
-             */

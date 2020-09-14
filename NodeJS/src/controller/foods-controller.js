@@ -1,18 +1,6 @@
 'use strict';
 import Foods from "../model/foods-model";
 
-export function read_all_food_item_names(req, res) {
-    Foods.getAllFoodNames(function(err, food) {
-        if (err) {
-            res.status(400).send(err);
-            return;
-        } else {
-            res.json({ food });
-            return;
-        }
-    });
-}
-
 export function read_all_food_items(req, res) {
     Foods.getAllFoodsItems(function(err, food) {
         if (err) {
@@ -24,6 +12,19 @@ export function read_all_food_items(req, res) {
         }
     });
 }
+
+export function read_food_item_kebab(req, res) {
+    Foods.getFoodKebab(function(err, food) {
+        if (err) {
+            res.status(400).send(err);
+            return;
+        } else {
+            res.json({ food });
+            return;
+        }
+    });
+}
+
 
 export function download_picture(req, res) {
     Foods.downloadpicture(function(err, resp){

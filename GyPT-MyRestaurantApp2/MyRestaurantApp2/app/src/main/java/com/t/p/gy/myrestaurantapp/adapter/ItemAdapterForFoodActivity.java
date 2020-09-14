@@ -15,13 +15,13 @@ import com.t.p.gy.myrestaurantapp.FoodActivity;
 import com.t.p.gy.myrestaurantapp.R;
 import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
 
-public class ItemAdapter_v2 extends ArrayAdapter<SingleMenuItem> {
+public class ItemAdapterForFoodActivity extends ArrayAdapter<SingleMenuItem> {
     private int mColorResourceID; //hatter szine
 
-    public ItemAdapter_v2(Activity context, ArrayList<SingleMenuItem> inputList, int colorResourceID) {
+    public ItemAdapterForFoodActivity(Activity context, ArrayList<SingleMenuItem> inputList, int colorResourceID) {
         super(context, 0, inputList);
         mColorResourceID = colorResourceID;
-        Log.i("myLog", "Foods, ItemAdapter_v2: itemadapter_v2 konstruktor");
+        Log.i("myLog", "Foods, ItemAdapterForFoodActivity konstruktor");
     }
 
     @Override
@@ -31,7 +31,7 @@ public class ItemAdapter_v2 extends ArrayAdapter<SingleMenuItem> {
         View listItemView = convertView;
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.food_menu_list_item_layout_v2, parent, false);
+                    R.layout.foodlist_item_layout_v2, parent, false);
         }
 
         final SingleMenuItem currentSingleMenuItem = getItem(position);
@@ -56,8 +56,10 @@ public class ItemAdapter_v2 extends ArrayAdapter<SingleMenuItem> {
         descriptionTextView.setText(currentSingleMenuItem.getDetail());
         priceTextView.setText(String.valueOf(currentSingleMenuItem.getPrice())+"Ft");
         minusButton.setText("-");
+        minusButton.setTextSize(24);
         amountTextView.setText(String.valueOf(currentSingleMenuItem.getOrderAmount()));
         plusButton.setText("+");
+        plusButton.setTextSize(24);
 
         plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,38 +78,6 @@ public class ItemAdapter_v2 extends ArrayAdapter<SingleMenuItem> {
                 FoodActivity.refreshSummedPrice();
             }
         });
-/*
-        addItemToCartTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //if (currentSingleMenuItem.getCartAmount() > 0) Toast.makeText(view.getContext(),"Már van ilyen tétel a kosárban!", Toast.LENGTH_LONG).show();
-                //else
-                if ((Integer.valueOf(amountTextView.getText().toString())) == 0)
-                    Toast.makeText(view.getContext(), "0 darabot nem lehet a kosárba tenni", Toast.LENGTH_LONG).show();
-                else {
-
-                rákérdezés hozzáadásra/felülirásra
-                    if(currentSingleMenuItem.getCartAmount()==0) addItemToCartTextView.setText("Kosárba tesz");
-                    else addItemToCartTextView.setText("Módosít");
-
-                    felugró ablakban jelenleg mennyi van
-                    ehhez hozzáadni, vagy helyette
-                    törlés
-
-                    if (dp.addToCart(currentSingleMenuItem.getID())) {
-                        currentSingleMenuItem.setCartAmount(currentSingleMenuItem.getOrderAmount());
-                        amountTextView.setText(String.valueOf(currentSingleMenuItem.getOrderAmount()));
-                        Toast.makeText(view.getContext(), "A tétel a kosárba került!", Toast.LENGTH_LONG).show();
-                    } else{
-
-                        Toast.makeText(view.getContext(), "Már van ilyen tétel a kosárban!", Toast.LENGTH_LONG).show();
-                    }
-                    currentSingleMenuItem.resetOrderAmount();
-                }
-            }
-        });
-*/
-
 
         View textContainer = listItemView.findViewById(R.id.food_menu_list_item_layout_v2);
         int color = ContextCompat.getColor(getContext(), mColorResourceID);

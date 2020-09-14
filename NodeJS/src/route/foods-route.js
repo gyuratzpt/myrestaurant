@@ -4,13 +4,13 @@ export default function(router) {
     const foods = require('../controller/foods-controller');
     
     router.get(
-        '/foodnames',
-        foods.read_all_food_item_names
+        '/foods',
+        foods.read_all_food_items
     );
 
     router.get(
-        '/foods',
-        foods.read_all_food_items
+        '/foodkebab',
+        foods.read_food_item_kebab
     );
 
     router.get('/foods/picture',

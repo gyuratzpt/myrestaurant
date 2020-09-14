@@ -9,16 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.t.p.gy.myrestaurantapp.CartActivity;
-import com.t.p.gy.myrestaurantapp.DrinkProcessor;
 import com.t.p.gy.myrestaurantapp.R;
+import com.t.p.gy.myrestaurantapp.data.Cart;
 import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
 
 
-public class AdapterForRecyclerView extends RecyclerView.Adapter<AdapterForRecyclerView.ViewHolder>{
-    static DrinkProcessor dp = new DrinkProcessor();
-
-
+public class AdapterForCartRecyclerView extends RecyclerView.Adapter<AdapterForCartRecyclerView.ViewHolder>{
+    Cart myCart = Cart.getInstance();
+    private TextView textView;
     protected class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView itemImage;
         private TextView itemName,
@@ -43,25 +41,14 @@ public class AdapterForRecyclerView extends RecyclerView.Adapter<AdapterForRecyc
         }
     }
 
-    public AdapterForRecyclerView(){}
-
-    @Override
-//létrehozza az egyes sorokat
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recyclerview_item_layout_v3, parent, false);
-        Log.v("AdapterForRecyclerView4", "OK");
-        v.setBackgroundColor(v.getResources().getColor(R.color.MyCartColor));
-
-        // törlés swipe-ra?!
-
-        return new ViewHolder(v);
+    public AdapterForCartRecyclerView(TextView _tv){
+        textView = _tv;
     }
 
     @Override
 //adatfeltöltés az egyes elemekhez
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final SingleMenuItem smi = dp.getCart().get(position);
+        final SingleMenuItem smi = myCart.getCart().get(position);
 
         holder.itemImage.setImageResource(smi.getImageResourceID());
         if(smi.hasImage()) {
@@ -71,55 +58,68 @@ public class AdapterForRecyclerView extends RecyclerView.Adapter<AdapterForRecyc
         }
         else {holder.itemImage.setVisibility(View.GONE);}
 
-
         holder.itemName.setText(smi.getName());
-
         holder.itemDescription.setText(smi.getDetail());
+        holder.itemAmount.setText(Integer.toString(smi.getCartAmount()));
+        holder.itemPrice.setText(Integer.toString(smi.getPrice()*smi.getCartAmount()));
+        holder.itemDelete.setBackgroundColor(holder.itemDelete.getResources().getColor(R.color.MyWarningColor));
+
+
+        holder.itemDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myCart.deleteItemFromCart(smi, textView);
+                notifyDataSetChanged();
+                Toast.makeText(view.getContext(),"Tétel törölve",Toast.LENGTH_LONG).show();
+            }
+        });
+
 
         holder.itemAmountDecrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(smi.getCartAmount()>1){
                     smi.setCartAmount(smi.getCartAmount()-1);
-                    CartActivity.refreshCartFinalPrice();
+                    //myCart.refreshCartFinalPrice(textView);
+                    myCart.refreshCartActivityView();
                     notifyDataSetChanged();
                 }
                 else Toast.makeText(view.getContext(),"Üres tétel nem lehet a kosárban, használd a törlés gombot!",Toast.LENGTH_LONG).show();
             }
         });
-
-        holder.itemAmount.setText(Integer.toString(smi.getCartAmount()));
-
         holder.itemAmountIncrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 smi.setCartAmount(smi.getCartAmount()+1);
-                CartActivity.refreshCartFinalPrice();
+                myCart.refreshCartFinalPrice(textView);
                 notifyDataSetChanged();
             }
         });
 
-        holder.itemPrice.setText(Integer.toString(smi.getPrice()*smi.getCartAmount()));
 
-        holder.itemDelete.setBackgroundColor(holder.itemDelete.getResources().getColor(R.color.MyWarningColor));
-        holder.itemDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dp.deleteFromCart(smi.getID());
-                CartActivity.refreshCartFinalPrice();
-                notifyDataSetChanged();
-                Toast.makeText(view.getContext(),"Tétel törölve",Toast.LENGTH_LONG).show();
-            }
-        });
 
         Log.v("MyLog","AdapterForRecyclerView5 OK");
     }
 
     @Override
+//létrehozza az egyes sorokat
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        final View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.recyclerview_item_layout_v3, parent, false);
+        Log.v("myLog", "AdapterForRecyclerView4: OK");
+        v.setBackgroundColor(v.getResources().getColor(R.color.MyCartColor));
+
+        // törlés swipe-ra?!
+
+        return new ViewHolder(v);
+    }
+
+    @Override
     //visszaadja hány eleme van a listának
     public int getItemCount() {
-        return dp.getCart().size();
+        return myCart.getCart().size();
     }
+
 
 }
 
