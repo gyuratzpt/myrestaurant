@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View arg0) {
                     // Start Admin
                     Intent myIntent = new Intent(MainActivity.this,
-                            AdminActivity.class);
+                            AdminMaintenanceActivity.class);
                     startActivity(myIntent);
                 }
             });

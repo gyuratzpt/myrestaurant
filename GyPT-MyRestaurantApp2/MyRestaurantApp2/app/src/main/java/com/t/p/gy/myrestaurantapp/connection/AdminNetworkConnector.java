@@ -1,24 +1,13 @@
 package com.t.p.gy.myrestaurantapp.connection;
 
 import android.app.Application;
-import android.content.Context;
-import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.t.p.gy.myrestaurantapp.AdminActivity;
-import com.t.p.gy.myrestaurantapp.R;
-import com.t.p.gy.myrestaurantapp.adapter.AdapterForAdminRecyclerView;
-import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
-import com.t.p.gy.myrestaurantapp.connection.RetrofitClient;
-import com.t.p.gy.myrestaurantapp.data.Cart;
+import com.t.p.gy.myrestaurantapp.AdminMaintenanceActivity;
 import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -63,7 +52,7 @@ public class AdminNetworkConnector extends Application {
                                     inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""),
                                     inputJSONArray.get(i).getAsJsonObject().get("detail").toString().replaceAll("\"", ""),
                                     Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", "")),
-                                    Integer.parseInt(AdminActivity.getDrawableMap().get(inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", "")).toString()),
+                                    Integer.parseInt(AdminMaintenanceActivity.getDrawableMap().get(inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", "")).toString()),
                                     //macskaköröm hiba!!!
                                     "drink"
                             ));
@@ -87,7 +76,7 @@ public class AdminNetworkConnector extends Application {
                                     inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""),
                                     inputJSONArray.get(i).getAsJsonObject().get("detail").toString().replaceAll("\"", ""),
                                     Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", "")),
-                                    Integer.parseInt(AdminActivity.getDrawableMap().get(inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", "")).toString()),
+                                    Integer.parseInt(AdminMaintenanceActivity.getDrawableMap().get(inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", "")).toString()),
                                     "food"
                             ));
                         }

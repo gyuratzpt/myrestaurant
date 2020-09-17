@@ -32,7 +32,7 @@ public class ItemAdapterForDrinkActivity extends ArrayAdapter<SingleMenuItem> {
         View listItemView = convertView;
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.foodlist_item_layout_v2, parent, false);
+                    R.layout.food_listitem_layout_v2, parent, false);
         }
 
         final SingleMenuItem currentSingleMenuItem = getItem(position);

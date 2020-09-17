@@ -1,7 +1,5 @@
 package com.t.p.gy.myrestaurantapp.adapter;
 
-import android.app.Activity;
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,20 +8,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.t.p.gy.myrestaurantapp.AdminActivity;
-import com.t.p.gy.myrestaurantapp.AdminActivity_old;
 import com.t.p.gy.myrestaurantapp.R;
 import com.t.p.gy.myrestaurantapp.connection.AdminNetworkConnector;
-import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
-import com.t.p.gy.myrestaurantapp.connection.RetrofitClient;
 import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
 
 
 public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterForAdminRecyclerView.ViewHolder>{

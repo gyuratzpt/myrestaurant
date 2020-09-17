@@ -8,29 +8,19 @@
     android:paddingLeft="20dp"
     android:paddingTop="20dp"
     android:paddingRight="20dp"
-    tools:context=".AdminActivity">
+    tools:context=".AdminMaintenanceActivity">
 
     <TextView
         android:id="@+id/adminactivity_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Admin page"
+        android:text="Adatbázis karbantartás"
         android:textSize="30sp"
+        android:gravity="center"
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <Button
-        android:id="@+id/admin_temp_testbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Test method"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-
         />
 
     <Button

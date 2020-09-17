@@ -8,7 +8,7 @@
     android:paddingLeft="20dp"
     android:paddingTop="20dp"
     android:paddingRight="20dp"
-    tools:context=".AdminActivity">
+    tools:context=".AdminMaintenanceActivity">
 
     <TextView
         android:id="@+id/adminactivity_title"

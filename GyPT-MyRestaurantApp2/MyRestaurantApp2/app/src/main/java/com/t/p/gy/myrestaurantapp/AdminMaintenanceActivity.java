@@ -9,14 +9,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.t.p.gy.myrestaurantapp.adapter.AdapterForAdminRecyclerView;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class AdminActivity extends AppCompatActivity{
+public class AdminMaintenanceActivity extends AppCompatActivity{
     private RecyclerView adminRecyclerView;
     private RecyclerView.Adapter adminRecyclerViewAdapter;
     static Map<String, Integer> drawableMap;
@@ -24,39 +23,12 @@ public class AdminActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin);
+        setContentView(R.layout.activity_admin_maintenance);
         Log.v("MyLog", "Admin oncreate start...");
 
         Button addButton = (Button) findViewById(R.id.adminactivity_addbutton);
         //Button filterButton = (Button) findViewById(R.id.admin_activity_filter);
         //Button searchButton = (Button) findViewById(R.id.admin_activity_search);
-        Button testButton = findViewById(R.id.admin_temp_testbutton);
-        //metódus teszteléshez ideiglenes gomb
-        testButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-                /*
-                compositeDisposable.add(myAPI.getFoodKebab()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(response -> {
-                            Log.i("myLog", "response: " + response.toString());
-                            if (response.code() >= 200 && response.code() < 300) {
-                                Log.i("myLog", "tesztmetódus: " + response.body().toString());
-                                JsonArray allUsersJsonArray = response.body().getAsJsonArray("food");
-                                //Log.i("myLog", "Teszt, getFoodKebab input mérete: " + allUsersJsonArray.size());
-                                //Log.i("myLog", "Teszt, getFoodKebab input elemei: " + allUsersJsonArray.toString());
-                                JsonObject jsonamount = allUsersJsonArray.get(0).getAsJsonObject();
-                                //Log.i("myLog", "Teszt, jsonamount input mérete: " + jsonamount.size());
-                                //Log.i("myLog", "Teszt, jsonamount input elemei: " + jsonamount.toString());
-
-                            } else {
-                                Log.i("myLog", "HIBA!!!" + response.code() + " " + response.errorBody().string());
-                            }
-                        }));
-
-                 */
-            }
-        });
 
         initBackButton();
         initDrawMap();
