@@ -4,7 +4,6 @@ import android.util.Log;
 
 public class SingleMenuItem {
 
-
     private static final int NO_IMAGE_PROVIDED = -1;
     private int mImageResourceID = NO_IMAGE_PROVIDED;
     private final int mIDNumber;
@@ -13,16 +12,18 @@ public class SingleMenuItem {
     private int mPrice;
     private int mOrderAmount; //listview miatt, különben scrollozáskor elfeljtheti a korábbi értéket
     private int mCartAmount;
+    private String mCategory;
 
 
-    public SingleMenuItem(int id, String name, String detail, int price, int imageResourceID) {
-        mIDNumber = id;
-        mName = name;
-        mDetail = detail;
-        mPrice = price;
-        mImageResourceID = imageResourceID;
+    public SingleMenuItem(int _id, String _name, String _detail, int _price, int _imageResourceID, String _cat) {
+        mIDNumber = _id;
+        mName = _name;
+        mDetail = _detail;
+        mPrice = _price;
+        mImageResourceID = _imageResourceID;
         mOrderAmount = 0;
         mCartAmount = 0;
+        mCategory = _cat;
     }
 
     public int getImageResourceID() {
@@ -75,4 +76,11 @@ public class SingleMenuItem {
 
     public boolean hasImage() {
         return mImageResourceID != NO_IMAGE_PROVIDED;
-    }}
+    }
+
+    public String getCategory() {
+        return mCategory;
+    }
+
+}
+

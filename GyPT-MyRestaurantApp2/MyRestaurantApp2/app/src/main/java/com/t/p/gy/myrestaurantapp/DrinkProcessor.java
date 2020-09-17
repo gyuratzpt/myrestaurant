@@ -89,7 +89,7 @@ public class DrinkProcessor extends Application {
                             price = priceArray[i];
                             picture = DrinkActivity_old.listView.getResources().getIdentifier(pictureArray[i], "drawable", "com.t.p.gy.myrestaurantapp");
 
-                            drinks.add(new SingleMenuItem(id, name, detail, price, picture));
+                            drinks.add(new SingleMenuItem(id, name, detail, price, picture, "drink"));
                         }
                     }
                     else {

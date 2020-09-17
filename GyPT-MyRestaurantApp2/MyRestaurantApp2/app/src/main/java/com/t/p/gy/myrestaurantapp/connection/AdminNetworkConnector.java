@@ -1,6 +1,8 @@
 package com.t.p.gy.myrestaurantapp.connection;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -8,11 +10,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.t.p.gy.myrestaurantapp.AdminActivity;
 import com.t.p.gy.myrestaurantapp.R;
+import com.t.p.gy.myrestaurantapp.adapter.AdapterForAdminRecyclerView;
 import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
 import com.t.p.gy.myrestaurantapp.connection.RetrofitClient;
 import com.t.p.gy.myrestaurantapp.data.Cart;
 import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,37 +37,6 @@ public class AdminNetworkConnector extends Application {
         myAPI = retrofit.create(ProductsBackend.class);
         downloadData();
 
-        /*
-        compositeDisposable.add(myAPI.getDrinks()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    if (response.code() >= 200 && response.code() < 300) {
-                        Log.i("myLog", "AdminNetworkConnector response: " + response.toString());
-                        Log.i("myLog", "AdminNetworkConnector response: " + response.body().toString());
-                        JsonArray inputJSONArray = response.body().getAsJsonArray("drink");
-                        //Log.i("myLog", "AdminNetworkConnector inputJSONArray mérete: " + inputJSONArray.size());
-                        //Log.i("myLog", "AdminNetworkConnector inputJSONArray elemei: " + inputJSONArray.toString());
-                        //Log.i("myLog", "AdminNetworkConnector next: " + inputJSONArray.get(0).getAsJsonObject().toString());
-                        //Log.i("myLog", "AdminNetworkConnector next: " + inputJSONArray.get(0).getAsJsonObject().get("id"));
-
-                        for (int i = 0; i < inputJSONArray.size(); i++) {
-                            downloadedDataSet.add(new SingleMenuItem(
-                                    Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("id").toString()),
-                                    inputJSONArray.get(i).getAsJsonObject().get("name").toString(),
-                                    inputJSONArray.get(i).getAsJsonObject().get("detail").toString(),
-                                    Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString()),
-                                    //inputJSONArray.get(0).getAsJsonObject().get("picture").toString()
-                                    //picture = FoodActivity.listView.getResources().getIdentifier(pictureArray[i], "drawable", "com.t.p.gy.myrestaurantapp");
-                                    R.drawable.kilkenny
-                            ));
-                        }
-                    }
-                    else {
-                        Log.i("myLog", "AdminNetworkConnector error: " + response.code() + " " + response.errorBody().string());
-                    }
-                }));
-        */
         Log.i("myLog","AdminNetworkConnector vége");
     }
 
@@ -76,29 +49,23 @@ public class AdminNetworkConnector extends Application {
         return adminNetworkConnectorInstance;
     }
 
+
     private void downloadData(){
         compositeDisposable.add(myAPI.getDrinks()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response.code() >= 200 && response.code() < 300) {
-                        Log.i("myLog", "AdminNetworkConnector response: " + response.toString());
-                        Log.i("myLog", "AdminNetworkConnector response: " + response.body().toString());
                         JsonArray inputJSONArray = response.body().getAsJsonArray("drink");
-                        //Log.i("myLog", "AdminNetworkConnector inputJSONArray mérete: " + inputJSONArray.size());
-                        //Log.i("myLog", "AdminNetworkConnector inputJSONArray elemei: " + inputJSONArray.toString());
-                        //Log.i("myLog", "AdminNetworkConnector next: " + inputJSONArray.get(0).getAsJsonObject().toString());
-                        //Log.i("myLog", "AdminNetworkConnector next: " + inputJSONArray.get(0).getAsJsonObject().get("id"));
-
                         for (int i = 0; i < inputJSONArray.size(); i++) {
                             downloadedDataSet.add(new SingleMenuItem(
-                                    Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("id").toString()),
-                                    inputJSONArray.get(i).getAsJsonObject().get("name").toString(),
-                                    inputJSONArray.get(i).getAsJsonObject().get("detail").toString(),
-                                    Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString()),
-                                    //inputJSONArray.get(0).getAsJsonObject().get("picture").toString()
-                                    //picture = FoodActivity.listView.getResources().getIdentifier(pictureArray[i], "drawable", "com.t.p.gy.myrestaurantapp");
-                                    R.drawable.kilkenny
+                                    Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("id").toString().replaceAll("\"", "")),
+                                    inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""),
+                                    inputJSONArray.get(i).getAsJsonObject().get("detail").toString().replaceAll("\"", ""),
+                                    Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", "")),
+                                    Integer.parseInt(AdminActivity.getDrawableMap().get(inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", "")).toString()),
+                                    //macskaköröm hiba!!!
+                                    "drink"
                             ));
                         }
                     }
@@ -111,18 +78,17 @@ public class AdminNetworkConnector extends Application {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response.code() >= 200 && response.code() < 300) {
-                        Log.i("myLog", "AdminNetworkConnector response: " + response.toString());
-                        Log.i("myLog", "AdminNetworkConnector response: " + response.body().toString());
+                        //Log.i("myLog", "AdminNetworkConnector response: " + response.toString());
+                        //Log.i("myLog", "AdminNetworkConnector response: " + response.body().toString());
                         JsonArray inputJSONArray = response.body().getAsJsonArray("food");
                         for (int i = 0; i < inputJSONArray.size(); i++) {
                             downloadedDataSet.add(new SingleMenuItem(
-                                    Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("id").toString()),
-                                    inputJSONArray.get(i).getAsJsonObject().get("name").toString(),
-                                    inputJSONArray.get(i).getAsJsonObject().get("detail").toString(),
-                                    Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString()),
-                                    //inputJSONArray.get(0).getAsJsonObject().get("picture").toString()
-                                    //picture = FoodActivity.listView.getResources().getIdentifier(pictureArray[i], "drawable", "com.t.p.gy.myrestaurantapp");
-                                    R.drawable.csiga
+                                    Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("id").toString().replaceAll("\"", "")),
+                                    inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""),
+                                    inputJSONArray.get(i).getAsJsonObject().get("detail").toString().replaceAll("\"", ""),
+                                    Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", "")),
+                                    Integer.parseInt(AdminActivity.getDrawableMap().get(inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", "")).toString()),
+                                    "food"
                             ));
                         }
                     }
@@ -136,11 +102,12 @@ public class AdminNetworkConnector extends Application {
         return downloadedDataSet;
     }
 
-    public void deleteFromDrinksTable(final String inputName){
+    public boolean deleteFromDrinksTable(final String inputName){
         Log.i("myLog", "deleteFromDrinksTable start...");
         try {
             Log.i("myLog", "deleteFromDrinksTable try start... inputname: " + inputName);
-            compositeDisposable.add(myAPI.deleteDrinks("foxi")
+            Log.i("myLog", "deleteFromDrinksTable try start... inputname: " + inputName +" "+ inputName.length());
+            compositeDisposable.add(myAPI.deleteDrinks(inputName)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
@@ -148,13 +115,38 @@ public class AdminNetworkConnector extends Application {
                             Log.i("myLog", "Response code: " + response);
                             Log.i("myLog", "Response code: " + response.code());
                             Log.i("myLog", "Response body: " + response.body().toString());
-                            //Toast??
                         } else {
                             //Toast??: Toast.makeText(hogy kellelérni ay activity-t????, "" + response.code(), Toast.LENGTH_SHORT).show();
                         }
                     }));
+            return true;
         }catch (Exception e){
             Log.i("myLog", "Hiba törléskor: " + e);
+            return false;
+        }
+    }
+
+    public boolean deleteFromFoodsTable(final String inputName){
+        Log.i("myLog", "deleteFromFoodsTable start...");
+        try {
+            Log.i("myLog", "deleteFromFoodsTable try start... inputname: " + inputName);
+            Log.i("myLog", "deleteFromFoodsTable try start... inputname: " + inputName +" "+ inputName.length());
+            compositeDisposable.add(myAPI.deleteFoods(inputName)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(response -> {
+                        if (response.code() >= 200 && response.code() < 300) {
+                            Log.i("myLog", "Response code: " + response);
+                            Log.i("myLog", "Response code: " + response.code());
+                            Log.i("myLog", "Response body: " + response.body().toString());
+                        } else {
+                            //Toast??: Toast.makeText(hogy kellelérni ay activity-t????, "" + response.code(), Toast.LENGTH_SHORT).show();
+                        }
+                    }));
+            return true;
+        }catch (Exception e){
+            Log.i("myLog", "Hiba törléskor: " + e);
+            return false;
         }
     }
 }

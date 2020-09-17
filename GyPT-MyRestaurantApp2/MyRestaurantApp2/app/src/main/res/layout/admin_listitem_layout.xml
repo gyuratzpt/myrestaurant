@@ -94,7 +94,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Törlés"
-        android:background="@color/md_red_A700"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/admin_listitem_guideline_right"

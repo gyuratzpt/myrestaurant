@@ -15,8 +15,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
 import com.t.p.gy.myrestaurantapp.connection.RetrofitClient;
 
@@ -38,7 +36,7 @@ public class AdminActivity_old extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.admin_layout);
+        setContentView(R.layout.activity_admin);
 
         Retrofit retrofit = RetrofitClient.getInstance();
         myAPI = retrofit.create(ProductsBackend.class);

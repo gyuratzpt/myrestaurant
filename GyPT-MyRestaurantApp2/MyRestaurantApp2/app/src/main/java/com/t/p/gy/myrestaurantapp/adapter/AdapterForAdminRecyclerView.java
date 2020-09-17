@@ -1,6 +1,7 @@
 package com.t.p.gy.myrestaurantapp.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +27,7 @@ import retrofit2.Retrofit;
 
 
 public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterForAdminRecyclerView.ViewHolder>{
-    AdminNetworkConnector anc = AdminNetworkConnector.getInstance();
+    AdminNetworkConnector anc = AdminNetworkConnector.getInstance();;
 
     //egy listaelem elemei
     protected class ViewHolder extends RecyclerView.ViewHolder{
@@ -70,7 +71,6 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
 //adatfeltöltés az egyes elemekhez
     public void onBindViewHolder(ViewHolder holder, int position) {
         final SingleMenuItem smi = anc.getDownloadedList().get(position);
-
         /*
         holder.itemImage.setImageResource(smi.getImageResourceID());
         if(smi.hasImage()) {
@@ -87,39 +87,26 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
         holder.itemName.setText(smi.getName());
         holder.itemDescription.setText(smi.getDetail());
         holder.itemPrice.setText(Integer.toString(smi.getPrice()));
-
-        //holder.itemDelete.setBackgroundColor(holder.itemDelete.getResources().getColor(R.color.MyWarningColor));
+        holder.deleteButton.setBackgroundColor(holder.deleteButton.getResources().getColor(R.color.MyWarningColor));
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("myLog", "Deletebutton pressed");
-                Log.i("myLog", smi.getName());
-                anc.deleteFromDrinksTable(smi.getName());
-/*
-                try {
-                    compositeDisposable.add(myAPI.deleteDrinks("cola")
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(response -> {
-                                if (response.code() >= 200 && response.code() < 300) {
-                                    //Toast??
-                                    Log.i("myLog", smi.getName() + " törölve");
-                                } else {
-                                    //Toast??: Toast.makeText(hogy kellelérni ay activity-t????, "" + response.code(), Toast.LENGTH_SHORT).show();
-                                    Log.i("myLog", "Hiba törléskor" + response.code());
-                                }
-                            }));
-                }catch (Exception e){
-                    Log.i("myLog", "Hiba törléskor: " + e);
+                Log.i("myLog", "Választott termék: "+ smi.getName());
+                if (smi.getCategory().equals("drink")) {
+                    if (anc.deleteFromDrinksTable(smi.getName())) {
+                        Log.i("myLog", "if true lett!");
+                    }
                 }
-
- */
+                else if (smi.getCategory().equals("food")) {
+                    if (anc.deleteFromFoodsTable(smi.getName())) {
+                        Log.i("myLog", "if true lett!");
+                    }
+                }
             }
         });
-        Log.v("MyLog","Admin adapterForRecyclerView, konstruktor: OK");
+        Log.i("myLog","Admin adapterForRecyclerView, konstruktor: OK");
     }
-
-
 }
 
 

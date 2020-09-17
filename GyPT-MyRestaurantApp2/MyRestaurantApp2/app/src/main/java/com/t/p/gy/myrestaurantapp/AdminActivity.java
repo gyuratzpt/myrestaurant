@@ -1,9 +1,5 @@
 package com.t.p.gy.myrestaurantapp;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,54 +8,29 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
-import java.util.ArrayList;
-
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import com.t.p.gy.myrestaurantapp.adapter.AdapterForAdminRecyclerView;
-import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
-import com.t.p.gy.myrestaurantapp.connection.RetrofitClient;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AdminActivity extends AppCompatActivity{
     private RecyclerView adminRecyclerView;
     private RecyclerView.Adapter adminRecyclerViewAdapter;
-    //CompositeDisposable compositeDisposable = new CompositeDisposable();
-    //ProductsBackend myAPI;
+    static Map<String, Integer> drawableMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.admin_layout);
+        setContentView(R.layout.activity_admin);
         Log.v("MyLog", "Admin oncreate start...");
 
-        //Retrofit retrofit = RetrofitClient.getInstance();
-        //myAPI = retrofit.create(ProductsBackend.class);
-        //vissza gomb
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        Button addButton = (Button) findViewById(R.id.admin_activity_addbutton);
+        Button addButton = (Button) findViewById(R.id.adminactivity_addbutton);
         //Button filterButton = (Button) findViewById(R.id.admin_activity_filter);
         //Button searchButton = (Button) findViewById(R.id.admin_activity_search);
         Button testButton = findViewById(R.id.admin_temp_testbutton);
-
         //metódus teszteléshez ideiglenes gomb
         testButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
@@ -87,15 +58,25 @@ public class AdminActivity extends AppCompatActivity{
             }
         });
 
-        adminRecyclerView = (RecyclerView) findViewById(R.id.admin_activity_recyclerview) ;
+        initBackButton();
+        initDrawMap();
+
+        adminRecyclerView = (RecyclerView) findViewById(R.id.adminactivity_recyclerview) ;
         adminRecyclerView.setHasFixedSize(true);
         adminRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adminRecyclerViewAdapter = new AdapterForAdminRecyclerView();
         adminRecyclerView.setAdapter(adminRecyclerViewAdapter);
-        Log.v("MyLog", "Admin oncreate vége...");
+        Log.i("myLog", "Admin oncreate vége...");
     }
 
     //vissza gomb
+    private void initBackButton() {
+        //vissza gomb
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -104,11 +85,34 @@ public class AdminActivity extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
+    //vissza gomb vége
 
-
-    public static void makeMessage(final String inputString){
-        //Toast.makeText(this.getContext), inputString, Toast.LENGTH_LONG).show();
+    private void initDrawMap() {
+        drawableMap = new HashMap<>();
+        drawableMap.put("birramoretti", getApplicationContext().getResources().getIdentifier("birramoretti","drawable", getPackageName()));
+        drawableMap.put("cola", getApplicationContext().getResources().getIdentifier("cola","drawable", getPackageName()));
+        drawableMap.put("corona", getApplicationContext().getResources().getIdentifier("corona","drawable", getPackageName()));
+        drawableMap.put("csiga", getApplicationContext().getResources().getIdentifier("csiga","drawable", getPackageName()));
+        drawableMap.put("donerkebab", getApplicationContext().getResources().getIdentifier("donerkebab","drawable", getPackageName()));
+        drawableMap.put("duplahamburger", getApplicationContext().getResources().getIdentifier("duplahamburger","drawable", getPackageName()));
+        drawableMap.put("durum", getApplicationContext().getResources().getIdentifier("durum","drawable", getPackageName()));
+        drawableMap.put("extrahamburger", getApplicationContext().getResources().getIdentifier("extrahamburger","drawable", getPackageName()));
+        drawableMap.put("fanta", getApplicationContext().getResources().getIdentifier("fanta","drawable", getPackageName()));
+        drawableMap.put("hamburger", getApplicationContext().getResources().getIdentifier("hamburger","drawable", getPackageName()));
+        drawableMap.put("hell", getApplicationContext().getResources().getIdentifier("hell","drawable", getPackageName()));
+        drawableMap.put("kilkenny", getApplicationContext().getResources().getIdentifier("kilkenny","drawable", getPackageName()));
+        drawableMap.put("sprite", getApplicationContext().getResources().getIdentifier("sprite","drawable", getPackageName()));
+        drawableMap.put("stella", getApplicationContext().getResources().getIdentifier("stella","drawable", getPackageName()));
+        drawableMap.put("wizard", getApplicationContext().getResources().getIdentifier("wizard","drawable", getPackageName()));
     }
+
+    public static Map getDrawableMap(){
+        return drawableMap;
+    }
+
+}
+
+
     /*
     private void createDrinkItem(final String name, final String description, final Integer price,final String picture){
 
@@ -198,4 +202,3 @@ public class AdminActivity extends AppCompatActivity{
     }
 
     */
-}

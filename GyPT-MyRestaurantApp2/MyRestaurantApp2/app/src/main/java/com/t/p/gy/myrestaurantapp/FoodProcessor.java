@@ -91,7 +91,7 @@ public class FoodProcessor extends Application {
                             price = priceArray[i];
                             picture = FoodActivity.listView.getResources().getIdentifier(pictureArray[i], "drawable", "com.t.p.gy.myrestaurantapp");
 
-                            foods.add(new SingleMenuItem(id, name, detail, price, picture));
+                            foods.add(new SingleMenuItem(id, name, detail, price, picture, "food"));
                         }
                     }
                     else {

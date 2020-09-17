@@ -17,6 +17,7 @@ import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
 public class AdapterForCartRecyclerView extends RecyclerView.Adapter<AdapterForCartRecyclerView.ViewHolder>{
     Cart myCart = Cart.getInstance();
     private TextView textView;
+
     protected class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView itemImage;
         private TextView itemName,
