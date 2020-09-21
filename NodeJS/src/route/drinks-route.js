@@ -12,11 +12,13 @@ export default function(router) {
         '/drinks',
         drinks.create_drink_item
     );
+
     router
         .put(
             '/drinks/:name',
             drinks.update_drink
         );
+        
     router.delete(
         '/drinks/items/:name',
         drinks.delete_drinks_item

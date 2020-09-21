@@ -1,9 +1,12 @@
 package com.t.p.gy.myrestaurantapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -56,11 +59,24 @@ public class DrinkActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;
+        case R.id.cart:
+        Intent myIntent = new Intent(DrinkActivity.this, CartActivity.class);
+        startActivity(myIntent);
+        return true;
+        case R.id.logout:
+        Toast.makeText(this, "Kilépés", Toast.LENGTH_LONG).show();
+        return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -79,4 +95,7 @@ public class DrinkActivity extends AppCompatActivity {
     public static void refreshSummedPrice(){
         tv_SummedPrice.setText(String.valueOf(drinkProcessor.refreshActualOrderPrice()));
     }
+
+
+
 }

@@ -72,4 +72,5 @@ public class CartActivity extends AppCompatActivity{
     public static void refreshPriceTextView(int x){
         tv_price_new.setText(Integer.toString(x));
     }
+
 }

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <TextView
+        android:id="@+id/dialog_additem_nametitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Név:"
+        android:gravity="center"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/dialog_additem_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/dialog_additem_imagetitle"
+        />
+
+    <TextView
+        android:id="@+id/dialog_additem_descriptiontitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Leírás:"
+        android:gravity="center"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/dialog_additem_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/dialog_additem_imagetitle"
+        />
+
+    <TextView
+        android:id="@+id/dialog_additem_pricetitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Ár:"
+        android:gravity="center"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/dialog_additem_price"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/dialog_additem_imagetitle"
+        />
+
+    <TextView
+        android:id="@+id/dialog_additem_imagetitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Kép neve:"
+        app:layout_constraintHorizontal_weight="3"
+        android:gravity="center"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/dialog_additem_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/dialog_additem_image"/>
+
+    <EditText
+        android:id="@+id/dialog_additem_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="név"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/dialog_additem_description"
+        app:layout_constraintStart_toStartOf="@id/dialog_additem_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <EditText
+        android:id="@+id/dialog_additem_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:hint="termék leírása"
+
+        app:layout_constraintTop_toBottomOf="@id/dialog_additem_name"
+        app:layout_constraintBottom_toTopOf="@id/dialog_additem_price"
+        app:layout_constraintStart_toStartOf="@id/dialog_additem_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <EditText
+        android:id="@+id/dialog_additem_price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="ár"
+
+        app:layout_constraintTop_toBottomOf="@id/dialog_additem_price"
+        app:layout_constraintBottom_toTopOf="@id/dialog_additem_image"
+        app:layout_constraintStart_toStartOf="@id/dialog_additem_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <EditText
+        android:id="@+id/dialog_additem_image"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="forrásfile neve"
+        app:layout_constraintHorizontal_weight="6"
+
+        app:layout_constraintTop_toBottomOf="@id/dialog_additem_price"
+        app:layout_constraintStart_toEndOf="@id/dialog_additem_imagetitle"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/dialog_additem_addbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hozzáad"
+        android:paddingTop="10dp"
+
+        app:layout_constraintTop_toBottomOf="@id/dialog_additem_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/dialog_additem_cancelbutton"
+        />
+
+    <Button
+        android:id="@+id/dialog_additem_cancelbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mégsem"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/dialog_additem_addbutton"
+        app:layout_constraintStart_toEndOf="@id/dialog_additem_addbutton"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</android.support.constraint.ConstraintLayout>

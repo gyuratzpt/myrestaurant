@@ -26,18 +26,6 @@ export default class Drinks {
         );
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     static addDrinkItem(newItem, res) {
         conn.query(
             'INSERT INTO `drinks` (`name`, `detail`, `price`, `picture`) ' +

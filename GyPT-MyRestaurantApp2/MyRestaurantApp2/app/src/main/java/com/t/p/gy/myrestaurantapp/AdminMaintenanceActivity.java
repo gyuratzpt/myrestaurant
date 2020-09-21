@@ -1,16 +1,21 @@
 package com.t.p.gy.myrestaurantapp;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.t.p.gy.myrestaurantapp.adapter.AdapterForAdminRecyclerView;
+import com.t.p.gy.myrestaurantapp.other.AddDialog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +34,12 @@ public class AdminMaintenanceActivity extends AppCompatActivity{
         Button addButton = (Button) findViewById(R.id.adminactivity_addbutton);
         //Button filterButton = (Button) findViewById(R.id.admin_activity_filter);
         //Button searchButton = (Button) findViewById(R.id.admin_activity_search);
-
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                initAddButton();
+            }
+        });
         initBackButton();
         initDrawMap();
 
@@ -82,95 +92,9 @@ public class AdminMaintenanceActivity extends AppCompatActivity{
         return drawableMap;
     }
 
+    private void initAddButton(){
+        AddDialog alert = new AddDialog();
+        alert.showDialog(this);
+    }
+
 }
-
-
-    /*
-    private void createDrinkItem(final String name, final String description, final Integer price,final String picture){
-
-        compositeDisposable.add((Disposable) myAPI.addDrinks(name, description, price, picture)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                }, throwable -> {
-                    Toast.makeText(AdminActivity.this, "Drink added successfully!", Toast.LENGTH_SHORT).show();
-                })
-        );
-    }
-
-    private void createFoodItem(final String name, final String description, final Integer price,final String picture){
-        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
-
-        compositeDisposable.add(myAPI.addFoods(name, description, price, picture)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    if (response.code() >= 200 && response.code() < 300){
-                        Toast.makeText(AdminActivity.this, "Food added successfully!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(AdminActivity.this, "" + response.code(), Toast.LENGTH_SHORT).show();
-                    }
-                }));
-    }
-
-    private void changeDrinkItem(final String name, final String description, final Integer price,final String picture){
-        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
-
-        compositeDisposable.add(myAPI.updateDrinks(name, name, description, price, picture)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    if (response.code() >= 200 && response.code() < 300){
-                        Toast.makeText(AdminActivity.this, "Drink change successfully!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(AdminActivity.this, "" + response.code(), Toast.LENGTH_SHORT).show();
-                    }
-                }));
-    }
-
-    private void changeFoodItem(final String name, final String description, final Integer price,final String picture){
-        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
-
-        compositeDisposable.add(myAPI.updateFoods(name, name, description, price, picture)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    if (response.code() >= 200 && response.code() < 300){
-                        Toast.makeText(AdminActivity.this, "Food change successfully!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(AdminActivity.this, "" + response.code(), Toast.LENGTH_SHORT).show();
-                    }
-                }));
-    }
-
-    private void deleteDrinkItem(final String name){
-        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
-
-        compositeDisposable.add(myAPI.deleteDrinks(name)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    if (response.code() >= 200 && response.code() < 300){
-                        Toast.makeText(AdminActivity.this, "Drink delete successfully!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(AdminActivity.this, "" + response.code(), Toast.LENGTH_SHORT).show();
-                    }
-                }));
-    }
-
-    private void deleteFoodItem(final String name){
-        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
-
-        compositeDisposable.add(myAPI.deleteFoods(name)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    if (response.code() >= 200 && response.code() < 300){
-                        Toast.makeText(AdminActivity.this, "Food delete successfully!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(AdminActivity.this, "" + response.code(), Toast.LENGTH_SHORT).show();
-                    }
-                }));
-    }
-
-    */

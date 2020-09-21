@@ -26,49 +26,6 @@ export default class Foods {
         );
     }
 
-
-
-
-
-
-
-
-    
-
-    static getFoodKebab(res) {
-        conn.query(
-            `SELECT * FROM foods WHERE name = mars`,
-            [],
-            function(err, result) {
-                if (err) {
-                    console.log('Error: ', err);
-                    res(err, null);
-                } else {
-                    res(null, result);
-                }
-            }
-        );
-    }
-
-
-
-    static downloadpicture(res){
-        conn.query(`SELECT picture FROM foods`,
-        [],
-        function (error, blob){
-            if(error){
-                res(error, null);
-            } else if (blob[0]['picture'] !== null){
-                const imageData = blob[0]['picture'];
-                const imageMime = getImageMimeType(imageData);
-                res(null, {imageData, imageMime});
-            } else {
-                res(null, { message: 'No picture of that'});
-            }
-        }
-        );
-    }
-
     static addFoodItem(newItem, res) {
         conn.query(
             'INSERT INTO `foods` (`name`, `detail`, `price`, `picture`) ' +
@@ -118,4 +75,23 @@ export default class Foods {
             }
         );
     }
+
+    static downloadpicture(res){
+        conn.query(`SELECT picture FROM foods`,
+        [],
+        function (error, blob){
+            if(error){
+                res(error, null);
+            } else if (blob[0]['picture'] !== null){
+                const imageData = blob[0]['picture'];
+                const imageMime = getImageMimeType(imageData);
+                res(null, {imageData, imageMime});
+            } else {
+                res(null, { message: 'No picture of that'});
+            }
+        }
+        );
+    }
+
+
 }

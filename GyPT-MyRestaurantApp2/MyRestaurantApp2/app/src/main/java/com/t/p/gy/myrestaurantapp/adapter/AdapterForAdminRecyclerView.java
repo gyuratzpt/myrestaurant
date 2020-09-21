@@ -13,9 +13,13 @@ import com.t.p.gy.myrestaurantapp.R;
 import com.t.p.gy.myrestaurantapp.connection.AdminNetworkConnector;
 import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterForAdminRecyclerView.ViewHolder>{
-    AdminNetworkConnector anc = AdminNetworkConnector.getInstance();;
+    AdminNetworkConnector anc = AdminNetworkConnector.getInstance();
+    private List<SingleMenuItem> downloadedDataList = new ArrayList<SingleMenuItem>();
 
     //egy listaelem elemei
     protected class ViewHolder extends RecyclerView.ViewHolder{
@@ -37,7 +41,9 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
         }
     }
 
-    public AdapterForAdminRecyclerView(){}
+    public AdapterForAdminRecyclerView(){
+        downloadedDataList = anc.getDownloadedList();
+    }
 
     @Override
 //létrehozza az egyes sorokat
@@ -52,13 +58,13 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
     @Override
 //visszaadja hány eleme van a listának
     public int getItemCount() {
-        return anc.getDownloadedList().size();
+        return downloadedDataList.size();
     }
 
     @Override
 //adatfeltöltés az egyes elemekhez
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final SingleMenuItem smi = anc.getDownloadedList().get(position);
+        final SingleMenuItem smi = downloadedDataList.get(position);
         /*
         holder.itemImage.setImageResource(smi.getImageResourceID());
         if(smi.hasImage()) {
@@ -91,10 +97,12 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
                         Log.i("myLog", "if true lett!");
                     }
                 }
+                notifyItemRemoved(position);
             }
         });
         Log.i("myLog","Admin adapterForRecyclerView, konstruktor: OK");
     }
+
 }
 
 

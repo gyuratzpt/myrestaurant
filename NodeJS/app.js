@@ -6,6 +6,7 @@ const app = express();
 import drinksRoutes from './src/route/drinks-route';
 import foodsRoutes from './src/route/foods-route';
 import usersRoutes from './src/route/users-route';
+import ordersRoutes from './src/route/orders-route';
 const device = require('express-device');
 const config = require('./config');
 
@@ -35,6 +36,7 @@ const router = express.Router();
 drinksRoutes(router);
 foodsRoutes(router);
 usersRoutes(router);
+ordersRoutes(router);
 app.use(config.appVersion, router);
 
 // START APPLICATION

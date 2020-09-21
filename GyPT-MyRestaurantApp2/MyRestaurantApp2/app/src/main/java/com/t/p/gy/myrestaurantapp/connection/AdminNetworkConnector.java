@@ -2,21 +2,25 @@ package com.t.p.gy.myrestaurantapp.connection;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
+import com.t.p.gy.myrestaurantapp.AdminActivity_old;
 import com.t.p.gy.myrestaurantapp.AdminMaintenanceActivity;
 import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
 public class AdminNetworkConnector extends Application {
     private static AdminNetworkConnector adminNetworkConnectorInstance;
-    private ArrayList<SingleMenuItem> downloadedDataSet = new ArrayList<SingleMenuItem>();
+    //private ArrayList<SingleMenuItem> downloadedDataSet = new ArrayList<SingleMenuItem>();
     ProductsBackend myAPI;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -38,8 +42,8 @@ public class AdminNetworkConnector extends Application {
         return adminNetworkConnectorInstance;
     }
 
-
-    private void downloadData(){
+    private List<SingleMenuItem> downloadData(){
+        List<SingleMenuItem> downloadedDataSet = new ArrayList<SingleMenuItem>();
         compositeDisposable.add(myAPI.getDrinks()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -85,10 +89,11 @@ public class AdminNetworkConnector extends Application {
                         Log.i("myLog", "AdminNetworkConnector error: " + response.code() + " " + response.errorBody().string());
                     }
                 }));
+        return downloadedDataSet;
     }
 
-    public ArrayList<SingleMenuItem> getDownloadedList(){
-        return downloadedDataSet;
+    public List<SingleMenuItem> getDownloadedList(){
+        return downloadData();
     }
 
     public boolean deleteFromDrinksTable(final String inputName){
@@ -138,4 +143,34 @@ public class AdminNetworkConnector extends Application {
             return false;
         }
     }
+
+    public void createDrinkItem(final String name, final String description, final Integer price,final String picture){
+
+        compositeDisposable.add((Disposable) myAPI.addDrinks(name, description, price, picture)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                }, throwable -> {
+                    //Toast.makeText(this, "Drink added successfully!", Toast.LENGTH_SHORT).show();
+                })
+        );
+    }
+
+    public void createFoodItem(final String name, final String description, final Integer price,final String picture){
+        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
+
+        compositeDisposable.add(myAPI.addFoods(name, description, price, picture)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.code() >= 200 && response.code() < 300){
+                        Toast.makeText(this, "Food added successfully!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "" + response.code(), Toast.LENGTH_SHORT).show();
+                    }
+                }));
+    }
+
+
+
 }

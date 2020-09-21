@@ -8,12 +8,16 @@ import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -42,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button adminButton = findViewById(R.id.admin_button);
+        Button adminMaintenanceButton = findViewById(R.id.admin_maintenancebutton);
+        Button adminOrdersButton = findViewById(R.id.admin_ordersbutton);
 
         spinnerList.add("MENÜ");
         spinnerList.add("Ételek");
@@ -71,8 +76,9 @@ public class MainActivity extends AppCompatActivity {
 
         //ADMIN feature
         if(user.getIs_admin() == 1) {
-            adminButton.setVisibility(View.VISIBLE);
-            adminButton.setOnClickListener(new View.OnClickListener() {
+            adminMaintenanceButton.setVisibility(View.VISIBLE);
+            adminOrdersButton.setVisibility(View.VISIBLE);
+            adminMaintenanceButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View arg0) {
                     // Start Admin
                     Intent myIntent = new Intent(MainActivity.this,
@@ -80,15 +86,46 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(myIntent);
                 }
             });
+            adminOrdersButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View arg0) {
+                    // Start Admin
+                    Intent myIntent = new Intent(MainActivity.this,
+                            AdminOrdersActivity.class);
+                    startActivity(myIntent);
+                }
+            });
         }
         else {
-            adminButton.setVisibility(View.GONE);
+            adminMaintenanceButton.setVisibility(View.GONE);
+            adminOrdersButton.setVisibility(View.GONE);
         }
 
 
         //Ellenőrző lépések, csak teszt miatt
         Log.v("MyLog", "Main: finish");
      }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.cart:
+                Intent myIntent = new Intent(MainActivity.this, CartActivity.class);
+                startActivity(myIntent);
+                return true;
+            case R.id.logout:
+                Toast.makeText(this, "Kilépés", Toast.LENGTH_LONG).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     private void initButtons(ImageView gallery_imageView, ImageView contact_imageView) {
         //  GALLERY megnyitasa
