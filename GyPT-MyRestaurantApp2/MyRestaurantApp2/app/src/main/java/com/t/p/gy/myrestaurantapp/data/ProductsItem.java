@@ -1,4 +1,4 @@
-package com.t.p.gy.myrestaurantapp;
+package com.t.p.gy.myrestaurantapp.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

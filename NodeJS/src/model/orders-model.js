@@ -7,7 +7,6 @@ export default class Orders {
     constructor(orderItem) {
         this.orderid = orderItem.orderid;
         this.userid = orderItem.userid;
-        this.category = orderItem.category;
         this.productid = orderItem.productid;
         this.amount = orderItem.amount;
     }

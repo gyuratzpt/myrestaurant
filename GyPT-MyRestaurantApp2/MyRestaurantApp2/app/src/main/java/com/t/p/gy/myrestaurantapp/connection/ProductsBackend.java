@@ -14,14 +14,37 @@ import retrofit2.http.Path;
 
 public interface ProductsBackend {
 
+    @GET("/api/v1/products")
+    Observable<Response<JsonObject>> getAllProducts();
     @GET("/api/v1/orders")
     Observable<Response<JsonObject>> getAllOrders();
+    @GET("/api/v1/categories")
+    Observable<Response<JsonObject>> getCategories();
+    @FormUrlEncoded
+    @POST("/api/v1/products")
+    Observable<Response<JsonObject>> addProduct(@Field("categoryID") Integer categoryID,
+                                                @Field("name") String name,
+                                                @Field("detail") String detail,
+                                                @Field("price") Integer price,
+                                                @Field("picture") String picture);
+
+    @HTTP(method = "DELETE", path = "/api/v1/products/items/{id}", hasBody = true)
+    Observable<Response<ResponseBody>> deleteProduct(@Path("id") int id);
+
+
+
+
+
+
+
+
+
+
+
     @GET("/api/v1/foods")
     Observable<Response<JsonObject>> getFoods();
-	@GET("/api/v1/drinks")
+    @GET("/api/v1/drinks")
     Observable<Response<JsonObject>> getDrinks();
-
-
 
 	@FormUrlEncoded
 	@POST("/api/v1/foods")

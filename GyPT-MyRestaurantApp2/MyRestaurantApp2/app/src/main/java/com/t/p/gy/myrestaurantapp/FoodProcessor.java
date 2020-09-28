@@ -17,7 +17,7 @@ import retrofit2.Retrofit;
 import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
 import com.t.p.gy.myrestaurantapp.connection.RetrofitClient;
 import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
-import com.t.p.gy.myrestaurantapp.data.Cart;
+import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 
 public class FoodProcessor extends Application {
     final private static ArrayList<SingleMenuItem> foods = new ArrayList<SingleMenuItem>();
@@ -26,7 +26,7 @@ public class FoodProcessor extends Application {
     ProductsBackend myAPI;
     Gson gson = new GsonBuilder().setLenient().create();
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-    Cart myCart = Cart.getInstance();
+    DataProcessor myDataProcessor = DataProcessor.getInstance();
 
     //food feltotltese adatbazisbol
 
@@ -119,7 +119,7 @@ public class FoodProcessor extends Application {
             if (x.getOrderAmount() > 0) {
                 x.setCartAmount(x.getOrderAmount());
                 x.resetOrderAmount();
-                myCart.addToCart(x);
+                //myCart.addToCart(x);
             }
         }
     }

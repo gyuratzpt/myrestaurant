@@ -5,7 +5,8 @@ import android.content.Intent;
         import android.os.Bundle;
         import android.support.v7.app.ActionBar;
         import android.support.v7.app.AppCompatActivity;
-        import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
         import android.support.v7.widget.RecyclerView;
         import android.util.Log;
         import android.view.MenuItem;
@@ -14,14 +15,16 @@ import android.content.Intent;
         import android.widget.TextView;
 
         import com.t.p.gy.myrestaurantapp.adapter.AdapterForCartRecyclerView;
-        import com.t.p.gy.myrestaurantapp.data.Cart;
+        import com.t.p.gy.myrestaurantapp.data.DataProcessor;
+
+import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 public class CartActivity extends AppCompatActivity{
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerViewAdapter;
     private TextView tv_price;
     static TextView tv_price_new;
-    Cart myCart = Cart.getInstance();
+    DataProcessor myDataProcessor = DataProcessor.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +44,14 @@ public class CartActivity extends AppCompatActivity{
 
         tv_price = (TextView) findViewById(R.id.cart_layout_price);
         tv_price_new = (TextView) findViewById(R.id.cart_layout_price);
-        tv_price.setText(String.valueOf(myCart.getCartFullPrice())+"Ft");
+        tv_price.setText(String.valueOf(myDataProcessor.getCartFullPrice())+"Ft");
 
         recyclerView = (RecyclerView) findViewById(R.id.cart_layout_recyclerview) ;
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewAdapter = new AdapterForCartRecyclerView(tv_price);
+        DividerItemDecoration decoration = new DividerItemDecoration(this, VERTICAL);
+        recyclerView.addItemDecoration(decoration);
         recyclerView.setAdapter(recyclerViewAdapter);
         Log.v("MyLog","CartActivity Konstruktor kész");
     }

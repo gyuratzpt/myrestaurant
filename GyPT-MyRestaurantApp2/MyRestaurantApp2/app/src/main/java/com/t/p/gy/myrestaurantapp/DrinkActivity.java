@@ -35,14 +35,14 @@ public class DrinkActivity extends AppCompatActivity {
         listView.setAdapter(itemAdapterForDrinkActivity);
         Log.i("myLog", "Drinks, activity: itemadapter finish");
         tv_SummedPrice = (TextView) findViewById(R.id.drinkactivitylayout_price);
-        tv_SummedPrice.setText(R.string.shared_menu_layout_price_text);
+        //tv_SummedPrice.setText(R.string.shared_menu_layout_price_text);
 
         Button button = (Button) findViewById(R.id.drinkactivitylayout_addtocartbutton);
-        button.setText(R.string.shared_menu_layout_tocart_button_text);
+        //button.setText(R.string.shared_menu_layout_tocart_button_text);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                drinkProcessor.addSelectedItemsToCart();
+                //drinkProcessor.addSelectedItemsToCart();
                 Toast.makeText(view.getContext(), "A tételek bekerültek a kosárba!", Toast.LENGTH_LONG).show();
                 itemAdapterForDrinkActivity.refreshlistview();
                 refreshSummedPrice();

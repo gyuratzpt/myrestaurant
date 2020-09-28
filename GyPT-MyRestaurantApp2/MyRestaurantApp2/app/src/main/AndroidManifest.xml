@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AdminOrdersActivity"></activity>
+
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait">
@@ -45,7 +45,16 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".AdminMaintenanceActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".AdminOrdersActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".MenuActivity"
+            android:screenOrientation="portrait"/>
+
+
+
 
         <uses-library
             android:name="org.apache.http.legacy"

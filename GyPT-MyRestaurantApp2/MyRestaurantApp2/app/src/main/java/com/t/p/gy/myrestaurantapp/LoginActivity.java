@@ -23,6 +23,7 @@ import retrofit2.Retrofit;
 import com.auth0.android.jwt.JWT;
 import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
 import com.t.p.gy.myrestaurantapp.connection.RetrofitClient;
+import com.t.p.gy.myrestaurantapp.data.User;
 
 public class LoginActivity extends AppCompatActivity {
     Gson gson = new GsonBuilder().setLenient().create(); //???

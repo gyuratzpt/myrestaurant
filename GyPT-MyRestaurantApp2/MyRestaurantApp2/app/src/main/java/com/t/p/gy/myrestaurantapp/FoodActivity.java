@@ -31,12 +31,12 @@ public class FoodActivity extends AppCompatActivity {
         listView.setAdapter(itemAdapterforFoodActivity);
         Log.i("myLog", "Foods, activity: itemadapter_v2 finish");
         tv_SummedPrice = (TextView) findViewById(R.id.shared_menu_layout_price);
-        tv_SummedPrice.setText(R.string.shared_menu_layout_price_text);
+        //tv_SummedPrice.setText(R.string.shared_menu_layout_price_text);
 /*
 A kiválasztott tételeket ebben az Activityben egyszerre lehet a kosárhoz adni!
  */
         Button button = (Button) findViewById(R.id.shared_menu_layout_tocart_button);
-        button.setText(R.string.shared_menu_layout_tocart_button_text);
+        //button.setText(R.string.shared_menu_layout_tocart_button_text);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

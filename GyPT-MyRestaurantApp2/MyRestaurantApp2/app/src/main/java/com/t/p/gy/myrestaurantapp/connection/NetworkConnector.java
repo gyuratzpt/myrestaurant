@@ -2,12 +2,10 @@ package com.t.p.gy.myrestaurantapp.connection;
 
 import android.app.Application;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.JsonArray;
-import com.t.p.gy.myrestaurantapp.AdminActivity_old;
 import com.t.p.gy.myrestaurantapp.AdminMaintenanceActivity;
-import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
+import com.t.p.gy.myrestaurantapp.data.SingleProductItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,30 +16,176 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
-public class AdminNetworkConnector extends Application {
-    private static AdminNetworkConnector adminNetworkConnectorInstance;
+import static java.sql.Types.NULL;
+
+public class NetworkConnector extends Application {
+    private static NetworkConnector networkConnectorInstance;
     //private ArrayList<SingleMenuItem> downloadedDataSet = new ArrayList<SingleMenuItem>();
     ProductsBackend myAPI;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private List<SingleProductItem> productList;
+    private List<String> productCategories;
 
-    public AdminNetworkConnector(){
+    public NetworkConnector(){
         Log.i("myLog","AdminNetworkConnector start");
         Retrofit retrofit = RetrofitClient.getInstance();
         myAPI = retrofit.create(ProductsBackend.class);
-        downloadData();
+        //downloadData();
+        //downloadAllProducts();
 
         Log.i("myLog","AdminNetworkConnector vége");
     }
 
-    public static AdminNetworkConnector getInstance(){
-        if (adminNetworkConnectorInstance == null){ //if there is no instance available... create new one
-            adminNetworkConnectorInstance = new AdminNetworkConnector();
+    public static NetworkConnector getInstance(){
+        if (networkConnectorInstance == null){ //if there is no instance available... create new one
+            networkConnectorInstance = new NetworkConnector();
         }
         Log.i("myLog", "AdminNetworkConnector singleton");
 
-        return adminNetworkConnectorInstance;
+        return networkConnectorInstance;
     }
 
+    //products
+
+    private List<SingleProductItem> downloadAllProducts(){
+        List<SingleProductItem> downloadedDataSet = new ArrayList<SingleProductItem>();
+        compositeDisposable.add(myAPI.getAllProducts()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.code() >= 200 && response.code() < 300) {
+                        //Log.i("myLog", "ANC downloadAllProducts: " + response.body().toString());
+                        JsonArray inputJSONArray = response.body().getAsJsonArray("product");
+                        for (int i = 0; i < inputJSONArray.size(); i++) {
+                            Integer tmpInt = NULL;
+                            boolean x = inputJSONArray.get(i).getAsJsonObject().get("picture").isJsonNull();
+                            if (!x){
+                                String tmpString = inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", "");
+                                tmpInt = Integer.parseInt(AdminMaintenanceActivity.getDrawableMap().get(tmpString).toString());
+                                //tmpInt = Integer.parseInt(MenuActivity.getDrawableMap().get(tmpString).toString());
+
+
+                            }
+                            downloadedDataSet.add(new SingleProductItem(
+                                    Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("id").toString().replaceAll("\"", "")),
+                                    Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("categoryID").toString().replaceAll("\"", "")),
+                                    inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""),
+                                    inputJSONArray.get(i).getAsJsonObject().get("detail").toString().replaceAll("\"", ""),
+                                    Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", "")),
+                                    //Integer.parseInt(AdminMaintenanceActivity.getDrawableMap().get(inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", "")).toString())
+                                    tmpInt
+                            ));
+                        }
+                    }
+                    else {
+                        Log.i("myLog", "AdminNetworkConnector error: " + response.code() + " " + response.errorBody().string());
+                    }
+                }));
+        return downloadedDataSet;
+    }
+
+    public List<SingleProductItem> getDownloadedList(){
+        return downloadAllProducts();
+    }
+
+    public void createNewItem(final Integer category, final String name, final String description, final Integer price,final String picture){
+        Log.i("myLog", "createNewItem adatok: " + category + " " + name + " " + price);
+        compositeDisposable.add((Disposable) myAPI.addProduct(category, name, description, price, picture)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                }, throwable -> {
+                    //Toast.makeText(this, "Drink added successfully!", Toast.LENGTH_SHORT).show();
+
+                })
+        );
+    }
+
+    public boolean deleteProduct(final Integer id){
+        try {
+            Log.i("myLog", "deleteProduct try start... id: " + id);
+            compositeDisposable.add(myAPI.deleteProduct(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(response -> {
+                        if (response.code() >= 200 && response.code() < 300) {
+                            Log.i("myLog", "Response code: " + response);
+                            Log.i("myLog", "Response code: " + response.code());
+                            Log.i("myLog", "Response body: " + response.body().toString());
+                        } else {
+                            //Toast??: Toast.makeText(hogy kellelérni ay activity-t????, "" + response.code(), Toast.LENGTH_SHORT).show();
+                        }
+                    }));
+            return true;
+        }catch (Exception e){
+            Log.i("myLog", "Hiba törléskor: " + e);
+            return false;
+        }
+    }
+
+    public String downloadCategories(){
+        StringBuilder tmpString = new StringBuilder("");
+
+        try {
+            Log.i("myLog", "downloadCategories try");
+            compositeDisposable.add(myAPI.getCategories()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(response -> {
+                        if (response.code() >= 200 && response.code() < 300) {
+                            Log.i("myLog", "Response body: " + response.body().toString());
+                            tmpString.append(response.body().toString());
+                        } else {
+                            Log.i("myLog", "Response error: " + response.code());
+                            //Toast??: Toast.makeText(hogy kellelérni ay activity-t????, "" + response.code(), Toast.LENGTH_SHORT).show();
+                        }
+                    }));
+        }catch (Exception e){
+            Log.i("myLog", "Hiba törléskor: " + e);
+        }
+        return tmpString.toString();
+    }
+
+
+    //orders
+
+    public String downloadOrders(){
+        String tmp = "xyz";
+        StringBuilder tmpString = new StringBuilder();
+
+        compositeDisposable.add(myAPI.getAllOrders()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.code() >= 200 && response.code() < 300) {
+                        JsonArray inputJSONArray = response.body().getAsJsonArray("order");
+                        for (int i = 0; i < inputJSONArray.size(); i++) {
+                            tmpString.append(inputJSONArray.get(i).getAsJsonObject().get("orderID").toString().replaceAll("\"", "")
+                                    + " " + inputJSONArray.get(i).getAsJsonObject().get("userID").toString().replaceAll("\"", "")
+                                    + " " + inputJSONArray.get(i).getAsJsonObject().get("productID").toString().replaceAll("\"", "")
+                                    + " " + inputJSONArray.get(i).getAsJsonObject().get("amount").toString().replaceAll("\"", "")
+                                    + "\n"
+
+                            );
+                            Log.i("myLog", "tmpStr: " + tmpString);
+                        }
+                    }
+                    else {
+                        Log.i("myLog", "AdminOrders error: " + response.code() + " " + response.errorBody().string());
+                    }
+                })
+        );
+
+        Log.i("myLog", "végleges Stringbuilder: " + tmpString);
+        return tmpString.toString();
+    }
+
+
+
+
+
+    //egyéb
+    /*
     private List<SingleMenuItem> downloadData(){
         List<SingleMenuItem> downloadedDataSet = new ArrayList<SingleMenuItem>();
         compositeDisposable.add(myAPI.getDrinks()
@@ -90,10 +234,6 @@ public class AdminNetworkConnector extends Application {
                     }
                 }));
         return downloadedDataSet;
-    }
-
-    public List<SingleMenuItem> getDownloadedList(){
-        return downloadData();
     }
 
     public boolean deleteFromDrinksTable(final String inputName){
@@ -170,7 +310,5 @@ public class AdminNetworkConnector extends Application {
                     }
                 }));
     }
-
-
-
+    */
 }

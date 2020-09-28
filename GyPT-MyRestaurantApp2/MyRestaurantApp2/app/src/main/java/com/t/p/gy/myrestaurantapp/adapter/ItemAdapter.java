@@ -20,6 +20,7 @@ import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
 
 public class ItemAdapter extends ArrayAdapter<SingleMenuItem> {
     private int mColorResourceID; //hatter szine
+
     static DrinkProcessor dp = new DrinkProcessor();//valamiért ez dupláz?!?!?!
     public ItemAdapter(Activity context, ArrayList<SingleMenuItem> inputList, int colorResourceID) {
         super(context, 0, inputList);
@@ -78,7 +79,7 @@ public class ItemAdapter extends ArrayAdapter<SingleMenuItem> {
                     notifyDataSetChanged();
             }
         });
-
+/*
         addItemToCartTextView.setOnClickListener(new View.OnClickListener() {
             //DrinkProcessor dp = new DrinkProcessor();
             @Override
@@ -125,7 +126,7 @@ public class ItemAdapter extends ArrayAdapter<SingleMenuItem> {
                 }
             }
         });
-
+*/
         View textContainer = listItemView.findViewById(R.id.drink_menu_list_item_layout);
         int color = ContextCompat.getColor(getContext(), mColorResourceID);
         textContainer.setBackgroundColor(color);

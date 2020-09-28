@@ -23,7 +23,7 @@
         android:id="@+id/shared_menu_layout_tocart_button"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="@string/shared_menu_layout_tocart_button_text"
+        android:text="@string/menuactivity_addtocart_button_text"
 
         app:layout_constraintTop_toBottomOf="@id/shared_menu_layout_listview"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,7 +35,7 @@
         android:id="@+id/shared_menu_layout_price"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="@string/shared_menu_layout_price_text"
+        android:text="@string/menuactivity_addtocart_button_text"
         android:textAlignment="center"
 
         app:layout_constraintTop_toBottomOf="@id/shared_menu_layout_listview"

@@ -58,7 +58,7 @@ public class AdminActivity_old extends AppCompatActivity{
         Button changeButton = (Button) findViewById(R.id.admin_button_change);
         Button deleteButton = (Button) findViewById(R.id.admin_button_delete);
         Button testButton = findViewById(R.id.main_testbutton);
-        initSpinner(eTName, eTDescription, eTPrice, eTPic, addButton, changeButton, deleteButton);
+        //initSpinner(eTName, eTDescription, eTPrice, eTPic, addButton, changeButton, deleteButton);
 
 
         //metódus teszteléshez ideiglenes gomb
@@ -89,7 +89,7 @@ public class AdminActivity_old extends AppCompatActivity{
 
         });
     }
-
+/*
     private void initSpinner(EditText eTName, EditText eTDescription, EditText eTPrice, EditText eTPic, Button addButton, Button changeButton, Button deleteButton) {
         Spinner adminSpinner = findViewById(R.id.admin_spinner);
 
@@ -268,4 +268,6 @@ public class AdminActivity_old extends AppCompatActivity{
                     }
                 }));
     }
+
+ */
 }

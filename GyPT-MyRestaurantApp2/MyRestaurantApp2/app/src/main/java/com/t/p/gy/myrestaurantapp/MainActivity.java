@@ -22,16 +22,13 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
+import com.t.p.gy.myrestaurantapp.data.User;
 
 import java.util.ArrayList;
 
-import io.reactivex.disposables.CompositeDisposable;
-
 public class MainActivity extends AppCompatActivity {
     Gson gson = new GsonBuilder().setLenient().create();
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    ProductsBackend myAPI; //kell ez ide? nincs használva??
     private Spinner menuSpinner; //spinner objektum
     static final private ArrayList<String> spinnerList = new ArrayList<String>(); //adatbázisból lehúyni
 
@@ -44,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_v2);
 
         Button adminMaintenanceButton = findViewById(R.id.admin_maintenancebutton);
         Button adminOrdersButton = findViewById(R.id.admin_ordersbutton);
@@ -64,15 +61,19 @@ public class MainActivity extends AppCompatActivity {
 //Grafikus elemek példányosítása
         ImageView logo_imageView = findViewById(R.id.logo);
         ImageView actual_story_imageView = findViewById(R.id.actual_story);
+        ImageView menu_imageView = findViewById(R.id.menu);
         ImageView gallery_imageView = findViewById(R.id.gallery);
         ImageView contact_imageView = findViewById(R.id.contact);
 //Grafikus elemek forrásának beállítása
         logo_imageView.setImageResource(R.drawable.logo);
         actual_story_imageView.setImageResource(R.drawable.actual_story2);
+        menu_imageView.setImageResource(R.drawable.menu);
         gallery_imageView.setImageResource(R.drawable.gallery);
         contact_imageView.setImageResource(R.drawable.contact);
-        initSpinner();
-        initButtons(gallery_imageView, contact_imageView);
+
+
+        //initSpinner();
+        initButtons(menu_imageView, gallery_imageView, contact_imageView);
 
         //ADMIN feature
         if(user.getIs_admin() == 1) {
@@ -96,8 +97,10 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         else {
+
             adminMaintenanceButton.setVisibility(View.GONE);
             adminOrdersButton.setVisibility(View.GONE);
+
         }
 
 
@@ -127,7 +130,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void initButtons(ImageView gallery_imageView, ImageView contact_imageView) {
+    private void initButtons(ImageView menu_imageView, ImageView gallery_imageView, ImageView contact_imageView) {
+        //  MENU megnyitasa
+        menu_imageView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                Intent myIntent = new Intent(MainActivity.this,
+                        MenuActivity.class);
+                startActivity(myIntent);
+            }
+        });
+
         //  GALLERY megnyitasa
         gallery_imageView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {

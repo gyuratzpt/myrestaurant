@@ -1,28 +1,15 @@
 package com.t.p.gy.myrestaurantapp;
 
 import android.app.Application;
-import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import java.util.ArrayList;
-import java.util.List;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
 
-import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
-import com.t.p.gy.myrestaurantapp.connection.RetrofitClient;
 import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
-import com.t.p.gy.myrestaurantapp.data.Cart;
 
 public class DrinkProcessor extends Application {
     final private static ArrayList<SingleMenuItem> drinks = new ArrayList<SingleMenuItem>();
     private static ArrayList<SingleMenuItem> cart = new ArrayList<SingleMenuItem>();
-
+/*
     ProductsBackend myAPI;
     Gson gson = new GsonBuilder().setLenient().create();
     CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -147,6 +134,8 @@ public class DrinkProcessor extends Application {
         }
         return null;
     }
+
+ */
 }
 
 

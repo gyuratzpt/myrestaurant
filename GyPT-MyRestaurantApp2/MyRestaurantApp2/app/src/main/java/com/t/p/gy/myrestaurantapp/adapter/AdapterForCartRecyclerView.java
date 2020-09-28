@@ -10,12 +10,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.t.p.gy.myrestaurantapp.R;
-import com.t.p.gy.myrestaurantapp.data.Cart;
-import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
+import com.t.p.gy.myrestaurantapp.data.DataProcessor;
+import com.t.p.gy.myrestaurantapp.data.SingleProductItem;
 
 
 public class AdapterForCartRecyclerView extends RecyclerView.Adapter<AdapterForCartRecyclerView.ViewHolder>{
-    Cart myCart = Cart.getInstance();
+    DataProcessor myDataProcessor = DataProcessor.getInstance();
     private TextView textView;
 
     protected class ViewHolder extends RecyclerView.ViewHolder{
@@ -46,30 +46,45 @@ public class AdapterForCartRecyclerView extends RecyclerView.Adapter<AdapterForC
         textView = _tv;
     }
 
+
+    @Override
+//létrehozza az egyes elemeket
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        final View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.recyclerview_cart_layout, parent, false);
+        Log.v("myLog", "AdapterForRecyclerView4: OK");
+        v.setBackgroundColor(v.getResources().getColor(R.color.MyCartColor));
+
+        // törlés swipe-ra?!
+
+        return new ViewHolder(v);
+    }
+
+
     @Override
 //adatfeltöltés az egyes elemekhez
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final SingleMenuItem smi = myCart.getCart().get(position);
+        final SingleProductItem spi = myDataProcessor.getCart().get(position);
 
-        holder.itemImage.setImageResource(smi.getImageResourceID());
-        if(smi.hasImage()) {
+        holder.itemImage.setImageResource(spi.getImageResourceID());
+        if(spi.hasImage()) {
             // Get the image resource ID from the current AndroidFlavor object and set the image to iconView
-            holder.itemImage.setImageResource(smi.getImageResourceID());
+            holder.itemImage.setImageResource(spi.getImageResourceID());
             holder.itemImage.setVisibility(View.VISIBLE);
         }
         else {holder.itemImage.setVisibility(View.GONE);}
 
-        holder.itemName.setText(smi.getName());
-        holder.itemDescription.setText(smi.getDetail());
-        holder.itemAmount.setText(Integer.toString(smi.getCartAmount()));
-        holder.itemPrice.setText(Integer.toString(smi.getPrice()*smi.getCartAmount()));
+        holder.itemName.setText(spi.getName());
+        holder.itemDescription.setText(spi.getDetail());
+        holder.itemAmount.setText(Integer.toString(spi.getCartAmount()));
+        holder.itemPrice.setText(Integer.toString(spi.getPrice()*spi.getCartAmount()));
         holder.itemDelete.setBackgroundColor(holder.itemDelete.getResources().getColor(R.color.MyWarningColor));
 
 
         holder.itemDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myCart.deleteItemFromCart(smi, textView);
+                myDataProcessor.deleteItemFromCart(spi, textView);
                 notifyDataSetChanged();
                 Toast.makeText(view.getContext(),"Tétel törölve",Toast.LENGTH_LONG).show();
             }
@@ -79,10 +94,10 @@ public class AdapterForCartRecyclerView extends RecyclerView.Adapter<AdapterForC
         holder.itemAmountDecrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(smi.getCartAmount()>1){
-                    smi.setCartAmount(smi.getCartAmount()-1);
+                if(spi.getCartAmount()>1){
+                    spi.setCartAmount(spi.getCartAmount()-1);
                     //myCart.refreshCartFinalPrice(textView);
-                    myCart.refreshCartActivityView();
+                    myDataProcessor.refreshCartActivityView();
                     notifyDataSetChanged();
                 }
                 else Toast.makeText(view.getContext(),"Üres tétel nem lehet a kosárban, használd a törlés gombot!",Toast.LENGTH_LONG).show();
@@ -91,8 +106,8 @@ public class AdapterForCartRecyclerView extends RecyclerView.Adapter<AdapterForC
         holder.itemAmountIncrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                smi.setCartAmount(smi.getCartAmount()+1);
-                myCart.refreshCartFinalPrice(textView);
+                spi.setCartAmount(spi.getCartAmount()+1);
+                myDataProcessor.refreshCartFinalPrice(textView);
                 notifyDataSetChanged();
             }
         });
@@ -103,22 +118,9 @@ public class AdapterForCartRecyclerView extends RecyclerView.Adapter<AdapterForC
     }
 
     @Override
-//létrehozza az egyes sorokat
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recyclerview_item_layout_v3, parent, false);
-        Log.v("myLog", "AdapterForRecyclerView4: OK");
-        v.setBackgroundColor(v.getResources().getColor(R.color.MyCartColor));
-
-        // törlés swipe-ra?!
-
-        return new ViewHolder(v);
-    }
-
-    @Override
     //visszaadja hány eleme van a listának
     public int getItemCount() {
-        return myCart.getCart().size();
+        return myDataProcessor.getCart().size();
     }
 
 

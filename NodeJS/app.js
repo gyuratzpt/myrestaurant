@@ -7,6 +7,8 @@ import drinksRoutes from './src/route/drinks-route';
 import foodsRoutes from './src/route/foods-route';
 import usersRoutes from './src/route/users-route';
 import ordersRoutes from './src/route/orders-route';
+import productsRoutes from './src/route/products-route';
+import categoriesRoutes from './src/route/categories-route';
 const device = require('express-device');
 const config = require('./config');
 
@@ -37,6 +39,8 @@ drinksRoutes(router);
 foodsRoutes(router);
 usersRoutes(router);
 ordersRoutes(router);
+productsRoutes(router);
+categoriesRoutes(router);
 app.use(config.appVersion, router);
 
 // START APPLICATION

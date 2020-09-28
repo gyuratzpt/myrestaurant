@@ -1,73 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drink_menu_layout">
 
-    <TextView
-        android:id="@+id/drinkactivitylayout_title"
+    <Spinner
+        android:id="@+id/menuactivity_spinner"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="4:1"
-        android:text="Italok"
-        android:gravity="center"
-        android:textSize="32sp"
+        android:layout_height="wrap_content"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-    />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <ListView
-        android:id="@+id/drinkactivitylayout_listview"
+    <TextView
+        android:id="@+id/menuactivity_title"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
+        app:layout_constraintDimensionRatio="4:1"
+        android:text="Placeholder"
+        android:gravity="center"
+        android:textSize="32sp"
 
-        app:layout_constraintTop_toBottomOf="@id/drinkactivitylayout_title"
-        app:layout_constraintBottom_toBottomOf="@id/drinkactivitylayout_guideline"
+        app:layout_constraintTop_toBottomOf="@id/menuactivity_spinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        >
+        />
 
-    </ListView>
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/menuactivity_recyclerview"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:scrollbars="vertical"
+
+    app:layout_constraintTop_toBottomOf="@id/menuactivity_title"
+    app:layout_constraintBottom_toTopOf="@id/menuactivity_guideline"
+    >
+
+</android.support.v7.widget.RecyclerView>
+
+
+
 
 
     <Button
-        android:id="@+id/drinkactivitylayout_addtocartbutton"
+        android:id="@+id/menuactivity_addtocartbutton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/menuactivity_addtocart_button_text"
 
-        app:layout_constraintTop_toBottomOf="@id/drinkactivitylayout_guideline"
+        app:layout_constraintTop_toBottomOf="@id/menuactivity_guideline"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/drinkactivitylayout_price"
+        app:layout_constraintEnd_toStartOf="@id/menuactivity_price"
         />
 
     <TextView
-        android:id="@+id/drinkactivitylayout_price"
+        android:id="@+id/menuactivity_price"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="@string/menuactivity_addtocart_button_text"
+        android:text="@string/menuactivity_price_text"
         android:gravity="center"
 
-        app:layout_constraintTop_toBottomOf="@id/drinkactivitylayout_guideline"
+        app:layout_constraintTop_toBottomOf="@id/menuactivity_guideline"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/drinkactivitylayout_addtocartbutton"
+        app:layout_constraintStart_toEndOf="@id/menuactivity_addtocartbutton"
         app:layout_constraintEnd_toEndOf="parent"
 
         app:layout_constraintWidth_percent="0.7"
         />
 
     <android.support.constraint.Guideline
-        android:id="@+id/drinkactivitylayout_guideline"
+        android:id="@+id/menuactivity_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
 
         app:layout_constraintGuide_percent="0.85" />
+
+
 </android.support.constraint.ConstraintLayout>

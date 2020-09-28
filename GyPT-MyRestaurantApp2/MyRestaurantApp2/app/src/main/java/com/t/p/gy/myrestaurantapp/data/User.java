@@ -1,4 +1,4 @@
-package com.t.p.gy.myrestaurantapp;
+package com.t.p.gy.myrestaurantapp.data;
 
 import android.app.Activity;
 import android.content.SharedPreferences;

@@ -10,16 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.t.p.gy.myrestaurantapp.R;
-import com.t.p.gy.myrestaurantapp.connection.AdminNetworkConnector;
-import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
+import com.t.p.gy.myrestaurantapp.connection.NetworkConnector;
+import com.t.p.gy.myrestaurantapp.data.SingleProductItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterForAdminRecyclerView.ViewHolder>{
-    AdminNetworkConnector anc = AdminNetworkConnector.getInstance();
-    private List<SingleMenuItem> downloadedDataList = new ArrayList<SingleMenuItem>();
+    NetworkConnector anc = NetworkConnector.getInstance();
+    private List<SingleProductItem> downloadedDataList = new ArrayList<SingleProductItem>();
 
     //egy listaelem elemei
     protected class ViewHolder extends RecyclerView.ViewHolder{
@@ -64,7 +63,7 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
     @Override
 //adatfeltöltés az egyes elemekhez
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final SingleMenuItem smi = downloadedDataList.get(position);
+        final SingleProductItem spi = downloadedDataList.get(position);
         /*
         holder.itemImage.setImageResource(smi.getImageResourceID());
         if(smi.hasImage()) {
@@ -75,31 +74,47 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
         else {holder.itemImage.setVisibility(View.GONE);}
          */
         //holder.itemImage.setImageResource(R.drawable.cola);
-        holder.itemImage.setImageResource(smi.getImageResourceID());
+        holder.itemImage.setImageResource(spi.getImageResourceID());
         holder.itemImage.setVisibility(View.VISIBLE);
 
-        holder.itemName.setText(smi.getName());
-        holder.itemDescription.setText(smi.getDetail());
-        holder.itemPrice.setText(Integer.toString(smi.getPrice()));
+        holder.itemName.setText(spi.getName());
+        holder.itemDescription.setText(spi.getDetail());
+        holder.itemPrice.setText(Integer.toString(spi.getPrice()));
         holder.deleteButton.setBackgroundColor(holder.deleteButton.getResources().getColor(R.color.MyWarningColor));
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("myLog", "Deletebutton pressed");
-                Log.i("myLog", "Választott termék: "+ smi.getName());
-                if (smi.getCategory().equals("drink")) {
-                    if (anc.deleteFromDrinksTable(smi.getName())) {
+                Log.i("myLog", "Választott termék: "+ spi.getID());
+                anc.deleteProduct(spi.getID());
+                notifyItemRemoved(position);
+                //AdminMaintenanceActivity.makeMessage("Tétel töröve!");
+
+
+                /*
+                if (spi.getCategory()== 2) {
+                    if (anc.deleteFromDrinksTable(spi.getName())) {
                         Log.i("myLog", "if true lett!");
                     }
                 }
-                else if (smi.getCategory().equals("food")) {
-                    if (anc.deleteFromFoodsTable(smi.getName())) {
+                else if (spi.getCategory() == 1 ) {
+                    if (anc.deleteFromFoodsTable(spi.getName())) {
                         Log.i("myLog", "if true lett!");
                     }
                 }
                 notifyItemRemoved(position);
+
+                 */
             }
         });
+        holder.modifyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("myLog", "Modifybutton pressed");
+                Log.i("myLog", "Választott termék ID-ja: "+ spi.getID());
+            }
+        });
+
         Log.i("myLog","Admin adapterForRecyclerView, konstruktor: OK");
     }
 

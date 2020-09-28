@@ -7,7 +7,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
 import com.t.p.gy.myrestaurantapp.connection.RetrofitClient;
-import com.t.p.gy.myrestaurantapp.data.Cart;
+import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 import com.t.p.gy.myrestaurantapp.data.SingleMenuItem;
 
 import java.util.ArrayList;
@@ -22,9 +22,10 @@ public class DrinkProcessor_v3 extends Application {
     final private static ArrayList<SingleMenuItem> drinks = new ArrayList<SingleMenuItem>();
     ProductsBackend myAPI;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-    Cart myCart = Cart.getInstance();
+    DataProcessor myDataProcessor = DataProcessor.getInstance();
 
     public DrinkProcessor_v3(){
+
         Log.i("myLog","Drinkprocessor_v2 start");
         Retrofit retrofit = RetrofitClient.getInstance();
         myAPI = retrofit.create(ProductsBackend.class);
@@ -109,7 +110,7 @@ public class DrinkProcessor_v3 extends Application {
         }
         return sum;
     }
-
+/*
     public void addSelectedItemsToCart() {
         for (SingleMenuItem x : drinks) {
             if (x.getOrderAmount() > 0) {
@@ -118,7 +119,9 @@ public class DrinkProcessor_v3 extends Application {
                 myCart.addToCart(x);
             }
         }
+
     }
+    */
 }
 
 

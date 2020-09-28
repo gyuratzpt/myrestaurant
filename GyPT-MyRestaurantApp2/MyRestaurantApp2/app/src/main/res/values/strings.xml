@@ -16,8 +16,8 @@
     <!-- -->
 
     <!--activity_shared_menu_layout -->
-    <string name="shared_menu_layout_tocart_button_text">Fasza, mehet(nek) a kosárba!</string>
-    <string name="shared_menu_layout_price_text">Nincs kiválasztva tétel</string>
+    <string name="menuactivity_addtocart_button_text">Fasza, mehet(nek) a kosárba!</string>
+    <string name="menuactivity_price_text">Nincs kiválasztva tétel</string>
 
     <!-- -->
 </resources>
