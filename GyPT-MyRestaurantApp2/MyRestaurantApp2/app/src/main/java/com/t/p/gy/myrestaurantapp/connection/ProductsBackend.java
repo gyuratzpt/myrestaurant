@@ -62,7 +62,6 @@ public interface ProductsBackend {
 
 
 
-
     @HTTP(method = "DELETE", path = "/api/v1/drinks/items/{name}", hasBody = true)
     Observable<Response<ResponseBody>> deleteDrinks(@Path("name") String namepath);
     @HTTP(method = "DELETE", path = "/api/v1/foods/items/{name}", hasBody = true)

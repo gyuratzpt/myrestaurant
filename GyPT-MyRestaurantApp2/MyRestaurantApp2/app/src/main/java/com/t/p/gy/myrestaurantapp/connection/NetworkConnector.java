@@ -94,9 +94,10 @@ public class NetworkConnector extends Application {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    Log.i("myLog", "CreateItem ok, code: " + response);
                 }, throwable -> {
                     //Toast.makeText(this, "Drink added successfully!", Toast.LENGTH_SHORT).show();
-
+                    Log.i("myLog", "Miért throwable????");
                 })
         );
     }
@@ -109,10 +110,13 @@ public class NetworkConnector extends Application {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
                         if (response.code() >= 200 && response.code() < 300) {
-                            Log.i("myLog", "Response code: " + response);
-                            Log.i("myLog", "Response code: " + response.code());
-                            Log.i("myLog", "Response body: " + response.body().toString());
+                            Log.i("myLog", "DeleteProduct response code: " + response);
+                            //Log.i("myLog", "DeleteProduct response code: " + response.code());
+                            //Log.i("myLog", "DeleteProduct response body: " + response.body().toString());
                         } else {
+                            Log.i("myLog", "Delete error, code: " + response);
+                            Log.i("myLog", "Nem áll rendelés alatt??");
+
                             //Toast??: Toast.makeText(hogy kellelérni ay activity-t????, "" + response.code(), Toast.LENGTH_SHORT).show();
                         }
                     }));

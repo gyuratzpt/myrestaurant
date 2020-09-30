@@ -11,7 +11,7 @@ export default class Categories {
 
     static getCategories(res) {
         conn.query(
-            `SELECT * FROM categories WHERE id = 2`,
+            `SELECT * FROM categories`,
             [],
             function(err, result) {
                 if (err) {

@@ -26,12 +26,6 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".DrinkActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".FoodActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ContactActivity"
             android:screenOrientation="portrait" />
         <activity

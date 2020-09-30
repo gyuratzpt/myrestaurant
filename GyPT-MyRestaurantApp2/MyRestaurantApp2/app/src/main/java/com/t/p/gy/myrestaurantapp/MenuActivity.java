@@ -1,5 +1,6 @@
 package com.t.p.gy.myrestaurantapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.t.p.gy.myrestaurantapp.adapter.AdapterForMenuRecyclerView;
 import com.t.p.gy.myrestaurantapp.data.DataProcessor;
@@ -43,6 +47,8 @@ public class MenuActivity extends AppCompatActivity {
         Button addToCartbutton;
         initDrawMap();
 
+
+
         tv_SummedPrice = (TextView) findViewById(R.id.menuactivity_price);
         tv_SummedPrice.setText(R.string.menuactivity_price_text);
         addToCartbutton = (Button) findViewById(R.id.menuactivity_addtocartbutton);
@@ -60,33 +66,58 @@ public class MenuActivity extends AppCompatActivity {
         addToCartbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myDataProcessor.addSelectedItemsToCart();
-                //itemAdapterforFoodActivity.refreshlistview();
-                addToCartbutton.setText(R.string.menuactivity_addtocart_button_text);
-
+                String tmpMessage;
+                if (myDataProcessor.addSelectedItemsToCart(MenuActivity.this)){
+                    tmpMessage ="A tételek a kosárba kerültek!";
+                    Toast.makeText(MenuActivity.this, "A tételek a kosárba kerültek!", Toast.LENGTH_LONG).show();
+                    refreshPriceTextView(0);
+                }
+                else {
+                    tmpMessage ="Nincs rendelendő tétel!";
+                    }
+                Toast.makeText(MenuActivity.this, tmpMessage, Toast.LENGTH_LONG).show();
+                //recyclerview frissítése!
+                //refreshPriceTextView(0);
             }
         });
+
+
+
+
 
         Log.v("myLog","Menuactivity Konstruktor kész");
     }
 
-    //vissza gomb
+    //menu
     private void initBackButton() {
-
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
     }
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.cart:
+                Intent myIntent = new Intent(MenuActivity.this, CartActivity.class);
+                startActivity(myIntent);
+                return true;
+            case R.id.logout:
+                Toast.makeText(this, "Kilépés", Toast.LENGTH_LONG).show();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
-    //vissza gomb vége
+    //menu
+    // vége
     private void initSpinner(){
         menuSpinner = findViewById(R.id.menuactivity_spinner);
         List<String> getSpinnerList = new ArrayList<>();
@@ -127,12 +158,6 @@ public class MenuActivity extends AppCompatActivity {
         });
 
     }
-
-    public static void refreshPriceTextView(int x){
-        tv_SummedPrice.setText(Integer.toString(x));
-    }
-
-
     private void initDrawMap() {
         drawableMap = new HashMap<>();
         drawableMap.put("birramoretti", getApplicationContext().getResources().getIdentifier("birramoretti","drawable", getPackageName()));
@@ -155,6 +180,13 @@ public class MenuActivity extends AppCompatActivity {
         return drawableMap;
     }
 
+
+    //actions
+    public static void refreshPriceTextView(int x){
+        tv_SummedPrice.setText(Integer.toString(x) + "Ft");
+    }
+
+}
     /*
     //saját metódusok
     @Override
@@ -165,9 +197,4 @@ public class MenuActivity extends AppCompatActivity {
         }
         Log.i("MyLog","FoodActivity onResume");
     }
-
-    public static void refreshSummedPrice(){
-        tv_SummedPrice.setText(String.valueOf(foodProcessor.refreshActualOrderPrice()));
-    }
-*/
-}
+     */

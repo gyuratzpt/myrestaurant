@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    /*
     private void initSpinner() {
         //  spinner (lenyitható lista) peldanyositasa, feltoltese egy ArrayList objektumból, viselkedes beallitas
         menuSpinner  = findViewById(R.id.menu_spinner);
@@ -192,6 +193,8 @@ public class MainActivity extends AppCompatActivity {
         });
 //spinner vege
     }
+    */
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
