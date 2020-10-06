@@ -13,7 +13,7 @@ export default class Orders {
 
     static getAllOrders(res) {
         conn.query(
-            `SELECT * FROM orders`,
+            `SELECT * FROM orders LEFT JOIN products ON orders.productID = products.id LEFT JOIN users ON orders.userID = users.id`,
             [],
             function(err, result) {
                 if (err) {

@@ -47,7 +47,7 @@ public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForM
 //létrehozza az egyes sorokat
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recyclerview_menu_layout, parent, false);
+                .inflate(R.layout.recyclerview_listitem_menu_layout, parent, false);
         Log.v("myLog", "Menu recyclerview onCreateViewHolder: OK");
         v.setBackgroundColor(v.getResources().getColor(R.color.MyCartColor));
         // törlés swipe-ra?!

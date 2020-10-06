@@ -17,40 +17,26 @@
         android:layout_marginStart="10dp"/>
 
     <TextView
-        android:id="@+id/orders_listitem_items"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-
-        app:layout_constraintTop_toBottomOf="@id/orders_listitem_idnumber"
-        app:layout_constraintStart_toStartOf="@id/orders_listitem_idnumber"
-        />
-
-    <CheckBox
-        android:id="@+id/orders_listitem_itemcheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Kész"
-
-        app:layout_constraintBaseline_toBaselineOf="@id/orders_listitem_items"
-        app:layout_constraintStart_toEndOf="@id/orders_listitem_items" />
-
-    <TextView
         android:id="@+id/orders_listitem_nametitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Név:"
-        app:layout_constraintBaseline_toBaselineOf="@id/orders_listitem_idnumber"
 
+        app:layout_constraintTop_toBottomOf="@id/orders_listitem_idnumber"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/orders_listitem_name"
         app:layout_constraintHorizontal_weight="2"
-        app:layout_constraintStart_toEndOf="@id/orders_listitem_guideline" />
+
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        />
 
     <TextView
         android:id="@+id/orders_listitem_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="John Doe"
+
         app:layout_constraintBaseline_toBaselineOf="@id/orders_listitem_nametitle"
 
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,9 +52,10 @@
         android:text="Cím:"
         app:layout_constraintBaseline_toBaselineOf="@id/orders_listitem_address"
 
+        app:layout_constraintStart_toStartOf="@id/orders_listitem_nametitle"
         app:layout_constraintEnd_toStartOf="@id/orders_listitem_address"
         app:layout_constraintHorizontal_weight="2"
-        app:layout_constraintStart_toEndOf="@id/orders_listitem_guideline" />
+    />
 
     <TextView
         android:id="@+id/orders_listitem_address"
@@ -91,9 +78,10 @@
         android:text="Telefonszám:"
         app:layout_constraintBaseline_toBaselineOf="@id/orders_listitem_phonenumber"
 
+        app:layout_constraintStart_toStartOf="@id/orders_listitem_nametitle"
         app:layout_constraintEnd_toStartOf="@id/orders_listitem_phonenumber"
         app:layout_constraintHorizontal_weight="2"
-        app:layout_constraintStart_toEndOf="@id/orders_listitem_guideline" />
+    />
 
 
     <TextView
@@ -110,15 +98,40 @@
         />
 
     <TextView
+        android:id="@+id/orders_listitem_items_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rendelt tételek"
+
+        app:layout_constraintTop_toBottomOf="@id/orders_listitem_phonenumbertitle"
+        app:layout_constraintStart_toStartOf="@id/orders_listitem_idnumber"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:id="@+id/orders_listitem_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+
+        app:layout_constraintTop_toBottomOf="@id/orders_listitem_items_title"
+        app:layout_constraintStart_toStartOf="@id/orders_listitem_idnumber"
+
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
         android:id="@+id/orders_listitem_othertitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Egyéb információ"
-        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintHorizontal_weight="2"
 
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/orders_listitem_items"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/orders_listitem_other"
+
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginStart="10dp"/>
 
@@ -127,12 +140,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="lorem ipsum"
-        app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintHorizontal_weight="2"
 
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/orders_listitem_othertitle"
         app:layout_constraintStart_toEndOf="@id/orders_listitem_othertitle"
         app:layout_constraintEnd_toStartOf="@id/orders_listitem_sentbutton"
-        android:layout_marginBottom="10dp"/>
+    />
 
     <Button
         android:id="@+id/orders_listitem_sentbutton"
@@ -141,19 +154,13 @@
         android:text="Sent"
         app:layout_constraintHorizontal_weight="1"
 
-        app:layout_constraintTop_toBottomOf="@id/orders_listitem_phonenumber"
-        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintBottom_toBottomOf="@id/orders_listitem_othertitle"
         app:layout_constraintStart_toEndOf="@id/orders_listitem_other"
         app:layout_constraintEnd_toEndOf="parent"
+
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
         />
 
-    <android.support.constraint.Guideline
-        android:id="@+id/orders_listitem_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.4" />
 </android.support.constraint.ConstraintLayout>

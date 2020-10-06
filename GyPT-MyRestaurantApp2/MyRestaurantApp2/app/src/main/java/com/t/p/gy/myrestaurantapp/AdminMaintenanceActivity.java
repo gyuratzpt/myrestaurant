@@ -1,5 +1,7 @@
 package com.t.p.gy.myrestaurantapp;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,7 +26,7 @@ public class AdminMaintenanceActivity extends AppCompatActivity {
     NetworkConnector anc = NetworkConnector.getInstance();
     private RecyclerView adminRecyclerView;
     private RecyclerView.Adapter adminRecyclerViewAdapter;
-    static Map<String, Integer> drawableMap;
+    //static Map<String, Integer> drawableMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +56,12 @@ public class AdminMaintenanceActivity extends AppCompatActivity {
 
 
         initBackButton();
-        initDrawMap();
+        //initDrawMap();
 
         adminRecyclerView = (RecyclerView) findViewById(R.id.adminactivity_recyclerview) ;
         adminRecyclerView.setHasFixedSize(true);
         adminRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adminRecyclerViewAdapter = new AdapterForAdminRecyclerView();
+        adminRecyclerViewAdapter = new AdapterForAdminRecyclerView(this);
         adminRecyclerView.setAdapter(adminRecyclerViewAdapter);
         DividerItemDecoration decoration = new DividerItemDecoration(this, VERTICAL);
         adminRecyclerView.addItemDecoration(decoration);
@@ -84,6 +86,7 @@ public class AdminMaintenanceActivity extends AppCompatActivity {
     }
     //vissza gomb vége
 
+    /*
     private void initDrawMap() {
         drawableMap = new HashMap<>();
         drawableMap.put("birramoretti", getApplicationContext().getResources().getIdentifier("birramoretti","drawable", getPackageName()));
@@ -106,15 +109,12 @@ public class AdminMaintenanceActivity extends AppCompatActivity {
     public static Map getDrawableMap(){
         return drawableMap;
     }
+    */
+
 
     private void initAddButton(){
         AdminDialog alert = new AdminDialog();
-        alert.showDialog(this, "Új termék hozzáadása","Hozzáad");
+        alert.showDialog(this, "Új termék hozzáadása","Hozzáad", null);
     }
 
-
-    /*    public static void makeMessage (String inputString){
-        Toast.makeText(this, inputString, Toast.LENGTH_LONG).show();
-    }
-    */
 }

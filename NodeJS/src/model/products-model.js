@@ -28,6 +28,21 @@ export default class Products {
         );
     }
 
+    static getProduct(res) {
+        conn.query(
+            `SELECT * FROM products WHERE id = ?`,
+            [id],
+            function(err, result) {
+                if (err) {
+                    console.log('Error: ', err);
+                    res(err, null);
+                } else {
+                    res(null, result);
+                }
+            }
+        );
+    }
+
     static addNewItem(newItem, res) {
         conn.query(
             'INSERT INTO `products` (`categoryID`,`name`, `detail`, `price`, `picture`) ' +
@@ -65,13 +80,10 @@ export default class Products {
         );
     }
 
-
-
-    /*
-    static modifyDrinkItem(name, detail, price, picture, res) {
+    static modifyItemByID(id, name, detail, price, picture, res) {
         conn.query(
-            'UPDATE drinks SET name = ?, detail = ?, price = ?, picture = ? WHERE name = ?',
-            [name, detail, price, picture, name],
+            'UPDATE products SET name = ?, detail = ?, price = ?, picture = ? WHERE id = ?',
+            [name, detail, price, picture, name, id],
             function(err, result) {
                 if (err) {
                     console.log('Error: ', err);
@@ -83,6 +95,4 @@ export default class Products {
         );
     }
 
-
-    */
 }

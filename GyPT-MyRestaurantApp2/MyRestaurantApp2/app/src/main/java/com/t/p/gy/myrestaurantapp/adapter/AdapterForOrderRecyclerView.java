@@ -13,48 +13,58 @@ import android.widget.TextView;
 
 import com.t.p.gy.myrestaurantapp.R;
 import com.t.p.gy.myrestaurantapp.connection.NetworkConnector;
+import com.t.p.gy.myrestaurantapp.data.DataProcessor;
+import com.t.p.gy.myrestaurantapp.data.Order;
 import com.t.p.gy.myrestaurantapp.data.SingleProductItem;
 import com.t.p.gy.myrestaurantapp.other.AdminDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterForAdminRecyclerView.ViewHolder>{
-    NetworkConnector anc = NetworkConnector.getInstance();
-    private List<SingleProductItem> downloadedDataList = new ArrayList<SingleProductItem>();
+public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterForOrderRecyclerView.ViewHolder>{
+    //NetworkConnector anc = NetworkConnector.getInstance();
+    DataProcessor myDp = DataProcessor.getInstance();
+    private List<Order> ordersList;
     private Context mContext;
 
     //egy listaelem elemei
     protected class ViewHolder extends RecyclerView.ViewHolder{
-        private ImageView itemImage;
-        private TextView itemName,
-            itemDescription,
-            itemPrice;
-        private Button modifyButton,
-            deleteButton;
+        private TextView    customerName,
+                            customerAddress,
+                            customerPhoneNumber,
+                            itemList,
+                            other;
+        private Button sentButton;
+
 
         private ViewHolder(View itemView){
             super(itemView);
-            itemImage = (ImageView) itemView.findViewById(R.id.admin_listitem_imageView) ;
-            itemName = (TextView) itemView.findViewById(R.id.admin_listitem_name);
-            itemDescription = (TextView) itemView.findViewById(R.id.admin_listitem_detail);
-            itemPrice = (TextView) itemView.findViewById(R.id.admin_listitem_price);
-            modifyButton = (Button) itemView.findViewById(R.id.admin_listitem_modifybutton);
-            deleteButton = (Button) itemView.findViewById(R.id.admin_listitem_deletebutton);
+            customerName = (TextView) itemView.findViewById(R.id.orders_listitem_name);
+            customerAddress = (TextView) itemView.findViewById(R.id.orders_listitem_address);
+            customerPhoneNumber = (TextView) itemView.findViewById(R.id.orders_listitem_phonenumber);
+            itemList = (TextView) itemView.findViewById(R.id.orders_listitem_items);
+            other = (TextView) itemView.findViewById(R.id.orders_listitem_other);
+            sentButton = (Button) itemView.findViewById(R.id.orders_listitem_sentbutton);
         }
     }
 
-    public AdapterForAdminRecyclerView(Context context){
+    public AdapterForOrderRecyclerView(Context context){
         mContext = context;
-        downloadedDataList = anc.getDownloadedList();
+        /*
+        if(ordersList != null && !ordersList.isEmpty()) {
+            ordersList.clear();
+        }
+*/
+        ordersList = myDp.getOrders_list();
+        Log.i("myLog", "Order adapter listája: " + ordersList.toString());
     }
 
     @Override
 //létrehozza az egyes sorokat
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recyclerview_listitem_admin_layout, parent, false);
-        Log.v("myLog", "Admin Recyclerview: onCreateViewHolder");
+                .inflate(R.layout.recyclerview_listitem_order_layout, parent, false);
+        Log.v("myLog", "Orders Recyclerview: onCreateViewHolder");
         //v.setBackgroundColor(v.getResources().getColor(R.color.MyCartColor));
         return new ViewHolder(v);
     }
@@ -62,13 +72,19 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
     @Override
 //visszaadja hány eleme van a listának
     public int getItemCount() {
-        return downloadedDataList.size();
+        return ordersList.size();
     }
 
     @Override
 //adatfeltöltés az egyes elemekhez
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final SingleProductItem spi = downloadedDataList.get(position);
+        final Order o = ordersList.get(position);
+        holder.customerName.setText(o.getCustomer());
+        holder.customerAddress.setText("ABC utca " + position);
+        holder.customerPhoneNumber.setText("06-50/ " + position);
+        holder.itemList.setText(o.toString());
+        holder.other.setText(o.getOrderTime());
+
         /*
         holder.itemImage.setImageResource(smi.getImageResourceID());
         if(smi.hasImage()) {
@@ -77,7 +93,7 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
             holder.itemImage.setVisibility(View.VISIBLE);
         }
         else {holder.itemImage.setVisibility(View.GONE);}
-         */
+
         //holder.itemImage.setImageResource(R.drawable.cola);
         holder.itemImage.setImageResource(spi.getImageResourceID());
         holder.itemImage.setVisibility(View.VISIBLE);
@@ -124,7 +140,7 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
                 }
                 notifyItemRemoved(position);
 
-                 */
+
             }
         });
         holder.modifyButton.setOnClickListener(new View.OnClickListener() {
@@ -138,7 +154,7 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
 
             }
         });
-
+        */
         Log.i("myLog","Admin adapterForRecyclerView, konstruktor: OK");
     }
 

@@ -8,6 +8,11 @@ export default function(router) {
         products.read_all_products
     );
 
+    router.get(
+        '/products/items/:id',
+        products.read_product
+    );
+
     router.post(
         '/products',
         products.create_new_item
@@ -18,14 +23,10 @@ export default function(router) {
         products.delete_products_item
     );
 
-
-    /*
     router
         .put(
             '/products/:name',
-            products.update_drink
+            products.modify_products_item
         );
         
-
-    */
 }

@@ -1,32 +1,32 @@
 package com.t.p.gy.myrestaurantapp.data;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.t.p.gy.myrestaurantapp.CartActivity;
-import com.t.p.gy.myrestaurantapp.MenuActivity;
 import com.t.p.gy.myrestaurantapp.connection.NetworkConnector;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class DataProcessor {
-    NetworkConnector anc;
+    private NetworkConnector netConn;
     private static DataProcessor dataProcessorInstance;
 
-    private List<SingleProductItem> productList = new ArrayList<>();
+    private List<SingleProductItem> productList;
     private List<SingleProductItem> cart = new ArrayList<>();
-    private Map<String, Integer> drawableMap;
+    private static Map<String, Integer> drawableMap = new HashMap<>();
 
     //private constructor.
     private DataProcessor(){
-        anc = NetworkConnector.getInstance();
-        productList = anc.getDownloadedList();
+        netConn = NetworkConnector.getInstance();
+        productList = netConn.getDownloadedList();
         //Drawable map feltöltése???
         //drawableMap.put("birramoretti", getApplicationContext().getResources().getIdentifier("birramoretti","drawable", getPackageName()));
 
@@ -36,45 +36,44 @@ public class DataProcessor {
         if (dataProcessorInstance == null){ //if there is no instance available... create new one
             dataProcessorInstance = new DataProcessor();
         }
-        Log.i("myLog", "Cart singleton");
+        Log.i("myLog", "DataProcessor singleton");
         return dataProcessorInstance;
     }
 
-    //kosár funkciók
-    public void addToCart(SingleProductItem inputSPI){
-        cart.add(inputSPI);
-        Log.i("myLog", "Cart új tartalma:" + cart.toString());
-        for(SingleProductItem x : cart){
-                Log.i("myLog", x.getName() + " "+ x.getCartAmount());
-            }
-    }
-    public List<SingleProductItem> getCart(){
-            return cart;
-        }
-    public int getCartFullPrice(){
-            int total = 0;
-            for(SingleProductItem x : cart){
-                Log.i("myLog", x.getName() + " "+ x.getCartAmount());
-                total += x.getCartAmount()*x.getPrice();
-            }
-            return total;
-        }
-    public void deleteItemFromCart(SingleProductItem inputSPI, TextView _tv){
-        cart.remove(inputSPI);
-        refreshCartFinalPrice(_tv);
-    }
-    public void refreshCartFinalPrice(TextView _tv){
-        _tv.setText(String.valueOf(getCartFullPrice())+"Ft");
-    }
-    public void refreshCartActivityView(){
-        CartActivity.refreshPriceTextView(getCartFullPrice());
-    }
 
 
-    //menu funkciók
-    public Map getDrawableMap(){
+    //admin funkciók
+    /*
+    public void getOrders(TextView _tv){
+        netConn.downloadOrders(_tv);
+    }
+    */
+
+    public List<Order> getOrders_list(){
+        return netConn.downloadOrders();
+    }
+
+    public void addItemToDatabase(int _category, String _name, String _desc, int _price, String _image){
+        Log.i("myLog", "addItemToDatabase running...");
+        netConn.createNewItem(_category, _name,  _desc,  _price,  _image);
+    }
+    public void getItemFromDatabase(int _id, EditText etCategory, EditText etName, EditText etDescription, EditText etPrice, EditText etImage){
+        Log.i("myLog", "getItemFromDatabase running...");
+        netConn.getItem(_id, etCategory, etName, etDescription, etPrice, etImage);
+    }
+    public void modifyDatabaseItem(int _id, int _category, String _name, String _desc, int _price, String _image){
+        Log.i("myLog", "modifyDatabaseItem running...");
+        netConn.modifyDatabaseItem(_id, _category, _name,  _desc,  _price,  _image);
+    }
+
+    //user funkciók
+    public static Map getDrawableMap(){
         return drawableMap;
     }
+    public void setDrawableMap(Map _drawableMap){
+        this.drawableMap = _drawableMap;
+    }
+
     public List<SingleProductItem> getProductList(){
         return productList;
     }
@@ -85,6 +84,19 @@ public class DataProcessor {
             sum += x.getOrderAmount()*x.getPrice();
         }
         return sum;
+    }
+
+    //kosár funkciók
+    public List<SingleProductItem> getCart(){
+        return cart;
+    }
+    public int getCartFullPrice(){
+        int total = 0;
+        for(SingleProductItem x : cart){
+            Log.i("myLog", x.getName() + " "+ x.getCartAmount());
+            total += x.getCartAmount()*x.getPrice();
+        }
+        return total;
     }
     public boolean addSelectedItemsToCart(Context _context){
         boolean notEmpty = false;
@@ -121,7 +133,15 @@ public class DataProcessor {
         }
         return notEmpty;
     }
-    private void modifyCartItem(){
-
+    public void deleteItemFromCart(SingleProductItem inputSPI, TextView _tv){
+        cart.remove(inputSPI);
+        refreshCartFinalPrice(_tv);
     }
+    public void refreshCartFinalPrice(TextView _tv){
+        _tv.setText(String.valueOf(getCartFullPrice())+"Ft");
+    }
+    public void refreshCartActivityView(){
+        CartActivity.refreshPriceTextView(getCartFullPrice());
+    }
+
 }

@@ -51,7 +51,7 @@ public class AdapterForCartRecyclerView extends RecyclerView.Adapter<AdapterForC
 //létrehozza az egyes elemeket
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recyclerview_cart_layout, parent, false);
+                .inflate(R.layout.recyclerview_listitem_cart_layout, parent, false);
         Log.v("myLog", "AdapterForRecyclerView4: OK");
         v.setBackgroundColor(v.getResources().getColor(R.color.MyCartColor));
 

@@ -156,7 +156,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
-        android:id="@+id/dialog_additem_addbutton"
+        android:id="@+id/dialog_additem_okbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hozzáad"
@@ -173,7 +173,7 @@
         android:layout_height="wrap_content"
         android:text="Mégsem"
 
-        app:layout_constraintBaseline_toBaselineOf="@id/dialog_additem_addbutton"
-        app:layout_constraintStart_toEndOf="@id/dialog_additem_addbutton"
+        app:layout_constraintBaseline_toBaselineOf="@id/dialog_additem_okbutton"
+        app:layout_constraintStart_toEndOf="@id/dialog_additem_okbutton"
         app:layout_constraintEnd_toEndOf="parent"/>
 </android.support.constraint.ConstraintLayout>

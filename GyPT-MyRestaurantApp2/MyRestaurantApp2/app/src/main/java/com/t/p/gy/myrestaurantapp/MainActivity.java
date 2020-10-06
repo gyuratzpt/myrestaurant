@@ -22,29 +22,33 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
+import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 import com.t.p.gy.myrestaurantapp.data.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    Gson gson = new GsonBuilder().setLenient().create();
-
     private Spinner menuSpinner; //spinner objektum
     static final private ArrayList<String> spinnerList = new ArrayList<String>(); //adatbázisból lehúyni
-
     public ArrayList<String> getSpinnerList(){
         return spinnerList;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
+    DataProcessor myDp = DataProcessor.getInstance();
+    Gson gson = new GsonBuilder().setLenient().create();
 
+
+    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_v2);
 
-        Button adminMaintenanceButton = findViewById(R.id.admin_maintenancebutton);
-        Button adminOrdersButton = findViewById(R.id.admin_ordersbutton);
+        if(myDp.getDrawableMap().isEmpty()){
+            myDp.setDrawableMap(initDrawableMap());
+        }
 
         spinnerList.add("MENÜ");
         spinnerList.add("Ételek");
@@ -53,10 +57,11 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         final User user = gson.fromJson(settings.getString("user","{}"), User.class);
-
         if (user.getEmail() == null) {
             logout();
         }
+
+
 
 //Grafikus elemek példányosítása
         ImageView logo_imageView = findViewById(R.id.logo);
@@ -71,12 +76,14 @@ public class MainActivity extends AppCompatActivity {
         gallery_imageView.setImageResource(R.drawable.gallery);
         contact_imageView.setImageResource(R.drawable.contact);
 
-
         //initSpinner();
         initButtons(menu_imageView, gallery_imageView, contact_imageView);
 
         //ADMIN feature
+        Button adminMaintenanceButton = findViewById(R.id.admin_maintenancebutton);
+        Button adminOrdersButton = findViewById(R.id.admin_ordersbutton);
         if(user.getIs_admin() == 1) {
+
             adminMaintenanceButton.setVisibility(View.VISIBLE);
             adminOrdersButton.setVisibility(View.VISIBLE);
             adminMaintenanceButton.setOnClickListener(new View.OnClickListener() {
@@ -104,8 +111,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        //Ellenőrző lépések, csak teszt miatt
-        Log.v("MyLog", "Main: finish");
+        Log.v("myLog", "Main: finish");
      }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -128,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
     private void initButtons(ImageView menu_imageView, ImageView gallery_imageView, ImageView contact_imageView) {
         //  MENU megnyitasa
@@ -195,7 +200,26 @@ public class MainActivity extends AppCompatActivity {
     }
     */
 
+    private Map initDrawableMap(){
+        Map<String, Integer> drawableMap = new HashMap<>();
+        drawableMap.put("birramoretti", this.getResources().getIdentifier("birramoretti","drawable", this.getPackageName()));
+        drawableMap.put("cola", this.getResources().getIdentifier("cola","drawable", this.getPackageName()));
+        drawableMap.put("corona", getApplicationContext().getResources().getIdentifier("corona","drawable", getPackageName()));
+        drawableMap.put("csiga", getApplicationContext().getResources().getIdentifier("csiga","drawable", getPackageName()));
+        drawableMap.put("donerkebab", getApplicationContext().getResources().getIdentifier("donerkebab","drawable", getPackageName()));
+        drawableMap.put("duplahamburger", getApplicationContext().getResources().getIdentifier("duplahamburger","drawable", getPackageName()));
+        drawableMap.put("durum", getApplicationContext().getResources().getIdentifier("durum","drawable", getPackageName()));
+        drawableMap.put("extrahamburger", getApplicationContext().getResources().getIdentifier("extrahamburger","drawable", getPackageName()));
+        drawableMap.put("fanta", getApplicationContext().getResources().getIdentifier("fanta","drawable", getPackageName()));
+        drawableMap.put("hamburger", getApplicationContext().getResources().getIdentifier("hamburger","drawable", getPackageName()));
+        drawableMap.put("hell", getApplicationContext().getResources().getIdentifier("hell","drawable", getPackageName()));
+        drawableMap.put("kilkenny", getApplicationContext().getResources().getIdentifier("kilkenny","drawable", getPackageName()));
+        drawableMap.put("sprite", getApplicationContext().getResources().getIdentifier("sprite","drawable", getPackageName()));
+        drawableMap.put("stella", getApplicationContext().getResources().getIdentifier("stella","drawable", getPackageName()));
+        drawableMap.put("wizard", getApplicationContext().getResources().getIdentifier("wizard","drawable", getPackageName()));
 
+        return drawableMap;
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     public void logout() {

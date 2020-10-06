@@ -13,6 +13,18 @@ export function read_all_products(req, res) {
     });
 }
 
+export function read_product(req, res) {
+    Products.getProduct(req.params.id, function(err, product) {
+        if (err) {
+            res.status(400).send(err);
+            return;
+        } else {
+            res.json({ product });
+            return;
+        }
+    });
+}
+
 export function create_new_item(req, res) {
     const newItem = new Products(req.body);
     Products.addNewItem(newItem, function(err, insertId) {
@@ -44,9 +56,9 @@ export function delete_products_item(req, res) {
     
 }
 
-/*
-export function update_drink(req, res) {
-    Drinks.modifyDrinkItem(
+export function modify_products_item(req, res) {
+    Products.modifyItemByID(
+        req.body.id,
         req.body.name,
         req.body.detail,
         req.body.price,
@@ -57,11 +69,8 @@ export function update_drink(req, res) {
                 return;
             } else {
                 res.status(200).send({
-                    message: `Drinks successfully updated for ${req.body.name}!`,});
+                    message: `Products successfully updated for ${req.body.name}!`});
                 return;
             }
         });
     }
-
-
-*/
