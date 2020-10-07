@@ -32,7 +32,6 @@ public class NetworkConnector extends Application {
     private List<String> productCategories;
     private List<Order> orderList = new ArrayList<>();
     //DataProcessor myDp = DataProcessor.getInstance();
-
     //private ArrayList<SingleMenuItem> downloadedDataSet = new ArrayList<SingleMenuItem>();
     ProductsBackend myAPI;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -285,7 +284,6 @@ public class NetworkConnector extends Application {
         Log.i("myLog", "végleges orderList: " + orderList);
         return orderList;
     }
-
     private boolean isCustomerHasOrder(String _name){
         Log.i("myLog", "isCustomerHasOrder: " + _name);
         for(Order x : orderList){
@@ -304,5 +302,20 @@ public class NetworkConnector extends Application {
     }
 
     //egyéb
-
+    public String getOneUserByEmail(String _email){
+        compositeDisposable.add(myAPI.getOneUserByEmail(_email)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.code() >= 200 && response.code() < 300) {
+                        Log.i("myLog", response.body().toString());
+                        //JsonArray inputJSONArray = response.body().getAsJsonArray("order");
+                    }
+                    else {
+                        Log.i("myLog", " error: " + response.code() + " " + response.errorBody().string());
+                    }
+                })
+        );
+        return "user download kész";
+    }
 }

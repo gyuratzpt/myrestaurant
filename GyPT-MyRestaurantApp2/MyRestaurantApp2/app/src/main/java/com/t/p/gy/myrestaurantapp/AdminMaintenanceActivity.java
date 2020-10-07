@@ -49,10 +49,13 @@ public class AdminMaintenanceActivity extends AppCompatActivity {
                 Log.i("myLog", "Button: " + anc.downloadCategories());
             }
         });
-
-
-        //Button searchButton = (Button) findViewById(R.id.admin_activity_search);
-
+        Button searchButton = (Button) findViewById(R.id.adminactivity_searchbutton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("myLog", "SearchButton: " + anc.getOneUserByEmail("aaa@aaa.aa"));
+            }
+        });
 
 
         initBackButton();

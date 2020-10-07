@@ -12,8 +12,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -21,7 +19,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
 import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 import com.t.p.gy.myrestaurantapp.data.User;
 
@@ -56,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         spinnerList.add("Cart");
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        //settings.edit().clear().apply();
         final User user = gson.fromJson(settings.getString("user","{}"), User.class);
         if (user.getEmail() == null) {
             logout();

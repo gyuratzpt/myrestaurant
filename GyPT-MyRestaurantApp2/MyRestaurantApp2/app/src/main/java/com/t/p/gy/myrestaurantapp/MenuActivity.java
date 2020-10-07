@@ -45,7 +45,7 @@ public class MenuActivity extends AppCompatActivity {
         initSpinner();
         Log.i("myLog", "Menuactivity: start");
         Button addToCartbutton;
-        initDrawMap();
+        //initDrawMap();
 
 
 
@@ -81,10 +81,6 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
         Log.v("myLog","Menuactivity Konstruktor kész");
     }
 
@@ -116,8 +112,7 @@ public class MenuActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    //menu
-    // vége
+    //menu vége
     private void initSpinner(){
         menuSpinner = findViewById(R.id.menuactivity_spinner);
         List<String> getSpinnerList = new ArrayList<>();
@@ -158,6 +153,14 @@ public class MenuActivity extends AppCompatActivity {
         });
 
     }
+
+    //actions
+    public static void refreshPriceTextView(int x){
+        tv_SummedPrice.setText(Integer.toString(x) + "Ft");
+    }
+
+}
+/*
     private void initDrawMap() {
         drawableMap = new HashMap<>();
         drawableMap.put("birramoretti", getApplicationContext().getResources().getIdentifier("birramoretti","drawable", getPackageName()));
@@ -176,17 +179,10 @@ public class MenuActivity extends AppCompatActivity {
         drawableMap.put("stella", getApplicationContext().getResources().getIdentifier("stella","drawable", getPackageName()));
         drawableMap.put("wizard", getApplicationContext().getResources().getIdentifier("wizard","drawable", getPackageName()));
     }
-    public static Map getDrawableMap(){
+        public static Map getDrawableMap(){
         return drawableMap;
     }
-
-
-    //actions
-    public static void refreshPriceTextView(int x){
-        tv_SummedPrice.setText(Integer.toString(x) + "Ft");
-    }
-
-}
+ */
     /*
     //saját metódusok
     @Override

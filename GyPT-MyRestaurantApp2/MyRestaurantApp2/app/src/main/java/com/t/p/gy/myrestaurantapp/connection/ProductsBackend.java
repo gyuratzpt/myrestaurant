@@ -14,14 +14,21 @@ import retrofit2.http.Path;
 
 public interface ProductsBackend {
 
+    //teljes lista lekérdezések
     @GET("/api/v1/products")
     Observable<Response<JsonObject>> getAllProducts();
-    @GET("/api/v1/products")
-    Observable<Response<JsonObject>> getProductByID(@Field("id") Integer id);
     @GET("/api/v1/orders")
     Observable<Response<JsonObject>> getAllOrders();
     @GET("/api/v1/categories")
     Observable<Response<JsonObject>> getCategories();
+
+    //egy listaelem lekérdezés
+    @GET("/api/v1/products")
+    Observable<Response<JsonObject>> getProductByID(@Field("id") Integer id);
+
+    @HTTP(method = "GET", path = "/api/v1/users/{email}", hasBody = false)
+    Observable<Response<JsonObject>> getOneUserByEmail(@Path("email") String _email);
+
 
     @FormUrlEncoded
     @POST("/api/v1/products")
@@ -44,20 +51,20 @@ public interface ProductsBackend {
                                                         @Field("picture") String picture);
 
 
-
-
-
-
-
-
-
-
-
+    @FormUrlEncoded
+    @POST("/api/v1/login")
+    Observable<Response<JsonObject>> login(@Field("email") String email,
+                                               @Field("password") String password);
+    @FormUrlEncoded
+    @POST("/api/v1/register")
+    Observable<Response<JsonObject>> registration(@Field("email") String email,
+                                           @Field("password") String password);
+}
+/*
     @GET("/api/v1/foods")
     Observable<Response<JsonObject>> getFoods();
     @GET("/api/v1/drinks")
     Observable<Response<JsonObject>> getDrinks();
-
 	@FormUrlEncoded
 	@POST("/api/v1/foods")
     Observable<Response<JsonObject>> addFoods(@Field("name") String name,
@@ -70,19 +77,10 @@ public interface ProductsBackend {
                                                @Field("detail") String detail,
                                                @Field("price") Integer price,
                                                @Field("picture") String picture);
-
-
-
-
     @HTTP(method = "DELETE", path = "/api/v1/drinks/items/{name}", hasBody = true)
     Observable<Response<ResponseBody>> deleteDrinks(@Path("name") String namepath);
     @HTTP(method = "DELETE", path = "/api/v1/foods/items/{name}", hasBody = true)
     Observable<Response<ResponseBody>> deleteFoods(@Path("name") String namepath);
-
-
-
-
-
     @FormUrlEncoded
     @HTTP(method = "PUT", path = "/api/v1/drinks/{name}", hasBody = true)
     Observable<Response<ResponseBody>> updateDrinks(@Path("name") String namepath,
@@ -90,16 +88,4 @@ public interface ProductsBackend {
                                                        @Field("detail") String detail,
                                                        @Field("price") Integer price,
                                                        @Field("picture") String picture);
-
-
-
-    @FormUrlEncoded
-    @POST("/api/v1/login")
-    Observable<Response<JsonObject>> login(@Field("email") String email,
-                                               @Field("password") String password);
-
-    @FormUrlEncoded
-    @POST("/api/v1/register")
-    Observable<Response<JsonObject>> registration(@Field("email") String email,
-                                           @Field("password") String password);
-}
+ */
