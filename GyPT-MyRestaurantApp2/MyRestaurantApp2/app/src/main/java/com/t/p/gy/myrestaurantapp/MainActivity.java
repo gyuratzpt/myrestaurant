@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -22,20 +21,12 @@ import com.google.gson.GsonBuilder;
 import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 import com.t.p.gy.myrestaurantapp.data.User;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    private Spinner menuSpinner; //spinner objektum
-    static final private ArrayList<String> spinnerList = new ArrayList<String>(); //adatbázisból lehúyni
-    public ArrayList<String> getSpinnerList(){
-        return spinnerList;
-    }
-
     DataProcessor myDp = DataProcessor.getInstance();
     Gson gson = new GsonBuilder().setLenient().create();
-
 
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     @Override
@@ -43,48 +34,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_v2);
 
+        //res/drawable file-ok int id kiolvasása. Más módszer??
         if(myDp.getDrawableMap().isEmpty()){
             myDp.setDrawableMap(initDrawableMap());
         }
 
-        spinnerList.add("MENÜ");
-        spinnerList.add("Ételek");
-        spinnerList.add("Italok");
-        spinnerList.add("Cart");
-
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        //felhasználó törlésére
         //settings.edit().clear().apply();
         final User user = gson.fromJson(settings.getString("user","{}"), User.class);
         if (user.getEmail() == null) {
             logout();
         }
 
+        initUI();
 
 
-//Grafikus elemek példányosítása
-        ImageView logo_imageView = findViewById(R.id.logo);
-        ImageView actual_story_imageView = findViewById(R.id.actual_story);
-        ImageView menu_imageView = findViewById(R.id.menu);
-        ImageView gallery_imageView = findViewById(R.id.gallery);
-        ImageView contact_imageView = findViewById(R.id.contact);
-//Grafikus elemek forrásának beállítása
-        logo_imageView.setImageResource(R.drawable.logo);
-        actual_story_imageView.setImageResource(R.drawable.actual_story2);
-        menu_imageView.setImageResource(R.drawable.menu);
-        gallery_imageView.setImageResource(R.drawable.gallery);
-        contact_imageView.setImageResource(R.drawable.contact);
-
-        //initSpinner();
-        initButtons(menu_imageView, gallery_imageView, contact_imageView);
-
-        //ADMIN feature
+        //ADMIN feature, külön admin layout készítése?
         Button adminMaintenanceButton = findViewById(R.id.admin_maintenancebutton);
         Button adminOrdersButton = findViewById(R.id.admin_ordersbutton);
         if(user.getIs_admin() == 1) {
 
-            adminMaintenanceButton.setVisibility(View.VISIBLE);
-            adminOrdersButton.setVisibility(View.VISIBLE);
-            adminMaintenanceButton.setOnClickListener(new View.OnClickListener() {
+        adminMaintenanceButton.setVisibility(View.VISIBLE);
+        adminOrdersButton.setVisibility(View.VISIBLE);
+        adminMaintenanceButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View arg0) {
                     // Start Admin
                     Intent myIntent = new Intent(MainActivity.this,
@@ -92,34 +65,31 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(myIntent);
                 }
             });
-            adminOrdersButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View arg0) {
-                    // Start Admin
-                    Intent myIntent = new Intent(MainActivity.this,
-                            AdminOrdersActivity.class);
+        adminOrdersButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                // Start Admin
+                Intent myIntent = new Intent(MainActivity.this,
+                    AdminOrdersActivity.class);
                     startActivity(myIntent);
                 }
             });
         }
         else {
-
             adminMaintenanceButton.setVisibility(View.GONE);
             adminOrdersButton.setVisibility(View.GONE);
-
         }
-
-
         Log.v("myLog", "Main: finish");
      }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
         switch (item.getItemId()) {
             case R.id.cart:
                 Intent myIntent = new Intent(MainActivity.this, CartActivity.class);
@@ -133,7 +103,49 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initButtons(ImageView menu_imageView, ImageView gallery_imageView, ImageView contact_imageView) {
+    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
+    public void logout() {
+        Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
+        MainActivity.this.startActivity(myIntent);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        settings.edit().remove("token").apply();
+        settings.edit().remove("user").apply();
+        finish();
+    }
+
+    private Map initDrawableMap(){
+        Map<String, Integer> drawableMap = new HashMap<>();
+        drawableMap.put("birramoretti", this.getResources().getIdentifier("birramoretti","drawable", this.getPackageName()));
+        drawableMap.put("cola", this.getResources().getIdentifier("cola","drawable", this.getPackageName()));
+        drawableMap.put("corona", this.getResources().getIdentifier("corona","drawable", this.getPackageName()));
+        drawableMap.put("csiga", this.getResources().getIdentifier("csiga","drawable", this.getPackageName()));
+        drawableMap.put("donerkebab", getApplicationContext().getResources().getIdentifier("donerkebab","drawable", getPackageName()));
+        drawableMap.put("duplahamburger", getApplicationContext().getResources().getIdentifier("duplahamburger","drawable", getPackageName()));
+        drawableMap.put("durum", getApplicationContext().getResources().getIdentifier("durum","drawable", getPackageName()));
+        drawableMap.put("extrahamburger", getApplicationContext().getResources().getIdentifier("extrahamburger","drawable", getPackageName()));
+        drawableMap.put("fanta", getApplicationContext().getResources().getIdentifier("fanta","drawable", getPackageName()));
+        drawableMap.put("hamburger", getApplicationContext().getResources().getIdentifier("hamburger","drawable", getPackageName()));
+        drawableMap.put("hell", getApplicationContext().getResources().getIdentifier("hell","drawable", getPackageName()));
+        drawableMap.put("kilkenny", getApplicationContext().getResources().getIdentifier("kilkenny","drawable", getPackageName()));
+        drawableMap.put("sprite", getApplicationContext().getResources().getIdentifier("sprite","drawable", getPackageName()));
+        drawableMap.put("stella", getApplicationContext().getResources().getIdentifier("stella","drawable", getPackageName()));
+        drawableMap.put("wizard", getApplicationContext().getResources().getIdentifier("wizard","drawable", getPackageName()));
+
+        return drawableMap;
+    }
+    private void initUI(){
+        ImageView logo_imageView = findViewById(R.id.logo);
+        ImageView actual_story_imageView = findViewById(R.id.actual_story);
+        ImageView menu_imageView = findViewById(R.id.menu);
+        ImageView gallery_imageView = findViewById(R.id.gallery);
+        ImageView contact_imageView = findViewById(R.id.contact);
+
+        logo_imageView.setImageResource(R.drawable.logo);
+        actual_story_imageView.setImageResource(R.drawable.actual_story2);
+        menu_imageView.setImageResource(R.drawable.menu);
+        gallery_imageView.setImageResource(R.drawable.gallery);
+        contact_imageView.setImageResource(R.drawable.contact);
+
         //  MENU megnyitasa
         menu_imageView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
@@ -161,6 +173,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+}
+
+
     /*
     private void initSpinner() {
         //  spinner (lenyitható lista) peldanyositasa, feltoltese egy ArrayList objektumból, viselkedes beallitas
@@ -198,37 +213,6 @@ public class MainActivity extends AppCompatActivity {
     }
     */
 
-    private Map initDrawableMap(){
-        Map<String, Integer> drawableMap = new HashMap<>();
-        drawableMap.put("birramoretti", this.getResources().getIdentifier("birramoretti","drawable", this.getPackageName()));
-        drawableMap.put("cola", this.getResources().getIdentifier("cola","drawable", this.getPackageName()));
-        drawableMap.put("corona", getApplicationContext().getResources().getIdentifier("corona","drawable", getPackageName()));
-        drawableMap.put("csiga", getApplicationContext().getResources().getIdentifier("csiga","drawable", getPackageName()));
-        drawableMap.put("donerkebab", getApplicationContext().getResources().getIdentifier("donerkebab","drawable", getPackageName()));
-        drawableMap.put("duplahamburger", getApplicationContext().getResources().getIdentifier("duplahamburger","drawable", getPackageName()));
-        drawableMap.put("durum", getApplicationContext().getResources().getIdentifier("durum","drawable", getPackageName()));
-        drawableMap.put("extrahamburger", getApplicationContext().getResources().getIdentifier("extrahamburger","drawable", getPackageName()));
-        drawableMap.put("fanta", getApplicationContext().getResources().getIdentifier("fanta","drawable", getPackageName()));
-        drawableMap.put("hamburger", getApplicationContext().getResources().getIdentifier("hamburger","drawable", getPackageName()));
-        drawableMap.put("hell", getApplicationContext().getResources().getIdentifier("hell","drawable", getPackageName()));
-        drawableMap.put("kilkenny", getApplicationContext().getResources().getIdentifier("kilkenny","drawable", getPackageName()));
-        drawableMap.put("sprite", getApplicationContext().getResources().getIdentifier("sprite","drawable", getPackageName()));
-        drawableMap.put("stella", getApplicationContext().getResources().getIdentifier("stella","drawable", getPackageName()));
-        drawableMap.put("wizard", getApplicationContext().getResources().getIdentifier("wizard","drawable", getPackageName()));
-
-        return drawableMap;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
-    public void logout() {
-        Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
-        MainActivity.this.startActivity(myIntent);
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        settings.edit().remove("token").apply();
-        settings.edit().remove("user").apply();
-        finish();
-    }
-}
 
 /*
 valtoztatni:
@@ -239,11 +223,10 @@ valtoztatni:
 
 
 - inditaskor adatok ellenorzese, ha van ujabb, csere (verziókvetés módszer)
-- egy kozos activity minden menuhoz!
-- kosár menu elem link
-- adatok megadása activity
-- áttekintő, véglegesítő activity
-
+- egy kozos activity minden menuhoz! X
+- kosár menu elem link X
+- adatok megadása activity X
+- áttekintő, véglegesítő activity X
 
 
 - adatbazis csatlakozas
@@ -253,19 +236,11 @@ valtoztatni:
     felhasználók: name, password, phone nuber, email adress, devlivery address, invoice address
 
 
-
-
-
-
 - facebook oldalra link
-
-
-
 
 //https://www.freakyjolly.com/how-to-add-back-arrow-in-android-activity/
 
 */
-
 
 
             /*
@@ -273,11 +248,7 @@ valtoztatni:
             foods.add(new SingleMenuItem(25, "Extra hamburger", "300gr marhahús pogácsa, paradicsom, uborka, sajt", 2100, R.drawable.extrahamburger));
             foods.add(new SingleMenuItem(26, "Dupla hamburger", "2x300gr marhahús pogácsa, paradicsom, uborka, sajt", 3300, R.drawable.duplahamburger));
             foods.add(new SingleMenuItem(27, "Döner Kebab", "borjúhús, paradicsom, uborka, káposzta, öntet, házi pitában", 900, R.drawable.donerkebab));
-            foods.add(new SingleMenuItem(28, "Dürüm", "borjúhús, paradicsom, uborka, káposzta, öntet, tortillalapban", 900, R.drawable.durum));
-            foods.add(new SingleMenuItem(29, "Dürüm2", "csirkehús, paradicsom, uborka, káposzta, öntet, tortillalapban", 900, R.drawable.durum));
-            foods.add(new SingleMenuItem(30, "Dürüm3", "borjúhús, hagyma, paradicsom, uborka, káposzta, öntet, tortillalapban", 900, R.drawable.durum));
-            foods.add(new SingleMenuItem(31, "Dürüm4", "csirkehús, hagyma, paradicsom, uborka, káposzta, öntet, tortillalapban", 900, R.drawable.durum));
-            foods.add(new SingleMenuItem(32, "Kakaós tekercs", "sima, egyszerű kakaóscsiga - yetiknek", 240, R.drawable.csiga));
+
 
             drinks.add(new SingleMenuItem(2, "Fanta", "szensavas", 250, R.drawable.fanta));
             drinks.add(new SingleMenuItem(3, "Sprite", "szensavas", 250, R.drawable.sprite));

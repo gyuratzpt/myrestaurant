@@ -14,7 +14,8 @@ import retrofit2.http.Path;
 
 public interface ProductsBackend {
 
-    //teljes lista lekérdezések
+    //LEKÉRDEZÉSEK//
+    //teljes lekérdezések
     @GET("/api/v1/products")
     Observable<Response<JsonObject>> getAllProducts();
     @GET("/api/v1/orders")
@@ -22,13 +23,16 @@ public interface ProductsBackend {
     @GET("/api/v1/categories")
     Observable<Response<JsonObject>> getCategories();
 
-    //egy listaelem lekérdezés
-    @GET("/api/v1/products")
-    Observable<Response<JsonObject>> getProductByID(@Field("id") Integer id);
-
-    @HTTP(method = "GET", path = "/api/v1/users/{email}", hasBody = false)
+    //elem lekérdezések
+    @HTTP(method = "GET", path = "/api/v1/products/{id}")
+    Observable<Response<JsonObject>> getProductByID(@Path("id") int id);
+    @HTTP(method = "GET", path = "/api/v1/users/{email}")
     Observable<Response<JsonObject>> getOneUserByEmail(@Path("email") String _email);
 
+
+    //product műveletek
+    @HTTP(method = "DELETE", path = "/api/v1/products/items/{id}", hasBody = true)
+    Observable<Response<ResponseBody>> deleteProduct(@Path("id") int id);
 
     @FormUrlEncoded
     @POST("/api/v1/products")
@@ -37,9 +41,6 @@ public interface ProductsBackend {
                                                 @Field("detail") String detail,
                                                 @Field("price") Integer price,
                                                 @Field("picture") String picture);
-
-    @HTTP(method = "DELETE", path = "/api/v1/products/items/{id}", hasBody = true)
-    Observable<Response<ResponseBody>> deleteProduct(@Path("id") int id);
 
     @FormUrlEncoded
     @HTTP(method = "PUT", path = "/api/v1/products/{id}", hasBody = true)
@@ -50,7 +51,7 @@ public interface ProductsBackend {
                                                         @Field("price") Integer price,
                                                         @Field("picture") String picture);
 
-
+    //user műveletek
     @FormUrlEncoded
     @POST("/api/v1/login")
     Observable<Response<JsonObject>> login(@Field("email") String email,

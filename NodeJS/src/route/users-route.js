@@ -5,8 +5,14 @@ export default function(router) {
 
     router.get(
         '/users',
-        users.read_all_users_items
+        users.read_all_users
     );
+
+    router.get(
+        '/users/:email',
+        users.read_one_user
+    );
+
     router.post(
         '/register', 
         users.create_user

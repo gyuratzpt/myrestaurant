@@ -16,9 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 public class DataProcessor {
-    private NetworkConnector netConn;
     private static DataProcessor dataProcessorInstance;
-
+    private NetworkConnector netConn;
     private List<SingleProductItem> productList;
     private List<SingleProductItem> cart = new ArrayList<>();
     private static Map<String, Integer> drawableMap = new HashMap<>();
@@ -40,19 +39,20 @@ public class DataProcessor {
         return dataProcessorInstance;
     }
 
+    //közös funkciók
+    public static Map getDrawableMap(){
+        return drawableMap;
+    }
+    public void setDrawableMap(Map _drawableMap){
+        this.drawableMap = _drawableMap;
+    }
+
+
+
 
 
     //admin funkciók
-    /*
-    public void getOrders(TextView _tv){
-        netConn.downloadOrders(_tv);
-    }
-    */
-
-    public List<Order> getOrders_list(){
-        return netConn.downloadOrders();
-    }
-
+    //admin/database
     public void addItemToDatabase(int _category, String _name, String _desc, int _price, String _image){
         Log.i("myLog", "addItemToDatabase running...");
         netConn.createNewItem(_category, _name,  _desc,  _price,  _image);
@@ -66,13 +66,19 @@ public class DataProcessor {
         netConn.modifyDatabaseItem(_id, _category, _name,  _desc,  _price,  _image);
     }
 
+    //admin/order
+    public List<Order> getOrders_list(){
+        return netConn.downloadOrders();
+    }
+
+
+
+
+
+
+
     //user funkciók
-    public static Map getDrawableMap(){
-        return drawableMap;
-    }
-    public void setDrawableMap(Map _drawableMap){
-        this.drawableMap = _drawableMap;
-    }
+
 
     public List<SingleProductItem> getProductList(){
         return productList;

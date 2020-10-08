@@ -28,23 +28,13 @@ import static java.sql.Types.NULL;
 
 public class NetworkConnector extends Application {
     private static NetworkConnector networkConnectorInstance;
-    private List<SingleProductItem> productList;
-    private List<String> productCategories;
-    private List<Order> orderList = new ArrayList<>();
-    //DataProcessor myDp = DataProcessor.getInstance();
-    //private ArrayList<SingleMenuItem> downloadedDataSet = new ArrayList<SingleMenuItem>();
     ProductsBackend myAPI;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-
+    private List<Order> orderList = new ArrayList<>();
 
     public NetworkConnector(){
-        Log.i("myLog","AdminNetworkConnector start");
         Retrofit retrofit = RetrofitClient.getInstance();
         myAPI = retrofit.create(ProductsBackend.class);
-        //downloadData();
-        //downloadAllProducts();
-
-        Log.i("myLog","AdminNetworkConnector vége");
     }
     public static NetworkConnector getInstance(){
         if (networkConnectorInstance == null){ //if there is no instance available... create new one
@@ -55,9 +45,19 @@ public class NetworkConnector extends Application {
         return networkConnectorInstance;
     }
 
+
+
+
+
+
+
+
+
+
+
     //products
 
-    private List<SingleProductItem> downloadAllProducts(){
+    public List<SingleProductItem> downloadAllProducts(){
         List<SingleProductItem> downloadedDataSet = new ArrayList<SingleProductItem>();
 
         compositeDisposable.add(myAPI.getAllProducts()
@@ -73,11 +73,7 @@ public class NetworkConnector extends Application {
                             boolean x = inputJSONArray.get(i).getAsJsonObject().get("picture").isJsonNull();
                             if (!x){
                                 String tmpString = inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", "");
-                                //Log.i("myLog", "ANC downloadAllProducts: " + DataProcessor.getDrawableMap().toString());
                                 tmpInt = Integer.parseInt(DataProcessor.getDrawableMap().get(tmpString).toString());
-                                //tmpInt = Integer.parseInt(MenuActivity.getDrawableMap().get(tmpString).toString());
-
-
                             }
                             downloadedDataSet.add(new SingleProductItem(
                                     Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("id").toString().replaceAll("\"", "")),
@@ -96,7 +92,6 @@ public class NetworkConnector extends Application {
                 }));
         return downloadedDataSet;
     }
-
     public List<SingleProductItem> getDownloadedList(){
         return downloadAllProducts();
     }
@@ -159,16 +154,17 @@ public class NetworkConnector extends Application {
                 })
         );
     }
-    public void getItem(final Integer _id, EditText etCategory, EditText etName, EditText etDescription, EditText etPrice, EditText etImage){
+    public void getItem(final int _id, EditText etCategory, EditText etName, EditText etDescription, EditText etPrice, EditText etImage){
         Log.i("myLog", "getItem adatok: " + _id);
         compositeDisposable.add((Disposable) myAPI.getProductByID(_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    Log.i("myLog", response.body().toString());
                     if (response.code() >= 200 && response.code() < 300) {
                         JsonArray inputJSONArray = response.body().getAsJsonArray("product");
                         for (int i = 0; i < inputJSONArray.size(); i++) {
-                            etCategory.setText(inputJSONArray.get(i).getAsJsonObject().get("category").toString().replaceAll("\"", ""));
+                            etCategory.setText(inputJSONArray.get(i).getAsJsonObject().get("categoryID").toString().replaceAll("\"", ""));
                             etName.setText(inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""));
                             etDescription.setText(inputJSONArray.get(i).getAsJsonObject().get("detail").toString().replaceAll("\"", ""));
                             etPrice .setText(inputJSONArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", ""));
@@ -185,6 +181,7 @@ public class NetworkConnector extends Application {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    Log.i("myLog", response.body().toString());
                     if (response.code() >= 200 && response.code() < 300){
                         Log.i("myLog", "ChangeProduct response code: " + response.body().toString());
                     } else {
@@ -193,63 +190,7 @@ public class NetworkConnector extends Application {
                 }));
     }
 
-
     //orders
-/*
-    public String downloadOrders(TextView _tv){
-        StringBuilder tmpString = new StringBuilder();
-
-        compositeDisposable.add(myAPI.getAllOrders()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    if (response.code() >= 200 && response.code() < 300) {
-                        Log.i("myLog", response.body().toString());
-                        Log.i("myLog", response.body().getAsJsonArray("order").get(0).toString());
-                        JsonArray inputJSONArray = response.body().getAsJsonArray("order");
-                        for (int i = 0; i < inputJSONArray.size(); i++) {
-                            String tmpCustomerName = inputJSONArray.get(i).getAsJsonObject().get("email").toString().replaceAll("\"", "");
-                            String tmpItemName = inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", "");
-                            int tmpAmount = Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("amount").toString().replaceAll("\"", ""));
-                            int tmpPrice = Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", ""));
-
-                            if (orderList.isEmpty() || !isCustomerHasOrder(tmpCustomerName)){
-                                Log.i("myLog", "Üres lista: " + Boolean.toString(orderList.isEmpty()) + ", vagy nem létező felhasználó: " + Boolean.toString(!isCustomerHasOrder(tmpCustomerName)) + ", hozzáadás!");
-                                orderList.add(new Order(tmpCustomerName,"2020.02.22"));
-                            }
-                            orderList.get(getOrderPosition(tmpCustomerName)).addItem(tmpItemName, tmpAmount);
-
-
-                            tmpString.append(inputJSONArray.get(i).getAsJsonObject().get("orderID").toString().replaceAll("\"", "")
-                                    + " " + inputJSONArray.get(i).getAsJsonObject().get("email").toString().replaceAll("\"", "")
-                                    + " " + inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", "")
-                                    + " " + inputJSONArray.get(i).getAsJsonObject().get("amount").toString().replaceAll("\"", "")
-                                    + "\n"
-                            );
-
-                        }
-                        for(Order x : orderList){
-                            tmpString.append("Megrendelő:\n" + x.getCustomer() + ".\nRendelt tételek:\n");
-                            for (Object y : x.getOrderList()){
-                                tmpString.append("\t- " + y + " " + x.getAmount((String) y) + "\n");
-                            }
-                            tmpString.append("Teljes vételár: " + x.getPrice());
-                        }
-                        _tv.setTextSize(16);
-                        _tv.setText(tmpString.toString());
-                        //_tv.setText(orderList.toString());
-                    }
-                    else {
-                        Log.i("myLog", "AdminOrders error: " + response.code() + " " + response.errorBody().string());
-                    }
-                })
-        );
-        Log.i("myLog", "végleges orderList: " + orderList);
-
-
-        return orderList.toString();
-    }
-*/
 
     public List<Order> downloadOrders(){
         if(!orderList.isEmpty()) {

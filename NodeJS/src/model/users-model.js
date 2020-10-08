@@ -3,9 +3,13 @@ import { conn } from '../../app';
 export default class Users {
     constructor(usersItem) {
         this.email = usersItem.email;
-        this.password = usersItem.password;
-        this.updated_at = usersItem.updated_at;
         this.is_admin = usersItem.is_admin;
+        this.password = usersItem.password;
+        this.name = usersItem.name;
+        this.address = usersItem.address;
+        this.phonenumber = usersItem.phonenumber;
+        this.updated_at = usersItem.updated_at;
+
     }
 
         static getAllUsers(res) {
@@ -18,6 +22,22 @@ export default class Users {
                         res(err, null);
                     } else {
                         res(null, result);
+                    }
+                }
+            );
+        }
+
+        static getOneUser(email, res) {
+            conn.query(
+                'SELECT * FROM users WHERE email = ?',
+                [email],
+                function(err, result) {
+                    if (err) {
+                        return res(err, null);
+                    }
+                    else {
+                        res(null, result[0]);
+
                     }
                 }
             );
@@ -57,11 +77,14 @@ export default class Users {
                         res('Email address already in use!', null);
                     } else {
                         conn.query(
-                            'INSERT INTO `users`( `email`, `password`, `updated_at`) ' +
-                                'VALUES (?, ?, NOW())',
+                            'INSERT INTO `users`( `email`, `password`,`name`,`address`,`phonenumber`, `updated_at`) ' +
+                                'VALUES (?, ?, ?, ?, ?, NOW())',
                             [
                                 newUser.email,
                                 newUser.password,
+                                newUser.name,
+                                newUser.address,
+                                newUser.phonenumber,
                                 newUser.updated_at
                             ],
                             function(err, response) {

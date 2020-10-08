@@ -1,7 +1,5 @@
 package com.t.p.gy.myrestaurantapp;
 
-import android.app.Activity;
-import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,9 +15,6 @@ import com.t.p.gy.myrestaurantapp.adapter.AdapterForAdminRecyclerView;
 import com.t.p.gy.myrestaurantapp.connection.NetworkConnector;
 import com.t.p.gy.myrestaurantapp.other.AdminDialog;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 public class AdminMaintenanceActivity extends AppCompatActivity {
@@ -33,7 +28,19 @@ public class AdminMaintenanceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_maintenance);
         Log.v("MyLog", "Admin oncreate start...");
+        initUI();
 
+        adminRecyclerView = (RecyclerView) findViewById(R.id.adminactivity_recyclerview) ;
+        adminRecyclerView.setHasFixedSize(true);
+        adminRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adminRecyclerViewAdapter = new AdapterForAdminRecyclerView(this);
+        adminRecyclerView.setAdapter(adminRecyclerViewAdapter);
+        DividerItemDecoration decoration = new DividerItemDecoration(this, VERTICAL);
+        adminRecyclerView.addItemDecoration(decoration);
+        Log.i("myLog", "Admin oncreate vége...");
+    }
+
+    private void initUI(){
         Button addButton = (Button) findViewById(R.id.adminactivity_addbutton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,7 +48,6 @@ public class AdminMaintenanceActivity extends AppCompatActivity {
                 initAddButton();
             }
         });
-
         Button filterButton = (Button) findViewById(R.id.adminactivity_filterbutton);
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,19 +62,8 @@ public class AdminMaintenanceActivity extends AppCompatActivity {
                 Log.i("myLog", "SearchButton: " + anc.getOneUserByEmail("aaa@aaa.aa"));
             }
         });
-
-
         initBackButton();
-        //initDrawMap();
 
-        adminRecyclerView = (RecyclerView) findViewById(R.id.adminactivity_recyclerview) ;
-        adminRecyclerView.setHasFixedSize(true);
-        adminRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adminRecyclerViewAdapter = new AdapterForAdminRecyclerView(this);
-        adminRecyclerView.setAdapter(adminRecyclerViewAdapter);
-        DividerItemDecoration decoration = new DividerItemDecoration(this, VERTICAL);
-        adminRecyclerView.addItemDecoration(decoration);
-        Log.i("myLog", "Admin oncreate vége...");
     }
 
     //vissza gomb
@@ -88,32 +83,6 @@ public class AdminMaintenanceActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     //vissza gomb vége
-
-    /*
-    private void initDrawMap() {
-        drawableMap = new HashMap<>();
-        drawableMap.put("birramoretti", getApplicationContext().getResources().getIdentifier("birramoretti","drawable", getPackageName()));
-        drawableMap.put("cola", getApplicationContext().getResources().getIdentifier("cola","drawable", getPackageName()));
-        drawableMap.put("corona", getApplicationContext().getResources().getIdentifier("corona","drawable", getPackageName()));
-        drawableMap.put("csiga", getApplicationContext().getResources().getIdentifier("csiga","drawable", getPackageName()));
-        drawableMap.put("donerkebab", getApplicationContext().getResources().getIdentifier("donerkebab","drawable", getPackageName()));
-        drawableMap.put("duplahamburger", getApplicationContext().getResources().getIdentifier("duplahamburger","drawable", getPackageName()));
-        drawableMap.put("durum", getApplicationContext().getResources().getIdentifier("durum","drawable", getPackageName()));
-        drawableMap.put("extrahamburger", getApplicationContext().getResources().getIdentifier("extrahamburger","drawable", getPackageName()));
-        drawableMap.put("fanta", getApplicationContext().getResources().getIdentifier("fanta","drawable", getPackageName()));
-        drawableMap.put("hamburger", getApplicationContext().getResources().getIdentifier("hamburger","drawable", getPackageName()));
-        drawableMap.put("hell", getApplicationContext().getResources().getIdentifier("hell","drawable", getPackageName()));
-        drawableMap.put("kilkenny", getApplicationContext().getResources().getIdentifier("kilkenny","drawable", getPackageName()));
-        drawableMap.put("sprite", getApplicationContext().getResources().getIdentifier("sprite","drawable", getPackageName()));
-        drawableMap.put("stella", getApplicationContext().getResources().getIdentifier("stella","drawable", getPackageName()));
-        drawableMap.put("wizard", getApplicationContext().getResources().getIdentifier("wizard","drawable", getPackageName()));
-    }
-
-    public static Map getDrawableMap(){
-        return drawableMap;
-    }
-    */
-
 
     private void initAddButton(){
         AdminDialog alert = new AdminDialog();

@@ -26,12 +26,12 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
 
     //egy listaelem elemei
     protected class ViewHolder extends RecyclerView.ViewHolder{
-        private ImageView itemImage;
-        private TextView itemName,
-            itemDescription,
-            itemPrice;
-        private Button modifyButton,
-            deleteButton;
+        private ImageView   itemImage;
+        private TextView    itemName,
+                            itemDescription,
+                            itemPrice;
+        private Button      modifyButton,
+                            deleteButton;
 
         private ViewHolder(View itemView){
             super(itemView);
@@ -46,7 +46,7 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
 
     public AdapterForAdminRecyclerView(Context context){
         mContext = context;
-        downloadedDataList = anc.getDownloadedList();
+        downloadedDataList = anc.downloadAllProducts();
     }
 
     @Override
@@ -78,22 +78,19 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
         }
         else {holder.itemImage.setVisibility(View.GONE);}
          */
-        //holder.itemImage.setImageResource(R.drawable.cola);
         holder.itemImage.setImageResource(spi.getImageResourceID());
         holder.itemImage.setVisibility(View.VISIBLE);
 
         holder.itemName.setText(spi.getName());
         holder.itemDescription.setText(spi.getDetail());
         holder.itemPrice.setText(Integer.toString(spi.getPrice()));
+
         holder.deleteButton.setBackgroundColor(holder.deleteButton.getResources().getColor(R.color.MyWarningColor));
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("myLog", "Deletebutton pressed");
                 Log.i("myLog", "Választott termék: "+ spi.getID());
-                anc.deleteProduct(spi.getID());
-                notifyItemRemoved(position);
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 builder.setMessage("Biztos törlöd a " + spi.getName() + " tételt az adatbázisból?");
                 //.setCancelable(false)
@@ -106,27 +103,9 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
                 AlertDialog alert = builder.create();
                 alert.setTitle("Vigyázz, törlés művelet!");
                 alert.show();
-
-                //AdminMaintenanceActivity.makeMessage("Tétel töröve!");
-
-
-
-                /*
-                if (spi.getCategory()== 2) {
-                    if (anc.deleteFromDrinksTable(spi.getName())) {
-                        Log.i("myLog", "if true lett!");
-                    }
-                }
-                else if (spi.getCategory() == 1 ) {
-                    if (anc.deleteFromFoodsTable(spi.getName())) {
-                        Log.i("myLog", "if true lett!");
-                    }
-                }
-                notifyItemRemoved(position);
-
-                 */
             }
         });
+
         holder.modifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,10 +114,8 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
 
                 AdminDialog alert = new AdminDialog();
                 alert.showDialog(mContext, "Termék módosítása","Módosít", spi.getID());
-
             }
         });
-
         Log.i("myLog","Admin adapterForRecyclerView, konstruktor: OK");
     }
 
