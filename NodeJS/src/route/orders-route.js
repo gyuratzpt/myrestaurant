@@ -8,4 +8,14 @@ export default function(router) {
         orders.read_all_orders
     );
 
+    router.post(
+        '/orders',
+        orders.create_new_order
+    );
+
+    router.put(
+        '/orders/:id',
+        orders.finalizeOrder
+    );
+
 }

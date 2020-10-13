@@ -9,8 +9,13 @@ export default function(router) {
     );
 
     router.get(
-        '/products/items/:id',
-        products.read_product
+        '/products/:categoryID',
+        products.read_filtered_products
+    );
+
+    router.get(
+        '/products/:id',
+        products.read_one_product
     );
 
     router.post(
@@ -23,10 +28,9 @@ export default function(router) {
         products.delete_products_item
     );
 
-    router
-        .put(
-            '/products/:name',
-            products.modify_products_item
-        );
+    router.put(
+        '/products/:name',
+        products.modify_products_item
+    );
         
 }

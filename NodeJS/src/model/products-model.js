@@ -28,7 +28,24 @@ export default class Products {
         );
     }
 
-    static getProduct(res) {
+
+
+    static getFilteredProducts(categoryID ,res) {
+        conn.query(
+            `SELECT * FROM products WHERE categoryID = ?`,
+            [categoryID],
+            function(err, result) {
+                if (err) {
+                    console.log('Error: ', err);
+                    res(err, null);
+                } else {
+                    res(null, result);
+                }
+            }
+        );
+    }
+
+    static getProduct(id ,res) {
         conn.query(
             `SELECT * FROM products WHERE id = ?`,
             [id],

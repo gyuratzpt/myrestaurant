@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.t.p.gy.myrestaurantapp.adapter.AdapterForMenuRecyclerView;
+import com.t.p.gy.myrestaurantapp.connection.NetworkConnector;
 import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 
 import java.util.ArrayList;
@@ -35,18 +36,16 @@ public class MenuActivity extends AppCompatActivity {
     Spinner menuSpinner;
     private RecyclerView.Adapter menuRecyclerViewAdapter;
     static TextView tv_SummedPrice;
-    static Map<String, Integer> drawableMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         initBackButton();
-        initSpinner();
+        initSpinnerValues();
+        //initSpinnerBehavior();
         Log.i("myLog", "Menuactivity: start");
         Button addToCartbutton;
-        //initDrawMap();
-
 
 
         tv_SummedPrice = (TextView) findViewById(R.id.menuactivity_price);
@@ -81,10 +80,11 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        Log.v("myLog","Menuactivity Konstruktor kész");
+        Log.i("myLog","Menuactivity Konstruktor kész");
     }
 
-    //menu
+    //*******************************************//
+                        //menu
     private void initBackButton() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -112,47 +112,42 @@ public class MenuActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    //menu vége
-    private void initSpinner(){
+                        //menu vége
+    //*******************************************//
+
+
+
+    private void initSpinnerValues(){
         menuSpinner = findViewById(R.id.menuactivity_spinner);
-        List<String> getSpinnerList = new ArrayList<>();
-        getSpinnerList.add("Étel");
-        getSpinnerList.add("Ital");
-        getSpinnerList.add("Koksz");
-        //  spinner (lenyitható lista) peldanyositasa, feltoltese egy ArrayList objektumból, viselkedes beallitas
-        ArrayAdapter menuSpinnerArrayAdapter = new ArrayAdapter(MenuActivity.this, R.layout.spinner_item, getSpinnerList);
+
+        NetworkConnector nc = new NetworkConnector();
+        //List<String> testList = new ArrayList<>();
+        List<String> testList;
+        testList = nc.downloadCategories();
+        //testList.add("food2");
+        //testList.add("drink2");
+        //testList.add("drug2");
+
+        ArrayAdapter menuSpinnerArrayAdapter = new ArrayAdapter(MenuActivity.this, R.layout.spinner_item, testList);
         menuSpinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         menuSpinner.setAdapter(menuSpinnerArrayAdapter);
+
+    }
+
+    private void initSpinnerBehavior() {
         menuSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                /*
-                menuSpinner.setSelection(0);
-                if (i!=0) {
-                    Intent myIntent;
-                    switch (i) {
-                        case 1:
-                            myIntent = new Intent(MainActivity.this, FoodActivity.class);
-                            startActivity(myIntent);
-                            break;
-                        case 2:
-                            myIntent = new Intent(MainActivity.this, DrinkActivity.class);
-                            startActivity(myIntent);
-                            break;
-                        case 3:
-                            myIntent = new Intent(MainActivity.this, CartActivity.class);
-                            startActivity(myIntent);
-                            break;
-                    }
-                }
-                */
+                Log.i("myLog", "Selected spinner value: " + adapterView.getSelectedItemPosition());
+                menuRecyclerViewAdapter = new AdapterForMenuRecyclerView(tv_SummedPrice, myDataProcessor.getProductList(adapterView.getSelectedItemPosition()));
+                menuRecyclerView.setAdapter(menuRecyclerViewAdapter);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
-
     }
+
 
     //actions
     public static void refreshPriceTextView(int x){
@@ -160,29 +155,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
 }
-/*
-    private void initDrawMap() {
-        drawableMap = new HashMap<>();
-        drawableMap.put("birramoretti", getApplicationContext().getResources().getIdentifier("birramoretti","drawable", getPackageName()));
-        drawableMap.put("cola", getApplicationContext().getResources().getIdentifier("cola","drawable", getPackageName()));
-        drawableMap.put("corona", getApplicationContext().getResources().getIdentifier("corona","drawable", getPackageName()));
-        drawableMap.put("csiga", getApplicationContext().getResources().getIdentifier("csiga","drawable", getPackageName()));
-        drawableMap.put("donerkebab", getApplicationContext().getResources().getIdentifier("donerkebab","drawable", getPackageName()));
-        drawableMap.put("duplahamburger", getApplicationContext().getResources().getIdentifier("duplahamburger","drawable", getPackageName()));
-        drawableMap.put("durum", getApplicationContext().getResources().getIdentifier("durum","drawable", getPackageName()));
-        drawableMap.put("extrahamburger", getApplicationContext().getResources().getIdentifier("extrahamburger","drawable", getPackageName()));
-        drawableMap.put("fanta", getApplicationContext().getResources().getIdentifier("fanta","drawable", getPackageName()));
-        drawableMap.put("hamburger", getApplicationContext().getResources().getIdentifier("hamburger","drawable", getPackageName()));
-        drawableMap.put("hell", getApplicationContext().getResources().getIdentifier("hell","drawable", getPackageName()));
-        drawableMap.put("kilkenny", getApplicationContext().getResources().getIdentifier("kilkenny","drawable", getPackageName()));
-        drawableMap.put("sprite", getApplicationContext().getResources().getIdentifier("sprite","drawable", getPackageName()));
-        drawableMap.put("stella", getApplicationContext().getResources().getIdentifier("stella","drawable", getPackageName()));
-        drawableMap.put("wizard", getApplicationContext().getResources().getIdentifier("wizard","drawable", getPackageName()));
-    }
-        public static Map getDrawableMap(){
-        return drawableMap;
-    }
- */
+
     /*
     //saját metódusok
     @Override

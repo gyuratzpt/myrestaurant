@@ -23,6 +23,10 @@ public interface ProductsBackend {
     @GET("/api/v1/categories")
     Observable<Response<JsonObject>> getCategories();
 
+    @HTTP(method = "GET", path = "/api/v1/products/{categoryID}")
+    Observable<Response<JsonObject>> getFilteredProducts(@Path("categoryID") int _cat);
+
+
     //elem lekérdezések
     @HTTP(method = "GET", path = "/api/v1/products/{id}")
     Observable<Response<JsonObject>> getProductByID(@Path("id") int id);
@@ -51,6 +55,35 @@ public interface ProductsBackend {
                                                         @Field("price") Integer price,
                                                         @Field("picture") String picture);
 
+
+
+
+
+
+
+
+    //order műveletek
+    @FormUrlEncoded
+    @POST("/api/v1/orders")
+    Observable<Response<JsonObject>> writeOrder(@Field("userid") int userID,
+                                                @Field("productid") int productID,
+                                                  @Field("amount") int amount);
+
+    @FormUrlEncoded
+    @HTTP(method = "PUT", path = "/api/v1/orders/{id}", hasBody = true)
+    Observable<Response<ResponseBody>> finalizeOrder(@Path("id") int id,
+                                                     @Field("isCompleted") boolean status);
+
+
+
+
+
+
+
+
+
+
+
     //user műveletek
     @FormUrlEncoded
     @POST("/api/v1/login")
@@ -60,6 +93,8 @@ public interface ProductsBackend {
     @POST("/api/v1/register")
     Observable<Response<JsonObject>> registration(@Field("email") String email,
                                            @Field("password") String password);
+
+
 }
 /*
     @GET("/api/v1/foods")

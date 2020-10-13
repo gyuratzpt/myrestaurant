@@ -13,9 +13,14 @@ import com.t.p.gy.myrestaurantapp.R;
 import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 import com.t.p.gy.myrestaurantapp.data.SingleProductItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForMenuRecyclerView.ViewHolder>{
+    List<SingleProductItem> actualProductList = new ArrayList<SingleProductItem>();
     DataProcessor myDataProcessor = DataProcessor.getInstance();
+    int selectedCategory;
     private TextView textView;
 
     protected class ViewHolder extends RecyclerView.ViewHolder{
@@ -40,7 +45,12 @@ public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForM
     }
 
     public AdapterForMenuRecyclerView(TextView _tv){
+        actualProductList = myDataProcessor.getProductList();
         textView = _tv;
+    }
+    public AdapterForMenuRecyclerView(TextView _tv, List<SingleProductItem> _inputList){
+        textView = _tv;
+        actualProductList = _inputList;
     }
 
     @Override
@@ -57,8 +67,16 @@ public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForM
     @Override
 //adatfeltöltés az egyes elemekhez
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final SingleProductItem spi = myDataProcessor.getProductList().get(position);
 
+        final SingleProductItem spi;
+        /*
+        if(selectedCategory.length()>0){
+            spi = myDataProcessor.getProductList(2).get(position);
+        } else{
+            spi = myDataProcessor.getProductList().get(position);
+        }
+        */
+        spi = actualProductList.get(position);
         holder.itemImage.setImageResource(spi.getImageResourceID());
         if(spi.hasImage()) {
             // Get the image resource ID from the current AndroidFlavor object and set the image to iconView
@@ -69,15 +87,16 @@ public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForM
 
         holder.itemName.setText(spi.getName());
         holder.itemDescription.setText(spi.getDetail());
-        holder.itemAmount.setText(Integer.toString(spi.getCartAmount()));
+        holder.itemAmount.setText(Integer.toString(spi.getOrderAmount()));
         holder.itemPrice.setText(Integer.toString(spi.getPrice()));
         holder.itemAmountDecrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (spi.getOrderAmount() > 0) {
                     spi.setOrderAmount(false);
-                    holder.itemAmount.setText(String.valueOf(spi.getOrderAmount()));
-                    MenuActivity.refreshPriceTextView(myDataProcessor.getActualOrderPrice());
+                    setPriceText(holder, spi);
+                    //holder.itemAmount.setText(String.valueOf(spi.getOrderAmount()));
+                    //MenuActivity.refreshPriceTextView(myDataProcessor.getActualOrderPrice());
                 }
             }
         });
@@ -85,8 +104,9 @@ public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForM
             @Override
             public void onClick(View view) {
                 spi.setOrderAmount(true);
-                holder.itemAmount.setText(String.valueOf(spi.getOrderAmount()));
-                MenuActivity.refreshPriceTextView(myDataProcessor.getActualOrderPrice());
+                setPriceText(holder, spi);
+                //holder.itemAmount.setText(String.valueOf(spi.getOrderAmount()));
+                //MenuActivity.refreshPriceTextView(myDataProcessor.getActualOrderPrice());
             }
         });
 
@@ -96,7 +116,13 @@ public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForM
     @Override
     //visszaadja hány eleme van a listának
     public int getItemCount() {
-        return myDataProcessor.getProductList().size();
+        return actualProductList.size();
+        //return myDataProcessor.getProductList().size();
+    }
+
+    private void setPriceText(ViewHolder h, SingleProductItem spi){
+        h.itemAmount.setText(String.valueOf(spi.getOrderAmount()));
+        MenuActivity.refreshPriceTextView(myDataProcessor.getActualOrderPrice());
     }
 
 }

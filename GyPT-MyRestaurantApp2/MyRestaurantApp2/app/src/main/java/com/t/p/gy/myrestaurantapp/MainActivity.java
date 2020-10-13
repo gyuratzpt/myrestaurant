@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    DataProcessor myDp = DataProcessor.getInstance();
+    DataProcessor myDp = DataProcessor.getInstance();;
     Gson gson = new GsonBuilder().setLenient().create();
 
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
@@ -33,11 +33,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_v2);
-
         //res/drawable file-ok int id kiolvasása. Más módszer??
         if(myDp.getDrawableMap().isEmpty()){
             myDp.setDrawableMap(initDrawableMap());
         }
+
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         //felhasználó törlésére
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         drawableMap.put("sprite", getApplicationContext().getResources().getIdentifier("sprite","drawable", getPackageName()));
         drawableMap.put("stella", getApplicationContext().getResources().getIdentifier("stella","drawable", getPackageName()));
         drawableMap.put("wizard", getApplicationContext().getResources().getIdentifier("wizard","drawable", getPackageName()));
-
+        drawableMap.put("noimage", getApplicationContext().getResources().getIdentifier("noimage","drawable", getPackageName()));
         return drawableMap;
     }
     private void initUI(){

@@ -5,7 +5,7 @@ export default class Users {
         this.email = usersItem.email;
         this.is_admin = usersItem.is_admin;
         this.password = usersItem.password;
-        this.name = usersItem.name;
+        this.name = usersItem.username;
         this.address = usersItem.address;
         this.phonenumber = usersItem.phonenumber;
         this.updated_at = usersItem.updated_at;
@@ -77,12 +77,12 @@ export default class Users {
                         res('Email address already in use!', null);
                     } else {
                         conn.query(
-                            'INSERT INTO `users`( `email`, `password`,`name`,`address`,`phonenumber`, `updated_at`) ' +
+                            'INSERT INTO `users`( `email`, `password`,`username`,`address`,`phonenumber`, `updated_at`) ' +
                                 'VALUES (?, ?, ?, ?, ?, NOW())',
                             [
                                 newUser.email,
                                 newUser.password,
-                                newUser.name,
+                                newUser.username,
                                 newUser.address,
                                 newUser.phonenumber,
                                 newUser.updated_at

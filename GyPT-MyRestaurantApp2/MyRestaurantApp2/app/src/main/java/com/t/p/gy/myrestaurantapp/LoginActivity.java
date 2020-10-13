@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
         //ha nem lenne túl gyors, eltűnének a gombok és megjelenne egy haladásjelző?!
 
-        compositeDisposable.add(myAPI.login(email, password) //myAPI, tehát a productsbackend felé adja az adatokat
+        compositeDisposable.add(myAPI.login(email, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {

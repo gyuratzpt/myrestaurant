@@ -21,23 +21,22 @@ import com.t.p.gy.myrestaurantapp.other.AdminDialog;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterForOrderRecyclerView.ViewHolder>{
-    //NetworkConnector anc = NetworkConnector.getInstance();
+public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterForOrderRecyclerView.ViewHolder> {
     DataProcessor myDp = DataProcessor.getInstance();
     private List<Order> ordersList;
     private Context mContext;
 
     //egy listaelem elemei
-    protected class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView    customerName,
-                            customerAddress,
-                            customerPhoneNumber,
-                            itemList,
-                            other;
+    protected class ViewHolder extends RecyclerView.ViewHolder {
+        private TextView customerName,
+                customerAddress,
+                customerPhoneNumber,
+                itemList,
+                other;
         private Button sentButton;
 
 
-        private ViewHolder(View itemView){
+        private ViewHolder(View itemView) {
             super(itemView);
             customerName = (TextView) itemView.findViewById(R.id.orders_listitem_name);
             customerAddress = (TextView) itemView.findViewById(R.id.orders_listitem_address);
@@ -48,7 +47,7 @@ public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterFor
         }
     }
 
-    public AdapterForOrderRecyclerView(Context context){
+    public AdapterForOrderRecyclerView(Context context) {
         mContext = context;
         /*
         if(ordersList != null && !ordersList.isEmpty()) {
@@ -85,31 +84,15 @@ public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterFor
         holder.itemList.setText(o.toString());
         holder.other.setText(o.getOrderTime());
 
-        /*
-        holder.itemImage.setImageResource(smi.getImageResourceID());
-        if(smi.hasImage()) {
-            // Get the image resource ID from the current AndroidFlavor object and set the image to iconView
-            holder.itemImage.setImageResource(smi.getImageResourceID());
-            holder.itemImage.setVisibility(View.VISIBLE);
-        }
-        else {holder.itemImage.setVisibility(View.GONE);}
-
-        //holder.itemImage.setImageResource(R.drawable.cola);
-        holder.itemImage.setImageResource(spi.getImageResourceID());
-        holder.itemImage.setVisibility(View.VISIBLE);
-
-        holder.itemName.setText(spi.getName());
-        holder.itemDescription.setText(spi.getDetail());
-        holder.itemPrice.setText(Integer.toString(spi.getPrice()));
-        holder.deleteButton.setBackgroundColor(holder.deleteButton.getResources().getColor(R.color.MyWarningColor));
-        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+        holder.sentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("myLog", "Deletebutton pressed");
-                Log.i("myLog", "Választott termék: "+ spi.getID());
-                anc.deleteProduct(spi.getID());
-                notifyItemRemoved(position);
 
+                Log.i("myLog", "SentButton pressed");
+                myDp.setOrderToCompleted(o.getOrderIDs());
+                //anc.deleteProduct(spi.getID());
+                //notifyItemRemoved(position);
+            /*
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 builder.setMessage("Biztos törlöd a " + spi.getName() + " tételt az adatbázisból?");
                 //.setCancelable(false)
@@ -122,44 +105,11 @@ public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterFor
                 AlertDialog alert = builder.create();
                 alert.setTitle("Vigyázz, törlés művelet!");
                 alert.show();
-
-                //AdminMaintenanceActivity.makeMessage("Tétel töröve!");
-
-
-
-                /*
-                if (spi.getCategory()== 2) {
-                    if (anc.deleteFromDrinksTable(spi.getName())) {
-                        Log.i("myLog", "if true lett!");
-                    }
-                }
-                else if (spi.getCategory() == 1 ) {
-                    if (anc.deleteFromFoodsTable(spi.getName())) {
-                        Log.i("myLog", "if true lett!");
-                    }
-                }
-                notifyItemRemoved(position);
-
-
+            */
             }
         });
-        holder.modifyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i("myLog", "Modifybutton pressed");
-                Log.i("myLog", "Választott termék ID-ja: "+ spi.getID());
-
-                AdminDialog alert = new AdminDialog();
-                alert.showDialog(mContext, "Termék módosítása","Módosít", spi.getID());
-
-            }
-        });
-        */
-        Log.i("myLog","Admin adapterForRecyclerView, konstruktor: OK");
     }
-
 }
-
 
 
 

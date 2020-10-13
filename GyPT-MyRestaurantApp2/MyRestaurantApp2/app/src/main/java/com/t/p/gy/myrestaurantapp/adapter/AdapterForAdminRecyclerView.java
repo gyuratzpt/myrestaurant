@@ -69,15 +69,16 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
 //adatfeltöltés az egyes elemekhez
     public void onBindViewHolder(ViewHolder holder, int position) {
         final SingleProductItem spi = downloadedDataList.get(position);
-        /*
-        holder.itemImage.setImageResource(smi.getImageResourceID());
-        if(smi.hasImage()) {
-            // Get the image resource ID from the current AndroidFlavor object and set the image to iconView
-            holder.itemImage.setImageResource(smi.getImageResourceID());
+
+                        /*
+        holder.itemImage.setImageResource(spi.getImageResourceID());
+        if(spi.hasImage()) {
+            holder.itemImage.setImageResource(spi.getImageResourceID());
             holder.itemImage.setVisibility(View.VISIBLE);
         }
-        else {holder.itemImage.setVisibility(View.GONE);}
+        else {holder.itemImage.setImageResource();}
          */
+
         holder.itemImage.setImageResource(spi.getImageResourceID());
         holder.itemImage.setVisibility(View.VISIBLE);
 

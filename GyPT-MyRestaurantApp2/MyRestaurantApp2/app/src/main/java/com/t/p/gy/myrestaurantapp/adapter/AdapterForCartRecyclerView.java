@@ -66,14 +66,13 @@ public class AdapterForCartRecyclerView extends RecyclerView.Adapter<AdapterForC
     public void onBindViewHolder(ViewHolder holder, int position) {
         final SingleProductItem spi = myDataProcessor.getCart().get(position);
 
-        holder.itemImage.setImageResource(spi.getImageResourceID());
         if(spi.hasImage()) {
-            // Get the image resource ID from the current AndroidFlavor object and set the image to iconView
             holder.itemImage.setImageResource(spi.getImageResourceID());
-            holder.itemImage.setVisibility(View.VISIBLE);
         }
-        else {holder.itemImage.setVisibility(View.GONE);}
+        else {holder.itemImage.setImageResource(Integer.parseInt(DataProcessor.getDrawableMap().get("noimage").toString()));}
 
+
+        holder.itemImage.setVisibility(View.VISIBLE);
         holder.itemName.setText(spi.getName());
         holder.itemDescription.setText(spi.getDetail());
         holder.itemAmount.setText(Integer.toString(spi.getCartAmount()));

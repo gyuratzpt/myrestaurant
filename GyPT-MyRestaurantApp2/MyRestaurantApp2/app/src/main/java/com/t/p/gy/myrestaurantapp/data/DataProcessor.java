@@ -18,18 +18,15 @@ import java.util.Map;
 public class DataProcessor {
     private static DataProcessor dataProcessorInstance;
     private NetworkConnector netConn;
-    private List<SingleProductItem> productList;
+    private List<SingleProductItem> productList = new ArrayList<>();;
     private List<SingleProductItem> cart = new ArrayList<>();
     private static Map<String, Integer> drawableMap = new HashMap<>();
 
     //private constructor.
     private DataProcessor(){
         netConn = NetworkConnector.getInstance();
-        productList = netConn.getDownloadedList();
-        //Drawable map feltöltése???
-        //drawableMap.put("birramoretti", getApplicationContext().getResources().getIdentifier("birramoretti","drawable", getPackageName()));
+        //productList = netConn.getDownloadedList();
 
-        //rendezést ráér
     }
     public static DataProcessor getInstance(){
         if (dataProcessorInstance == null){ //if there is no instance available... create new one
@@ -70,6 +67,9 @@ public class DataProcessor {
     public List<Order> getOrders_list(){
         return netConn.downloadOrders();
     }
+    public void setOrderToCompleted(List<Integer> _orderIDs){
+        netConn.setOrderToCompleted(_orderIDs);
+    }
 
 
 
@@ -81,7 +81,21 @@ public class DataProcessor {
 
 
     public List<SingleProductItem> getProductList(){
+        Log.i("myLog", "DataProcessor / getProductList running...");
+        productList = netConn.getDownloadedList();
+        Log.i("myLog", "productList tartalma:" + productList.toString());
         return productList;
+    }
+    public List<SingleProductItem> getProductList(int _cat){
+        Log.i("myLog", "DataProcessor / getProductList(" + _cat + ") running...");
+        //productList = netConn.getDownloadedList(_cat);
+        netConn.getDownloadedList(productList, _cat);
+        Log.i("myLog", "productList tartalma:" + productList.toString());
+        return productList;
+    }
+
+    public List<String> getSpinnerList(){
+        return netConn.downloadCategories();
     }
     public int getActualOrderPrice(){
         int sum = 0;
@@ -148,6 +162,13 @@ public class DataProcessor {
     }
     public void refreshCartActivityView(){
         CartActivity.refreshPriceTextView(getCartFullPrice());
+    }
+
+    public void sendOrder(){
+        for(SingleProductItem x : cart){
+            netConn.sendOrder(x);
+        }
+        Log.i("myLog", "sendOrder finish");
     }
 
 }

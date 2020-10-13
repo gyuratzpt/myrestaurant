@@ -43,7 +43,7 @@ public class AdminDialog {
                         etName.getText().toString(),
                         etDescription.getText().toString(),
                         Integer.parseInt(etPrice.getText().toString()),
-                        etImage.getText().toString()
+                        (etImage.getText().toString().length()>0) ? "noimage" : etImage.getText().toString()
                 );
                 adminDialog.dismiss();
             }
@@ -94,7 +94,7 @@ public class AdminDialog {
                                 etName.getText().toString(),
                                 etDescription.getText().toString(),
                                 Integer.parseInt(etPrice.getText().toString()),
-                                etImage.getText().toString());
+                                (etImage.getText().toString().length()>0) ? etImage.getText().toString() : null);
                         break;
                     case "Módosít":
                         Log.i("myLog", "AdminDialog, módosítás...");
