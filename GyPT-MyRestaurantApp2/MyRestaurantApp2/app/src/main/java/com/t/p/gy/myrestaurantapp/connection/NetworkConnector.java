@@ -8,10 +8,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.t.p.gy.myrestaurantapp.AdminMaintenanceActivity;
 import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 import com.t.p.gy.myrestaurantapp.data.Order;
 import com.t.p.gy.myrestaurantapp.data.SingleProductItem;
+
+import org.json.JSONObject;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -208,17 +211,18 @@ public class NetworkConnector extends Application {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-                    Log.i("myLog", response.body().toString());
+                    Log.i("myLog", "getItem response body: " + response.body().toString());
                     if (response.code() >= 200 && response.code() < 300) {
-                        JsonArray inputJSONArray = response.body().getAsJsonArray("product");
-                        for (int i = 0; i < inputJSONArray.size(); i++) {
-                            etCategory.setText(inputJSONArray.get(i).getAsJsonObject().get("categoryID").toString().replaceAll("\"", ""));
-                            etName.setText(inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""));
-                            etDescription.setText(inputJSONArray.get(i).getAsJsonObject().get("detail").toString().replaceAll("\"", ""));
-                            etPrice .setText(inputJSONArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", ""));
-                            etImage.setText(inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", ""));
-                           }
+
+                        JsonObject inputJSONObject = response.body().getAsJsonObject("product");
+                        etCategory.setText(inputJSONObject.get("categoryID").toString().replaceAll("\"", ""));
+                        etName.setText(inputJSONObject.get("name").toString().replaceAll("\"", ""));
+                        etDescription.setText(inputJSONObject.get("detail").toString().replaceAll("\"", ""));
+                        etPrice.setText(inputJSONObject.get("price").toString().replaceAll("\"", ""));
+                        etImage.setText(inputJSONObject.get("picture").toString().replaceAll("\"", ""));
+
                         }
+
                     else {
                         Log.i("myLog", "AdminNetworkConnector error: " + response.code() + " " + response.errorBody().string());
                     }
@@ -231,7 +235,7 @@ public class NetworkConnector extends Application {
                 .subscribe(response -> {
                     Log.i("myLog", response.body().toString());
                     if (response.code() >= 200 && response.code() < 300){
-                        Log.i("myLog", "ChangeProduct response code: " + response.body().toString());
+                        Log.i("myLog", "ChangeProduct response code: " + response.toString());
                     } else {
                         Log.i("myLog", "ChangeProduct error, code: " + response.toString());
                     }
@@ -311,16 +315,17 @@ public class NetworkConnector extends Application {
     }
     public void setOrderToCompleted(List<Integer> _orderIDs){
         for(Integer id : _orderIDs){
-            boolean status = true;
-            compositeDisposable.add(myAPI.finalizeOrder(id, status)
+            boolean _status = true;
+            int status = 1;
+            compositeDisposable.add(myAPI.finalizeOrder(id, _status)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
                         //Log.i("myLog", response.body().toString());
                         if (response.code() >= 200 && response.code() < 300){
-                            Log.i("myLog", "ChangeProduct response code: " + response.body().toString());
+                            Log.i("myLog", "setOrderToCompleted response code: " + response.toString());
                         } else {
-                            Log.i("myLog", "ChangeProduct error, code: " + response.toString());
+                            Log.i("myLog", "setOrderToCompleted error, code: " + response.toString());
                         }
                     }));
         }

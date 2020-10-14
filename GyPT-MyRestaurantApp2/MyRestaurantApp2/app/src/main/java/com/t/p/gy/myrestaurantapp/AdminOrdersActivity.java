@@ -34,7 +34,6 @@ public class AdminOrdersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_orders);
-        Log.i("myLog", "AdminOrders oncreate start...");
         Retrofit retrofit = RetrofitClient.getInstance();
         myAPI = retrofit.create(ProductsBackend.class);
 
@@ -49,9 +48,5 @@ public class AdminOrdersActivity extends AppCompatActivity {
         orderRecyclerView.setAdapter(orderRecyclerViewAdapter);
         DividerItemDecoration decoration = new DividerItemDecoration(this, VERTICAL);
         orderRecyclerView.addItemDecoration(decoration);
-
-        Log.i("myLog", "AdminOrders oncreate vége...");
     }
-
-
 }

@@ -77,6 +77,7 @@ public class AdminDialog {
         Button cancelButton = (Button) adminDialog.findViewById(R.id.dialog_additem_cancelbutton);
         okButton.setText(_buttonTitle);
         if(_buttonTitle.equals("Módosít")){
+            Log.i("myLog", "Tétel id-ja: " + dbId);
             dp.getItemFromDatabase(dbId, etCategory, etName, etDescription, etPrice, etImage);
         }
 

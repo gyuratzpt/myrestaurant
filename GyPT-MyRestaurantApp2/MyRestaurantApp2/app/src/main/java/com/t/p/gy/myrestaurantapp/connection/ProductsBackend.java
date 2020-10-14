@@ -23,7 +23,7 @@ public interface ProductsBackend {
     @GET("/api/v1/categories")
     Observable<Response<JsonObject>> getCategories();
 
-    @HTTP(method = "GET", path = "/api/v1/products/{categoryID}")
+    @HTTP(method = "GET", path = "/api/v1/products/cat/{categoryID}")
     Observable<Response<JsonObject>> getFilteredProducts(@Path("categoryID") int _cat);
 
 
@@ -47,7 +47,7 @@ public interface ProductsBackend {
                                                 @Field("picture") String picture);
 
     @FormUrlEncoded
-    @HTTP(method = "PUT", path = "/api/v1/products/{id}", hasBody = true)
+    @HTTP(method = "PUT", path = "/api/v1/products/put/{id}", hasBody = true)
     Observable<Response<ResponseBody>> updateProduct(@Path("id") int id,
                                                         @Field("categoryID") Integer categoryID,
                                                         @Field("name") String name,
@@ -70,9 +70,9 @@ public interface ProductsBackend {
                                                   @Field("amount") int amount);
 
     @FormUrlEncoded
-    @HTTP(method = "PUT", path = "/api/v1/orders/{id}", hasBody = true)
-    Observable<Response<ResponseBody>> finalizeOrder(@Path("id") int id,
-                                                     @Field("isCompleted") boolean status);
+    @HTTP(method = "PUT", path = "/api/v1/orders/{orderID}", hasBody = true)
+    Observable<Response<ResponseBody>> finalizeOrder(@Path("orderID") int id,
+                                                     @Field("iscompleted") boolean status);
 
 
 
