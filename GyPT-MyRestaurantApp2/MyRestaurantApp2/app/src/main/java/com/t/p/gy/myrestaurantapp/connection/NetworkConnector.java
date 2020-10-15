@@ -154,16 +154,16 @@ public class NetworkConnector extends Application {
                             for (int i = 0; i < inputJSONArray.size(); i++) {
                                 Log.i("myLog", inputJSONArray.get(i).getAsJsonObject().get("name").toString());
                                 catList.add(inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""));
+                                Log.i("myLog", "downloadCategories response: " + catList.toString());
                             }
                         } else {
                             Log.i("myLog", "Response error: " + response.code());
-                            //Toast??: Toast.makeText(hogy kellelérni ay activity-t????, "" + response.code(), Toast.LENGTH_SHORT).show();
                         }
                     }));
         }catch (Exception e){
-            Log.i("myLog", "Hiba törléskor: " + e);
+            Log.i("myLog", "Hiba a letöltéskor: " + e);
         }
-        Log.i("myLog", catList.toString());
+        Log.i("myLog", "downloadCategories listája: " + catList.toString());
         return catList;
     }
 
@@ -258,21 +258,27 @@ public class NetworkConnector extends Application {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response.code() >= 200 && response.code() < 300) {
-                        Log.i("myLog", response.body().toString());
-                        Log.i("myLog", response.body().getAsJsonArray("order").get(0).toString());
                         JsonArray inputJSONArray = response.body().getAsJsonArray("order");
                         for (int i = 0; i < inputJSONArray.size(); i++) {
-                            int tmpOrderid = Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("orderID").toString().replaceAll("\"", ""));
-                            String tmpCustomerName = inputJSONArray.get(i).getAsJsonObject().get("username").toString().replaceAll("\"", "");
-                            String tmpItemName = inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", "");
-                            int tmpAmount = Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("amount").toString().replaceAll("\"", ""));
-                            int tmpPrice = Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", ""));
 
-                            if (orderList.isEmpty() || !isCustomerHasOrder(tmpCustomerName)){
-                                Log.i("myLog", "Üres lista: " + Boolean.toString(orderList.isEmpty()) + ", vagy nem létező felhasználó: " + Boolean.toString(!isCustomerHasOrder(tmpCustomerName)) + ", hozzáadás!");
-                                orderList.add(new Order(tmpCustomerName, "2020.02.22"));
+                            if (Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("iscompleted").toString().replaceAll("\"", ""))==0) {
+
+
+                                int tmpOrderid = Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("orderID").toString().replaceAll("\"", ""));
+                                String tmpCustomerName = inputJSONArray.get(i).getAsJsonObject().get("username").toString().replaceAll("\"", "");
+                                String tmpItemName = inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", "");
+                                int tmpAmount = Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("amount").toString().replaceAll("\"", ""));
+                                int tmpPrice = Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", ""));
+
+                                if (orderList.isEmpty() || !isCustomerHasOrder(tmpCustomerName)) {
+                                    Log.i("myLog", "Üres lista: " + Boolean.toString(orderList.isEmpty()) + ", vagy nem létező felhasználó: " + Boolean.toString(!isCustomerHasOrder(tmpCustomerName)) + ", hozzáadás!");
+                                    orderList.add(new Order(tmpCustomerName, "2020.02.22"));
+                                }
+                                orderList.get(getOrderPosition(tmpCustomerName)).addSOIItem(tmpOrderid, tmpItemName, tmpAmount, tmpPrice);
                             }
-                            orderList.get(getOrderPosition(tmpCustomerName)).addSOIItem(tmpOrderid, tmpItemName, tmpAmount, tmpPrice);
+                            else Log.i("myLog", "downloadOrders: már teljesített rendelés!");
+
+
                         }
                     }
                     else {
@@ -315,9 +321,8 @@ public class NetworkConnector extends Application {
     }
     public void setOrderToCompleted(List<Integer> _orderIDs){
         for(Integer id : _orderIDs){
-            boolean _status = true;
-            int status = 1;
-            compositeDisposable.add(myAPI.finalizeOrder(id, _status)
+            //compositeDisposable.add(myAPI.finalizeOrder(id, 1)
+            compositeDisposable.add(myAPI.finalizeOrderGettel(id)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {

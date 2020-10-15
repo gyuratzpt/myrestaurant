@@ -5,7 +5,7 @@ export default class Users {
         this.email = usersItem.email;
         this.is_admin = usersItem.is_admin;
         this.password = usersItem.password;
-        this.name = usersItem.username;
+        this.username = usersItem.username;
         this.address = usersItem.address;
         this.phonenumber = usersItem.phonenumber;
         this.updated_at = usersItem.updated_at;

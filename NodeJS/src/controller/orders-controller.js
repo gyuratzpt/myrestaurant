@@ -29,14 +29,27 @@ export function create_new_order(req, res) {
 
 
 export function finalizeOrder(req, res) {
-    Products.finalizeOrder(req.body.id, req.body.status, function(err, resp) {
+    Orders.finalizeOrder(req.params.id, req.body.status, function(err, resp) {
             if (err) {
                 res.status(400).send(err);
                 return;
             } else {
                 res.status(200).send({
-                    message: `Products successfully updated for ${req.body.name}!`});
+                    message: `Order successfully closed!`});
                 return;
             }
         });
     }
+
+    export function finalizeOrderGettel(req, res) {
+        Orders.finalizeOrderGettel(req.params.id, function(err, resp) {
+                if (err) {
+                    res.status(400).send(err);
+                    return;
+                } else {
+                    res.status(200).send({
+                        message: `Order successfully closed!`});
+                    return;
+                }
+            });
+        }

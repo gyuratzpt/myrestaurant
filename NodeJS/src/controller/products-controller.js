@@ -26,7 +26,7 @@ export function read_filtered_products(req, res) {
 }
 
 export function read_one_product(req, res) {
-    Products.getProduct(req.params.id, function(err, product) {
+    Products.getOneProduct(req.params.id, function(err, product) {
         if (err) {
             res.status(400).send(err);
             return;
@@ -70,12 +70,12 @@ export function read_one_product(req, res) {
 
 export function modify_products_item(req, res) {
     Products.modifyItemByID(
-        req.body.id,
+        req.params.id,
         req.body.name,
         req.body.detail,
         req.body.price,
         req.body.picture,
-        function(err, resp) {
+        function(err, result) {
             if (err) {
                 res.status(400).send(err);
                 return;

@@ -49,7 +49,7 @@ export default class Orders {
 
     static finalizeOrder(id, status, res) {
         conn.query(
-            'UPDATE products SET isCompleted = ? WHERE id = ?',
+            'UPDATE orders SET iscompleted = ? WHERE orderID = ?',
             [status, id],
             function(err, result) {
                 if (err) {
@@ -62,5 +62,18 @@ export default class Orders {
         );
     }
 
-
+    static finalizeOrderGettel(id, res) {
+        conn.query(
+            'UPDATE orders SET iscompleted = 1 WHERE orderID = ?',
+            [id],
+            function(err, result) {
+                if (err) {
+                    console.log('Error: ', err);
+                    res(err, null);
+                } else {
+                    res(null, result);
+                }
+            }
+        );
+    }
 }

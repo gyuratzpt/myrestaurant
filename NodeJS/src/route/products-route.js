@@ -9,7 +9,7 @@ export default function(router) {
     );
 
     router.get(
-        '/products/:categoryID',
+        '/products/cat/:categoryID',
         products.read_filtered_products
     );
 
@@ -29,8 +29,10 @@ export default function(router) {
     );
 
     router.put(
-        '/products/:name',
+        '/products/put/:id',
         products.modify_products_item
     );
+
+    
         
 }

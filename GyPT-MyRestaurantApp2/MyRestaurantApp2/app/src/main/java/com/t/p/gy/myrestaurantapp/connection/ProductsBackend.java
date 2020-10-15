@@ -70,11 +70,13 @@ public interface ProductsBackend {
                                                   @Field("amount") int amount);
 
     @FormUrlEncoded
-    @HTTP(method = "PUT", path = "/api/v1/orders/{orderID}", hasBody = true)
-    Observable<Response<ResponseBody>> finalizeOrder(@Path("orderID") int id,
-                                                     @Field("iscompleted") boolean status);
+    @HTTP(method = "PUT", path = "/api/v1/orders/put/{id}", hasBody = true)
+    Observable<Response<ResponseBody>> finalizeOrder(@Path("id") int id,
+                                                     @Field("status") int status);
 
 
+    @HTTP(method = "GET", path = "/api/v1/orders/get/{id}")
+    Observable<Response<ResponseBody>> finalizeOrderGettel(@Path("id") int id);
 
 
 

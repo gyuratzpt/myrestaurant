@@ -45,7 +45,7 @@ export default class Products {
         );
     }
 
-    static getProduct(id ,res) {
+    static getOneProduct(id ,res) {
         conn.query(
             `SELECT * FROM products WHERE id = ?`,
             [id],
@@ -54,7 +54,7 @@ export default class Products {
                     console.log('Error: ', err);
                     res(err, null);
                 } else {
-                    res(null, result);
+                    res(null, result[0]);
                 }
             }
         );
@@ -100,7 +100,7 @@ export default class Products {
     static modifyItemByID(id, name, detail, price, picture, res) {
         conn.query(
             'UPDATE products SET name = ?, detail = ?, price = ?, picture = ? WHERE id = ?',
-            [name, detail, price, picture, name, id],
+            [name, detail, price, picture, id],
             function(err, result) {
                 if (err) {
                     console.log('Error: ', err);
