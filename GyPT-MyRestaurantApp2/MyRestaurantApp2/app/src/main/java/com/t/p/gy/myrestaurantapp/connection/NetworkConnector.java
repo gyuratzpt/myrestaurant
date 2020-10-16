@@ -1,6 +1,7 @@
 package com.t.p.gy.myrestaurantapp.connection;
 
 import android.app.Application;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.EditText;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.t.p.gy.myrestaurantapp.AdminMaintenanceActivity;
 import com.t.p.gy.myrestaurantapp.data.DataProcessor;
@@ -69,13 +71,18 @@ public class NetworkConnector extends Application {
                         JsonArray inputJSONArray = response.body().getAsJsonArray("product");
                         for (int i = 0; i < inputJSONArray.size(); i++) {
                             //Log.i("myLog", "ANC downloadAllProducts: " + inputJSONArray.get(i).toString());
+
+                        /*
                             Integer tmpInt = NULL;
                             boolean x = inputJSONArray.get(i).getAsJsonObject().get("picture").isJsonNull();
-                            if (!x){
+                            if (!x && DataProcessor.getDrawableMap().containsKey(inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", ""))){
                                 String tmpString = inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", "");
                                 Log.i("myLog",inputJSONArray.get(i).getAsJsonObject().toString());
                                 tmpInt = Integer.parseInt(DataProcessor.getDrawableMap().get(tmpString).toString());
                             }
+                            else tmpInt = Integer.parseInt(DataProcessor.getDrawableMap().get("noimage").toString());
+                         */
+
                             downloadedDataSet.add(new SingleProductItem(
                                     Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("id").toString().replaceAll("\"", "")),
                                     Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("categoryID").toString().replaceAll("\"", "")),
@@ -83,7 +90,8 @@ public class NetworkConnector extends Application {
                                     inputJSONArray.get(i).getAsJsonObject().get("detail").toString().replaceAll("\"", ""),
                                     Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", "")),
                                     //Integer.parseInt(AdminMaintenanceActivity.getDrawableMap().get(inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", "")).toString())
-                                    tmpInt
+                                    //tmpInt
+                                    getImageID(inputJSONArray.get(i).getAsJsonObject().get("picture"))
                             ));
                         }
                     }
@@ -374,5 +382,19 @@ public class NetworkConnector extends Application {
                 })
         );
         return "user download kész";
+    }
+
+
+    //segédfüggvények
+
+    private int getImageID(JsonElement _imageName){
+        Integer resID;
+        boolean x = _imageName.isJsonNull();
+        if (!x && DataProcessor.getDrawableMap().containsKey(_imageName.toString().replaceAll("\"", ""))){
+            Log.i("myLog", "getImageID: " + _imageName.toString());
+            resID = Integer.parseInt(DataProcessor.getDrawableMap().get(_imageName.toString().replaceAll("\"", "")).toString());
+        }
+        else resID = Integer.parseInt(DataProcessor.getDrawableMap().get("noimage").toString());
+        return resID;
     }
 }

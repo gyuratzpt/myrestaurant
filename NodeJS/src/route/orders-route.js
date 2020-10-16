@@ -14,8 +14,13 @@ export default function(router) {
     );
 
     router.put(
-        '/orders/:id',
+        '/orders/put/:id',
         orders.finalizeOrder
+    );
+
+    router.get(
+        '/orders/get/:id',
+        orders.finalizeOrderGettel
     );
 
 }

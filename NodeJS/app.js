@@ -47,6 +47,8 @@ app.use(config.appVersion, router);
 app.listen(config.appPort, () => {
     console.log(`Admin software ${config.appPort}...`);
 });
+app.use('/images', express.static(__dirname + '/assets'));
+
 
 // DATABASE CONNECTION
 const mysql = require(config.dbDriver);
