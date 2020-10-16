@@ -86,12 +86,14 @@ public class DataProcessor {
         Log.i("myLog", "productList tartalma:" + productList.toString());
         return productList;
     }
-    public List<SingleProductItem> getProductList(int _cat){
+    //public List<SingleProductItem> getProductList(List<SingleProductItem> _list, int _cat){
+    public void getProductList(List<SingleProductItem> _list, int _cat){
+        productList.clear();
         Log.i("myLog", "DataProcessor / getProductList(" + _cat + ") running...");
         //productList = netConn.getDownloadedList(_cat);
-        netConn.getDownloadedList(productList, _cat);
+        netConn.downloadFilteredProducts(_list, _cat);
         Log.i("myLog", "productList tartalma:" + productList.toString());
-        return productList;
+        //return productList;
     }
 
     public List<String> getSpinnerList(){

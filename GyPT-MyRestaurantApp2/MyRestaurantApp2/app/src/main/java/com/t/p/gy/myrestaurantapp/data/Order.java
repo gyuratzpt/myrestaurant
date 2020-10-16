@@ -9,19 +9,29 @@ import java.util.Map;
 
 public class Order {
     String customer;
+    String customerAddress;
+    String customerPhoneNumber;
     String orderTime;
     List<ShortOrderInfo> soiitems = new ArrayList<>();
 
 
-    public Order(String customer, String orderTime) {
-        this.customer = customer;
-        this.orderTime = orderTime;
+    public Order(String _customer, String _customerAddress, String _customerPhoneNumber, String _orderTime) {
+        this.customer = _customer;
+        this.customerAddress = _customerAddress;
+        this.customerPhoneNumber= _customerPhoneNumber;
+        this.orderTime = _orderTime;
     }
 
     //getter
 
     public String getCustomer() {
         return customer;
+    }
+    public String getCustomerAddress() {
+        return customerAddress;
+    }
+    public String getCustomerPhoneNumber() {
+        return customerPhoneNumber;
     }
     public String getOrderTime() {
         return orderTime;

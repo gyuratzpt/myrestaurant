@@ -21,7 +21,7 @@ import java.util.List;
 
 public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterForAdminRecyclerView.ViewHolder>{
     NetworkConnector anc = NetworkConnector.getInstance();
-    private List<SingleProductItem> downloadedDataList = new ArrayList<SingleProductItem>();
+    private List<SingleProductItem> downloadedDataList;
     private Context mContext;
 
     //egy listaelem elemei

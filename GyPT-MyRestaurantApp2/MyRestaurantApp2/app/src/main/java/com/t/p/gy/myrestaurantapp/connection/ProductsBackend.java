@@ -76,7 +76,7 @@ public interface ProductsBackend {
 
 
     @HTTP(method = "GET", path = "/api/v1/orders/get/{id}")
-    Observable<Response<ResponseBody>> finalizeOrderGettel(@Path("id") int id);
+    Observable<Response<ResponseBody>> finalizeOrder_Gettel(@Path("id") int id);
 
 
 

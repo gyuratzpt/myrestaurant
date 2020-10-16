@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.t.p.gy.myrestaurantapp.connection.NetworkConnector;
 import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 import com.t.p.gy.myrestaurantapp.data.User;
 
@@ -145,6 +146,12 @@ public class MainActivity extends AppCompatActivity {
         menu_imageView.setImageResource(R.drawable.menu);
         gallery_imageView.setImageResource(R.drawable.gallery);
         contact_imageView.setImageResource(R.drawable.contact);
+
+
+        NetworkConnector anc = NetworkConnector.getInstance();
+        logo_imageView.setImageBitmap(anc.setImage());
+
+
 
         //  MENU megnyitasa
         menu_imageView.setOnClickListener(new View.OnClickListener() {

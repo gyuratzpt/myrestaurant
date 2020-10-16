@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.t.p.gy.myrestaurantapp.adapter.AdapterForMenuRecyclerView;
 import com.t.p.gy.myrestaurantapp.connection.NetworkConnector;
 import com.t.p.gy.myrestaurantapp.data.DataProcessor;
+import com.t.p.gy.myrestaurantapp.data.SingleProductItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +44,7 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         initBackButton();
         initSpinnerValues();
-        //initSpinnerBehavior();
+
         Log.i("myLog", "Menuactivity: start");
         Button addToCartbutton;
 
@@ -61,6 +62,8 @@ public class MenuActivity extends AppCompatActivity {
         DividerItemDecoration decoration = new DividerItemDecoration(this, VERTICAL);
         menuRecyclerView.addItemDecoration(decoration);
         menuRecyclerView.setAdapter(menuRecyclerViewAdapter);
+
+        initSpinnerBehavior();
 
         addToCartbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,14 +122,13 @@ public class MenuActivity extends AppCompatActivity {
 
     private void initSpinnerValues(){
         menuSpinner = findViewById(R.id.menuactivity_spinner);
-
-        NetworkConnector nc = new NetworkConnector();
-        //List<String> testList = new ArrayList<>();
-        List<String> testList;
-        testList = nc.downloadCategories();
-        //testList.add("food2");
-        //testList.add("drink2");
-        //testList.add("drug2");
+        //NetworkConnector nc = new NetworkConnector();
+        List<String> testList = new ArrayList<>();
+        //List<String> testList;
+        //testList = nc.downloadCategories();
+        testList.add("food2");
+        testList.add("drink2");
+        testList.add("drug2");
 
         ArrayAdapter menuSpinnerArrayAdapter = new ArrayAdapter(MenuActivity.this, R.layout.spinner_item, testList);
         menuSpinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
@@ -138,9 +140,29 @@ public class MenuActivity extends AppCompatActivity {
         menuSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.i("myLog", "Selected spinner value: " + adapterView.getSelectedItemPosition());
-                menuRecyclerViewAdapter = new AdapterForMenuRecyclerView(tv_SummedPrice, myDataProcessor.getProductList(adapterView.getSelectedItemPosition()));
-                menuRecyclerView.setAdapter(menuRecyclerViewAdapter);
+
+                Log.i("myLog", "Selected spinner value: " + adapterView.getSelectedItem());
+                List<SingleProductItem> actualProductList = new ArrayList<SingleProductItem>();
+                switch (adapterView.getSelectedItem().toString()){
+                    case "food2":
+                        //actualProductList = myDataProcessor.getProductList(actualProductList, 1);
+                        myDataProcessor.getProductList(actualProductList, 1);
+                        break;
+                    case "drink2":
+                        //actualProductList = myDataProcessor.getProductList(actualProductList, 2);
+                        myDataProcessor.getProductList(actualProductList, 2);
+                        break;
+                    case "drug2":
+                        //actualProductList = myDataProcessor.getProductList(actualProductList, 3);
+                        myDataProcessor.getProductList(actualProductList, 3);
+                        break;
+                }
+
+                menuRecyclerViewAdapter = new AdapterForMenuRecyclerView(tv_SummedPrice, actualProductList);
+                menuRecyclerView.swapAdapter(menuRecyclerViewAdapter,true);
+
+
+
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {

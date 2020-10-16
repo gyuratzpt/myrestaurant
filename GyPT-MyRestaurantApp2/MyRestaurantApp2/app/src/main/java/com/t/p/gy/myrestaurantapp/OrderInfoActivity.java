@@ -47,6 +47,7 @@ public class OrderInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 myDataProcessor.sendOrder();
+                myDataProcessor.getCart().clear();
             }
         });
 

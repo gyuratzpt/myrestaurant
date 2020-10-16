@@ -79,8 +79,8 @@ public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterFor
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Order o = ordersList.get(position);
         holder.customerName.setText(o.getCustomer());
-        holder.customerAddress.setText("ABC utca " + position);
-        holder.customerPhoneNumber.setText("06-50/ " + position);
+        holder.customerAddress.setText(o.getCustomerAddress());
+        holder.customerPhoneNumber.setText(o.getCustomerPhoneNumber());
         holder.itemList.setText(o.toString());
         holder.other.setText(o.getOrderTime());
 

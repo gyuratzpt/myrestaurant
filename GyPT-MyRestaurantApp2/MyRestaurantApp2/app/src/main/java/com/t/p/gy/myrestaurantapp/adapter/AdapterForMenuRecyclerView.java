@@ -49,9 +49,14 @@ public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForM
         textView = _tv;
     }
     public AdapterForMenuRecyclerView(TextView _tv, List<SingleProductItem> _inputList){
+        Log.i("myLog", "menuRecyclerView" + actualProductList.toString());
         textView = _tv;
         actualProductList = _inputList;
+        notifyDataSetChanged();
+        Log.i("myLog", "menuRecyclerView" + actualProductList);
     }
+
+
 
     @Override
 //létrehozza az egyes sorokat
@@ -69,13 +74,7 @@ public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForM
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         final SingleProductItem spi;
-        /*
-        if(selectedCategory.length()>0){
-            spi = myDataProcessor.getProductList(2).get(position);
-        } else{
-            spi = myDataProcessor.getProductList().get(position);
-        }
-        */
+
         spi = actualProductList.get(position);
         holder.itemImage.setImageResource(spi.getImageResourceID());
         if(spi.hasImage()) {

@@ -17,6 +17,7 @@ app.use(device.capture());
 app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(express.static(__dirname));
+app.use('/images', express.static(__dirname + '/assets'));
 
 // SETTING CORS-POLICY (FOR DEVELOPMENT)
 app.use(function(req, res, next) {
@@ -47,7 +48,7 @@ app.use(config.appVersion, router);
 app.listen(config.appPort, () => {
     console.log(`Admin software ${config.appPort}...`);
 });
-app.use('/images', express.static(__dirname + '/assets'));
+
 
 
 // DATABASE CONNECTION
