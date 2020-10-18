@@ -3,6 +3,7 @@ package com.t.p.gy.myrestaurantapp.other;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -11,17 +12,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.t.p.gy.myrestaurantapp.R;
+import com.t.p.gy.myrestaurantapp.adapter.AdapterForAdminRecyclerView;
 import com.t.p.gy.myrestaurantapp.connection.NetworkConnector;
 import com.t.p.gy.myrestaurantapp.data.DataProcessor;
+import com.t.p.gy.myrestaurantapp.data.SingleProductItem;
 
 public class AdminDialog {
     DataProcessor dp = DataProcessor.getInstance();
-    public void showDialog_old(Activity activity, String _dialogTitle, String _buttonTitle){
+
+    public void showDialog_old(Activity activity, String _dialogTitle, String _buttonTitle) {
         final Dialog adminDialog = new Dialog(activity);
         adminDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         adminDialog.setCancelable(false);
         adminDialog.setContentView(R.layout.dialog_additem);
-        TextView tvTitle = (TextView)  adminDialog.findViewById(R.id.dialog_additem_title);
+        TextView tvTitle = (TextView) adminDialog.findViewById(R.id.dialog_additem_title);
         tvTitle.setText(_dialogTitle);
 
         EditText etCategory = (EditText) adminDialog.findViewById(R.id.dialog_additem_category);
@@ -43,7 +47,7 @@ public class AdminDialog {
                         etName.getText().toString(),
                         etDescription.getText().toString(),
                         Integer.parseInt(etPrice.getText().toString()),
-                        (etImage.getText().toString().length()>0) ? "noimage" : etImage.getText().toString()
+                        (etImage.getText().toString().length() > 0) ? "noimage" : etImage.getText().toString()
                 );
                 adminDialog.dismiss();
             }
@@ -59,12 +63,13 @@ public class AdminDialog {
 
     }
 
-    public void showDialog(Context context, String _dialogTitle, String _buttonTitle, Integer dbId){
+
+    public void showDialog(Context context, String _dialogTitle, String _buttonTitle, Integer dbId, SingleProductItem spi) {
         final Dialog adminDialog = new Dialog(context);
         adminDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         adminDialog.setCancelable(false);
         adminDialog.setContentView(R.layout.dialog_additem);
-        TextView tvTitle = (TextView)  adminDialog.findViewById(R.id.dialog_additem_title);
+        TextView tvTitle = (TextView) adminDialog.findViewById(R.id.dialog_additem_title);
         tvTitle.setText(_dialogTitle);
 
         EditText etCategory = (EditText) adminDialog.findViewById(R.id.dialog_additem_category);
@@ -76,7 +81,7 @@ public class AdminDialog {
         Button okButton = (Button) adminDialog.findViewById(R.id.dialog_additem_okbutton);
         Button cancelButton = (Button) adminDialog.findViewById(R.id.dialog_additem_cancelbutton);
         okButton.setText(_buttonTitle);
-        if(_buttonTitle.equals("Módosít")){
+        if (_buttonTitle.equals("Módosít")) {
             Log.i("myLog", "Tétel id-ja: " + dbId);
             dp.getItemFromDatabase(dbId, etCategory, etName, etDescription, etPrice, etImage);
         }
@@ -95,10 +100,12 @@ public class AdminDialog {
                                 etName.getText().toString(),
                                 etDescription.getText().toString(),
                                 Integer.parseInt(etPrice.getText().toString()),
-                                (etImage.getText().toString().length()>0) ? etImage.getText().toString() : null);
+                                (etImage.getText().toString().length() > 0) ? etImage.getText().toString() : null);
                         break;
                     case "Módosít":
                         Log.i("myLog", "AdminDialog, módosítás...");
+                        Log.i("myLog", "AdminDialog, módosítás előtt spi: " + spi.getName());
+
                         dp.modifyDatabaseItem(
                                 dbId,
                                 Integer.parseInt(etCategory.getText().toString()),
@@ -106,6 +113,14 @@ public class AdminDialog {
                                 etDescription.getText().toString(),
                                 Integer.parseInt(etPrice.getText().toString()),
                                 etImage.getText().toString());
+
+                        spi.setCategory(Integer.parseInt(etCategory.getText().toString()));
+                        spi.setName(etName.getText().toString());
+                        spi.setDetail(etDescription.getText().toString());
+                        spi.setPrice(Integer.parseInt(etPrice.getText().toString()));
+                        //etImage.getText().toString());
+                        Log.i("myLog", "AdminDialog, módosítás után spi: " + spi.getName());
+
                         break;
                 }
 
@@ -118,8 +133,7 @@ public class AdminDialog {
                 adminDialog.dismiss();
             }
         });
-
         adminDialog.show();
-
     }
 }
+

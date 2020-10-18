@@ -28,9 +28,13 @@ import com.t.p.gy.myrestaurantapp.data.User;
 public class LoginActivity extends AppCompatActivity {
     Gson gson = new GsonBuilder().setLenient().create(); //???
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-
     ProductsBackend myAPI; //interface deklarálás a ProductsBackend felé
     Retrofit retrofit = RetrofitClient.getInstance(); //retrofit library
+
+
+    Button loginButton, regButton, regButtonFinish;
+    EditText emailEditText, passwordEditText,regETItems[];
+    TextView forgotPasswordTextView, regTVItems[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,35 +42,65 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         //elemek inicializálása
-        Button loginButton = findViewById(R.id.loginButton);
-        Button regButton = findViewById(R.id.regButton);
-        final EditText emailEditText = findViewById(R.id.emailEditText);
-        final EditText passwordEditText = findViewById(R.id.passwordEditText);
-        final TextView forgotPasswordTextView = findViewById(R.id.forgotPasswordTextView);
+        loginButton = (Button) findViewById(R.id.loginButton);
+        regButton = findViewById(R.id.regButton);
+        regButtonFinish = findViewById(R.id.regButtonFinish);
+        emailEditText = findViewById(R.id.emailEditText);
+        passwordEditText = findViewById(R.id.passwordEditText);
+        forgotPasswordTextView = findViewById(R.id.forgotPasswordTextView);
+        regTVItems = new TextView[]{findViewById(R.id.regNameText), findViewById(R.id.regAddressText), findViewById(R.id.regPhoneNumberText)};
+        regETItems = new EditText[]{findViewById(R.id.regNameEdittext), findViewById(R.id.regAddressEdittext), findViewById(R.id.regPhoneNumberEdittext)};
+
+        for (TextView tv : regTVItems) {
+            tv.setVisibility(View.INVISIBLE);
+        }
+        for (EditText et : regETItems) {
+            et.setVisibility(View.INVISIBLE);
+        }
+        regButtonFinish.setVisibility(View.INVISIBLE);
+
         //elemek inicializálása vége
 
         myAPI = retrofit.create(ProductsBackend.class); //retrofit library-t adja a productbackand api-hoz??
 
-        //        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-//        settings.edit().clear().apply();
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+        //settings.edit().clear().apply();
         //token törlése (ezt mikor (logout felső menübe))?
         if (isTokenUserStored()) {
             startMainActivity();
         } //ha van tárolt token, továbbugrik a main-re
 
-        initButtons(loginButton, regButton, emailEditText, passwordEditText);
+        //initButtons(loginButton, regButton, emailEditText, passwordEditText);
+        initButtons();
 
     }
 
-    private void initButtons(Button loginButton, Button regButton, EditText emailEditText, EditText passwordEditText) {
+    private void initButtons() {
         loginButton.setOnClickListener(v -> {
             if (areFieldsFilled(emailEditText, passwordEditText)) //megnézi nem üres-e valamelyik mező
                 loginUser(emailEditText.getText().toString(), passwordEditText.getText().toString());
         });
 
         regButton.setOnClickListener(v -> {
-            if (areFieldsFilled(emailEditText, passwordEditText)) //megnézi nem üres-e valamelyik mező
-                registerUser(emailEditText.getText().toString(), passwordEditText.getText().toString());
+
+                    if (areFieldsFilled(emailEditText, passwordEditText)){ //megnézi nem üres-e valamelyik mező
+                        Toast.makeText(LoginActivity.this, "Add meg a további kötelező adatokat a regisztrációhoz!", Toast.LENGTH_LONG).show();
+                        for (TextView tv : regTVItems) {
+                            tv.setVisibility(View.VISIBLE);
+                        }
+                        for (EditText et : regETItems) {
+                        et.setVisibility(View.VISIBLE);
+
+                        }
+                        regButtonFinish.setVisibility(View.VISIBLE);
+                        regButtonFinish.setOnClickListener(view -> {
+                            if (areRegFieldsFilled(regETItems)) {
+
+                            }
+                            registerUser(emailEditText.getText().toString(), passwordEditText.getText().toString(), regETItems[0].getText().toString(), regETItems[1].getText().toString(), regETItems[2].getText().toString());
+                        });
+                }
+
         });
     }
 
@@ -74,16 +108,19 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
     }
+
     @Override
     protected void onStop(){
         compositeDisposable.clear();
         super.onStop();
     }
+
     @Override
     protected void onDestroy() {
         compositeDisposable.clear();
         super.onDestroy();
     }
+
     private boolean isTokenUserStored(){
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
 
@@ -93,6 +130,7 @@ public class LoginActivity extends AppCompatActivity {
 
         return !token.equals("not found") || !userString.equals("not found");
     }
+
     private boolean areFieldsFilled(EditText editText1, EditText editText2){
         Log.i("myLog", "Metódus: areFieldsFilled running...");
         if (editText1.getText().toString().equals("") || editText2.getText().toString().equals("")) {
@@ -109,6 +147,16 @@ public class LoginActivity extends AppCompatActivity {
             return true;
         }
     }
+    private boolean areRegFieldsFilled(EditText editTextArray[]){
+
+        if (editTextArray[0].getText().toString().equals("") || editTextArray[1].getText().toString().equals("")|| editTextArray[2].getText().toString().equals("")) {
+            Toast.makeText(LoginActivity.this, "Valamelyik adat még hiányzik", Toast.LENGTH_LONG).show();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     private void loginUser(final String email, final String password){
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
 
@@ -144,8 +192,10 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }));
     }
+
+    /*
     private void registerUser(final String email, final String password){
-        Log.i("myLog", "Metódus: registerUser running...");
+        Log.i("myLog", "registerUser running...");
         compositeDisposable.add(myAPI.registration(email, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -157,6 +207,27 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }));
     }
+    */
+    private void registerUser(final String email,
+                              final String password,
+                              final String name,
+                              final String address,
+                              final String phone){
+        Log.i("myLog", "registerUser running...");
+        Log.i("myLog", "Adatok: " + emailEditText.getText().toString() + " " + passwordEditText.getText().toString() + " " + regETItems[0].getText().toString()+ " " + regETItems[1].getText().toString()+ " " + regETItems[2].getText().toString());
+
+        compositeDisposable.add(myAPI.registration(email, password, name, address, phone)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.code() >= 200 && response.code() < 300) {
+                        Toast.makeText(LoginActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, response.code() + " " + response.errorBody().string(), Toast.LENGTH_LONG).show();
+                    }
+                }));
+    }
+
     private void startMainActivity(){
         //LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
         startActivity(new Intent(this, MainActivity.class));
@@ -165,5 +236,3 @@ public class LoginActivity extends AppCompatActivity {
 
 
 }
-
-//új user-nél crash

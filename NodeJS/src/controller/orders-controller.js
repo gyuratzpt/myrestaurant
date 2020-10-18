@@ -28,8 +28,8 @@ export function create_new_order(req, res) {
 }
 
 
-export function finalizeOrder(req, res) {
-    Orders.finalizeOrder(req.params.id, req.body.status, function(err, resp) {
+export function finalizeOrderById(req, res) {
+    Orders.finalizeOrderById(req.params.id, req.body.status, function(err, resp) {
             if (err) {
                 res.status(400).send(err);
                 return;
@@ -41,8 +41,8 @@ export function finalizeOrder(req, res) {
         });
     }
 
-    export function finalizeOrderGettel(req, res) {
-        Orders.finalizeOrderGettel(req.params.id, function(err, resp) {
+    export function finalizeOrderById_Gettel(req, res) {
+        Orders.finalizeOrderById_Gettel(req.params.id, function(err, resp) {
                 if (err) {
                     res.status(400).send(err);
                     return;

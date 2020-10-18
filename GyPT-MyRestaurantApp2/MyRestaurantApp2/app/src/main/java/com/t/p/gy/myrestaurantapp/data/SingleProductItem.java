@@ -7,10 +7,10 @@ public class SingleProductItem {
 
     //private final String mCategory;
     private final int mIDNumber;
-    private final int mCategory;
-    private final String mName;
-    private final String mDetail;
-    private final int mPrice;
+    private int mCategory;
+    private String mName;
+    private String mDetail;
+    private int mPrice;
     private int mImageResourceID = NO_IMAGE_PROVIDED;
 
     private int mOrderAmount; //listview miatt, különben scrollozáskor elfeljtheti a korábbi értéket
@@ -59,6 +59,23 @@ public class SingleProductItem {
 
 
     //SETTER-ek
+
+    public void setCategory(int mCategory) {
+        this.mCategory = mCategory;
+    }
+
+    public void setName(String mName) {
+        this.mName = mName;
+    }
+
+    public void setDetail(String mDetail) {
+        this.mDetail = mDetail;
+    }
+
+    public void setPrice(int mPrice) {
+        this.mPrice = mPrice;
+    }
+
     public void setOrderAmount(boolean bool){
         Log.i("Bool is", String.valueOf(bool));
         if (bool) {

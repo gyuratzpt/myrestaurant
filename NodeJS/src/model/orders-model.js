@@ -13,7 +13,7 @@ export default class Orders {
 
     static getAllOrders(res) {
         conn.query(
-            `SELECT * FROM orders LEFT JOIN products ON orders.productID = products.id LEFT JOIN users ON orders.userID = users.id`,
+            `SELECT * FROM orders LEFT JOIN products ON orders.productID = products.id LEFT JOIN users ON orders.userID = users.id WHERE iscompleted = 0`,
             [],
             function(err, result) {
                 if (err) {
@@ -47,7 +47,7 @@ export default class Orders {
         );
     }
 
-    static finalizeOrder(id, status, res) {
+    static finalizeOrderById(id, status, res) {
         conn.query(
             'UPDATE orders SET iscompleted = ? WHERE orderID = ?',
             [status, id],
@@ -62,7 +62,7 @@ export default class Orders {
         );
     }
 
-    static finalizeOrderGettel(id, res) {
+    static finalizeOrderById_Gettel(id, res) {
         conn.query(
             'UPDATE orders SET iscompleted = 1 WHERE orderID = ?',
             [id],

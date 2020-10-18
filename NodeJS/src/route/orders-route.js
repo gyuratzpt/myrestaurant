@@ -15,12 +15,12 @@ export default function(router) {
 
     router.put(
         '/orders/put/:id',
-        orders.finalizeOrder
+        orders.finalizeOrderById
     );
 
     router.get(
         '/orders/get/:id',
-        orders.finalizeOrderGettel
+        orders.finalizeOrderById_Gettel
     );
 
 }

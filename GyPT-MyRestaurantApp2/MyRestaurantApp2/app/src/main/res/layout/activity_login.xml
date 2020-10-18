@@ -165,6 +165,112 @@
             android:orientation="vertical"
             app:layout_constraintGuide_begin="62dp" />
 
+
+        <TextView
+            android:id="@+id/regNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/md_black_1000"
+            android:textSize="18sp"
+            android:text="Név:"
+
+            app:layout_constraintBaseline_toBaselineOf="@id/regNameEdittext"
+            app:layout_constraintStart_toStartOf="@id/emailTextView"
+
+            android:layout_marginTop="30dp"
+            />
+
+        <EditText
+            android:id="@+id/regNameEdittext"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:ems="10"
+            android:inputType="text"
+            android:textAlignment="center"
+            android:textColor="@color/md_black_1000"
+
+            app:layout_constraintTop_toBottomOf="@id/regButton"
+            app:layout_constraintStart_toEndOf="@id/regNameText"
+            />
+
+        <TextView
+            android:id="@+id/regAddressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/md_black_1000"
+            android:textSize="18sp"
+            android:text="Kiszállítási cím:"
+
+            app:layout_constraintBaseline_toBaselineOf="@id/regAddressEdittext"
+            app:layout_constraintStart_toStartOf="@id/emailTextView"
+
+            />
+
+        <EditText
+            android:id="@+id/regAddressEdittext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:textAlignment="center"
+            android:textColor="@color/md_black_1000"
+            android:hint="a címet bármely rendelésnél megváltoztathatod"
+
+            app:layout_constraintTop_toBottomOf="@id/regNameEdittext"
+            app:layout_constraintStart_toEndOf="@id/regAddressText"
+            app:layout_constraintEnd_toEndOf="@id/regNameEdittext"
+            />
+
+        <TextView
+            android:id="@+id/regPhoneNumberText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/md_black_1000"
+            android:textSize="18sp"
+            android:inputType="phone"
+            android:text="Telefonszám:"
+
+            app:layout_constraintBaseline_toBaselineOf="@id/regPhoneNumberEdittext"
+            app:layout_constraintStart_toStartOf="@id/emailTextView"
+
+            />
+
+        <EditText
+            android:id="@+id/regPhoneNumberEdittext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:ems="10"
+            android:inputType="text"
+            android:textAlignment="center"
+            android:textColor="@color/md_black_1000"
+
+            app:layout_constraintTop_toBottomOf="@id/regAddressEdittext"
+            app:layout_constraintStart_toEndOf="@id/regPhoneNumberText"
+            app:layout_constraintEnd_toEndOf="@id/regAddressEdittext"
+            />
+
+        <Button
+            android:id="@+id/regButtonFinish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mehet"
+
+            app:layout_constraintTop_toBottomOf="@id/regPhoneNumberEdittext"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:layout_marginTop="20dp"
+            />
+
+
     </android.support.constraint.ConstraintLayout>
+
+
+
+
+
 
 </ScrollView>

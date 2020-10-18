@@ -42,6 +42,8 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
             modifyButton = (Button) itemView.findViewById(R.id.admin_listitem_modifybutton);
             deleteButton = (Button) itemView.findViewById(R.id.admin_listitem_deletebutton);
         }
+
+
     }
 
     public AdapterForAdminRecyclerView(Context context){
@@ -68,7 +70,7 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
     @Override
 //adatfeltöltés az egyes elemekhez
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final SingleProductItem spi = downloadedDataList.get(position);
+        final SingleProductItem spi = downloadedDataList.get(holder.getAdapterPosition());
 
                         /*
         holder.itemImage.setImageResource(spi.getImageResourceID());
@@ -114,12 +116,18 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
                 Log.i("myLog", "Választott termék ID-ja: "+ spi.getID());
 
                 AdminDialog alert = new AdminDialog();
-                alert.showDialog(mContext, "Termék módosítása","Módosít", spi.getID());
+                alert.showDialog(mContext, "Termék módosítása","Módosít", spi.getID(), spi);
             }
         });
         Log.i("myLog","Admin adapterForRecyclerView, konstruktor: OK");
     }
 
+
+
+
+    public void updateItemInList(int _pos, String _name){
+
+    }
 }
 
 

@@ -86,7 +86,9 @@ public class AdminMaintenanceActivity extends AppCompatActivity {
 
     private void initAddButton(){
         AdminDialog alert = new AdminDialog();
-        alert.showDialog(this, "Új termék hozzáadása","Hozzáad", null);
+        alert.showDialog(this, "Új termék hozzáadása","Hozzáad", null, null);
+        //adaptert értesíteni valahogy
+        //előtte frissíteni a listát is (ez csak az adatbázisba dolgozik jelenleg)!!
+        adminRecyclerViewAdapter.notifyItemInserted(adminRecyclerViewAdapter.getItemCount());
     }
-
 }

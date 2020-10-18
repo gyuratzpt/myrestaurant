@@ -30,6 +30,7 @@ public interface ProductsBackend {
     //elem lekérdezések
     @HTTP(method = "GET", path = "/api/v1/products/{id}")
     Observable<Response<JsonObject>> getProductByID(@Path("id") int id);
+
     @HTTP(method = "GET", path = "/api/v1/users/{email}")
     Observable<Response<JsonObject>> getOneUserByEmail(@Path("email") String _email);
 
@@ -94,8 +95,10 @@ public interface ProductsBackend {
     @FormUrlEncoded
     @POST("/api/v1/register")
     Observable<Response<JsonObject>> registration(@Field("email") String email,
-                                           @Field("password") String password);
-
+                                            @Field("password") String password,
+                                            @Field("username") String username,
+                                            @Field("address") String address,
+                                            @Field("phonenumber") String phone);
 
 }
 /*
