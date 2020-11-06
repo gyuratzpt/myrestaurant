@@ -41,7 +41,7 @@ public class AdminDialog {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NetworkConnector anc = new NetworkConnector();
+                NetworkConnector anc = NetworkConnector.getInstance();
                 anc.createNewItem(
                         Integer.parseInt(etCategory.getText().toString()),
                         etName.getText().toString(),
@@ -52,6 +52,9 @@ public class AdminDialog {
                 adminDialog.dismiss();
             }
         });
+
+
+
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,11 +92,9 @@ public class AdminDialog {
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Log.i("myLog", "Eddig oké, gombfelirat: " + okButton.getText().toString());
-
                 switch (_buttonTitle) {
                     case "Hozzáad":
+                    /*
                         Log.i("myLog", "AdminDialog, Új termék...");
                         dp.addItemToDatabase(
                                 Integer.parseInt(etCategory.getText().toString()),
@@ -102,6 +103,19 @@ public class AdminDialog {
                                 Integer.parseInt(etPrice.getText().toString()),
                                 (etImage.getText().toString().length() > 0) ? etImage.getText().toString() : null);
                         break;
+                     */
+                    dp.addItemToList(
+                            new SingleProductItem(
+                            null,
+                            Integer.parseInt(etCategory.getText().toString()),
+                            etName.getText().toString(),
+                            etDescription.getText().toString(),
+                            Integer.parseInt(etPrice.getText().toString()),
+                            etImage.getText().toString()
+                            )
+                    );
+
+                    break;
                     case "Módosít":
                         Log.i("myLog", "AdminDialog, módosítás...");
                         Log.i("myLog", "AdminDialog, módosítás előtt spi: " + spi.getName());
@@ -114,13 +128,14 @@ public class AdminDialog {
                                 Integer.parseInt(etPrice.getText().toString()),
                                 etImage.getText().toString());
 
+                        /*
                         spi.setCategory(Integer.parseInt(etCategory.getText().toString()));
                         spi.setName(etName.getText().toString());
                         spi.setDetail(etDescription.getText().toString());
                         spi.setPrice(Integer.parseInt(etPrice.getText().toString()));
                         //etImage.getText().toString());
                         Log.i("myLog", "AdminDialog, módosítás után spi: " + spi.getName());
-
+                        */
                         break;
                 }
 

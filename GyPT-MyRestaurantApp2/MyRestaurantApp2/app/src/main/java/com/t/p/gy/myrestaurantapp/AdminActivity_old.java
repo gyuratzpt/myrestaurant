@@ -4,32 +4,24 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.t.p.gy.myrestaurantapp.connection.ProductsBackend;
+import com.t.p.gy.myrestaurantapp.connection.BackendAPI;
 import com.t.p.gy.myrestaurantapp.connection.RetrofitClient;
 
 import java.util.ArrayList;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
 public class AdminActivity_old extends AppCompatActivity{
     static final private ArrayList<String> adminSpinnerList = new ArrayList<String>();
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-    ProductsBackend myAPI;
+    BackendAPI myAPI;
     Gson gson = new GsonBuilder().setLenient()
             .create();
 
@@ -39,7 +31,7 @@ public class AdminActivity_old extends AppCompatActivity{
         setContentView(R.layout.activity_admin_maintenance);
 
         Retrofit retrofit = RetrofitClient.getInstance();
-        myAPI = retrofit.create(ProductsBackend.class);
+        myAPI = retrofit.create(BackendAPI.class);
 
         //vissza gomb
         ActionBar actionBar = getSupportActionBar();

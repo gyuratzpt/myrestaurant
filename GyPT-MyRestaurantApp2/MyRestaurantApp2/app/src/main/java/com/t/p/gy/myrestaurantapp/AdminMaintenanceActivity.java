@@ -15,9 +15,12 @@ import com.t.p.gy.myrestaurantapp.adapter.AdapterForAdminRecyclerView;
 import com.t.p.gy.myrestaurantapp.connection.NetworkConnector;
 import com.t.p.gy.myrestaurantapp.other.AdminDialog;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 
-public class AdminMaintenanceActivity extends AppCompatActivity {
+public class AdminMaintenanceActivity extends AppCompatActivity{
     NetworkConnector anc = NetworkConnector.getInstance();
     private RecyclerView adminRecyclerView;
     private RecyclerView.Adapter adminRecyclerViewAdapter;
@@ -52,13 +55,17 @@ public class AdminMaintenanceActivity extends AppCompatActivity {
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("myLog", "Button: " + anc.downloadCategories());
+                List<String> l = new ArrayList<>();
+                Log.i("myLog", "Button interface-el: " + l);
             }
         });
+
+
         Button searchButton = (Button) findViewById(R.id.adminactivity_searchbutton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Log.i("myLog", "SearchButton: " + anc.getOneUserByEmail("aaa@aaa.aa"));
             }
         });
@@ -91,4 +98,5 @@ public class AdminMaintenanceActivity extends AppCompatActivity {
         //előtte frissíteni a listát is (ez csak az adatbázisba dolgozik jelenleg)!!
         adminRecyclerViewAdapter.notifyItemInserted(adminRecyclerViewAdapter.getItemCount());
     }
+
 }

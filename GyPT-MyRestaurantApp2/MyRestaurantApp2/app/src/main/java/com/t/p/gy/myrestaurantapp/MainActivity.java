@@ -26,60 +26,36 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    DataProcessor myDp = DataProcessor.getInstance();;
+    DataProcessor myDataProcessor = DataProcessor.getInstance();;
     Gson gson = new GsonBuilder().setLenient().create();
+
+    ImageView logo_imageView, actual_story_imageView, menu_imageView, gallery_imageView, contact_imageView;
+    Button adminMaintenanceButton, adminOrdersButton;
 
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_v2);
-        //res/drawable file-ok int id kiolvasása. Más módszer??
-        if(myDp.getDrawableMap().isEmpty()){
-            myDp.setDrawableMap(initDrawableMap());
-        }
+
+        initUI();
+        if (myDataProcessor.getUser().getIs_admin()==1) initAdmin();
 
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+
+
         //felhasználó törlésére
         //settings.edit().clear().apply();
+
+        /*
+        //user ellenőrzés
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         final User user = gson.fromJson(settings.getString("user","{}"), User.class);
         if (user.getEmail() == null) {
             logout();
         }
+        */
 
-        initUI();
-
-
-        //ADMIN feature, külön admin layout készítése?
-        Button adminMaintenanceButton = findViewById(R.id.admin_maintenancebutton);
-        Button adminOrdersButton = findViewById(R.id.admin_ordersbutton);
-        if(user.getIs_admin() == 1) {
-
-        adminMaintenanceButton.setVisibility(View.VISIBLE);
-        adminOrdersButton.setVisibility(View.VISIBLE);
-        adminMaintenanceButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View arg0) {
-                    // Start Admin
-                    Intent myIntent = new Intent(MainActivity.this,
-                            AdminMaintenanceActivity.class);
-                    startActivity(myIntent);
-                }
-            });
-        adminOrdersButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-                // Start Admin
-                Intent myIntent = new Intent(MainActivity.this,
-                    AdminOrdersActivity.class);
-                    startActivity(myIntent);
-                }
-            });
-        }
-        else {
-            adminMaintenanceButton.setVisibility(View.GONE);
-            adminOrdersButton.setVisibility(View.GONE);
-        }
-        Log.v("myLog", "Main: finish");
      }
 
     @Override
@@ -105,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
-    public void logout() {
+    private void logout() {
         Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
         MainActivity.this.startActivity(myIntent);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
@@ -114,32 +90,12 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    private Map initDrawableMap(){
-        Map<String, Integer> drawableMap = new HashMap<>();
-        drawableMap.put("birramoretti", this.getResources().getIdentifier("birramoretti","drawable", this.getPackageName()));
-        drawableMap.put("cola", this.getResources().getIdentifier("cola","drawable", this.getPackageName()));
-        drawableMap.put("corona", this.getResources().getIdentifier("corona","drawable", this.getPackageName()));
-        drawableMap.put("csiga", this.getResources().getIdentifier("csiga","drawable", this.getPackageName()));
-        drawableMap.put("donerkebab", getApplicationContext().getResources().getIdentifier("donerkebab","drawable", getPackageName()));
-        drawableMap.put("duplahamburger", getApplicationContext().getResources().getIdentifier("duplahamburger","drawable", getPackageName()));
-        drawableMap.put("durum", getApplicationContext().getResources().getIdentifier("durum","drawable", getPackageName()));
-        drawableMap.put("extrahamburger", getApplicationContext().getResources().getIdentifier("extrahamburger","drawable", getPackageName()));
-        drawableMap.put("fanta", getApplicationContext().getResources().getIdentifier("fanta","drawable", getPackageName()));
-        drawableMap.put("hamburger", getApplicationContext().getResources().getIdentifier("hamburger","drawable", getPackageName()));
-        drawableMap.put("hell", getApplicationContext().getResources().getIdentifier("hell","drawable", getPackageName()));
-        drawableMap.put("kilkenny", getApplicationContext().getResources().getIdentifier("kilkenny","drawable", getPackageName()));
-        drawableMap.put("sprite", getApplicationContext().getResources().getIdentifier("sprite","drawable", getPackageName()));
-        drawableMap.put("stella", getApplicationContext().getResources().getIdentifier("stella","drawable", getPackageName()));
-        drawableMap.put("wizard", getApplicationContext().getResources().getIdentifier("wizard","drawable", getPackageName()));
-        drawableMap.put("noimage", getApplicationContext().getResources().getIdentifier("noimage","drawable", getPackageName()));
-        return drawableMap;
-    }
     private void initUI(){
-        ImageView logo_imageView = findViewById(R.id.logo);
-        ImageView actual_story_imageView = findViewById(R.id.actual_story);
-        ImageView menu_imageView = findViewById(R.id.menu);
-        ImageView gallery_imageView = findViewById(R.id.gallery);
-        ImageView contact_imageView = findViewById(R.id.contact);
+        logo_imageView = findViewById(R.id.logo);
+        actual_story_imageView = findViewById(R.id.actual_story);
+        menu_imageView = findViewById(R.id.menu);
+        gallery_imageView = findViewById(R.id.gallery);
+        contact_imageView = findViewById(R.id.contact);
 
         logo_imageView.setImageResource(R.drawable.logo);
         actual_story_imageView.setImageResource(R.drawable.actual_story2);
@@ -147,11 +103,11 @@ public class MainActivity extends AppCompatActivity {
         gallery_imageView.setImageResource(R.drawable.gallery);
         contact_imageView.setImageResource(R.drawable.contact);
 
+        adminMaintenanceButton = findViewById(R.id.admin_maintenancebutton);
+        adminOrdersButton = findViewById(R.id.admin_ordersbutton);
 
-        NetworkConnector anc = NetworkConnector.getInstance();
-        logo_imageView.setImageBitmap(anc.setImage());
-
-
+        adminMaintenanceButton.setVisibility(View.GONE);
+        adminOrdersButton.setVisibility(View.GONE);
 
         //  MENU megnyitasa
         menu_imageView.setOnClickListener(new View.OnClickListener() {
@@ -171,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//  CONTACT megnyitasa
+        //  CONTACT megnyitasa
         contact_imageView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
                 Intent myIntent = new Intent(MainActivity.this,
@@ -179,7 +135,33 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
+
+        //próba, majd törölni
+        NetworkConnector anc = NetworkConnector.getInstance();
+        logo_imageView.setImageBitmap(anc.setImage());
     }
+
+    private void initAdmin(){
+            adminMaintenanceButton.setVisibility(View.VISIBLE);
+            adminOrdersButton.setVisibility(View.VISIBLE);
+            adminMaintenanceButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View arg0) {
+                    // Start Admin
+                    Intent myIntent = new Intent(MainActivity.this,
+                            AdminMaintenanceActivity.class);
+                    startActivity(myIntent);
+                }
+            });
+            adminOrdersButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View arg0) {
+                    // Start Admin
+                    Intent myIntent = new Intent(MainActivity.this,
+                            AdminOrdersActivity.class);
+                    startActivity(myIntent);
+                }
+            });
+    }
+
 }
 
 

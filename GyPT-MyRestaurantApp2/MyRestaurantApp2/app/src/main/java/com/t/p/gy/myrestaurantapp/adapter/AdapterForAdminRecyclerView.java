@@ -24,6 +24,7 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
     private List<SingleProductItem> downloadedDataList;
     private Context mContext;
 
+
     //egy listaelem elemei
     protected class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView   itemImage;
@@ -32,7 +33,6 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
                             itemPrice;
         private Button      modifyButton,
                             deleteButton;
-
         private ViewHolder(View itemView){
             super(itemView);
             itemImage = (ImageView) itemView.findViewById(R.id.admin_listitem_imageView) ;
@@ -42,8 +42,6 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
             modifyButton = (Button) itemView.findViewById(R.id.admin_listitem_modifybutton);
             deleteButton = (Button) itemView.findViewById(R.id.admin_listitem_deletebutton);
         }
-
-
     }
 
     public AdapterForAdminRecyclerView(Context context){
@@ -71,23 +69,12 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
 //adatfeltöltés az egyes elemekhez
     public void onBindViewHolder(ViewHolder holder, int position) {
         final SingleProductItem spi = downloadedDataList.get(holder.getAdapterPosition());
-
-                        /*
-        holder.itemImage.setImageResource(spi.getImageResourceID());
-        if(spi.hasImage()) {
-            holder.itemImage.setImageResource(spi.getImageResourceID());
-            holder.itemImage.setVisibility(View.VISIBLE);
-        }
-        else {holder.itemImage.setImageResource();}
-         */
-
-        holder.itemImage.setImageResource(spi.getImageResourceID());
+        //holder.itemImage.setImageResource(spi.getImageResourceID());
+        holder.itemImage.setImageBitmap(anc.getImage(spi.getImageName()));
         holder.itemImage.setVisibility(View.VISIBLE);
-
         holder.itemName.setText(spi.getName());
         holder.itemDescription.setText(spi.getDetail());
         holder.itemPrice.setText(Integer.toString(spi.getPrice()));
-
         holder.deleteButton.setBackgroundColor(holder.deleteButton.getResources().getColor(R.color.MyWarningColor));
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +95,6 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
                 alert.show();
             }
         });
-
         holder.modifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,13 +103,12 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
 
                 AdminDialog alert = new AdminDialog();
                 alert.showDialog(mContext, "Termék módosítása","Módosít", spi.getID(), spi);
+                Log.i("myLog", "Admindialog után...");
+
             }
         });
-        Log.i("myLog","Admin adapterForRecyclerView, konstruktor: OK");
+        //Log.i("myLog","Admin adapterForRecyclerView, konstruktor: OK");
     }
-
-
-
 
     public void updateItemInList(int _pos, String _name){
 

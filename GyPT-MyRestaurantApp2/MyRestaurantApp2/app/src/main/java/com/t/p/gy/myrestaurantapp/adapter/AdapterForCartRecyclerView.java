@@ -65,13 +65,13 @@ public class AdapterForCartRecyclerView extends RecyclerView.Adapter<AdapterForC
 //adatfeltöltés az egyes elemekhez
     public void onBindViewHolder(ViewHolder holder, int position) {
         final SingleProductItem spi = myDataProcessor.getCart().get(position);
-
+/*
         if(spi.hasImage()) {
             holder.itemImage.setImageResource(spi.getImageResourceID());
         }
         else {holder.itemImage.setImageResource(Integer.parseInt(DataProcessor.getDrawableMap().get("noimage").toString()));}
-
-
+*/
+        holder.itemImage.setImageBitmap(myDataProcessor.getImage(spi.getImageName()));
         holder.itemImage.setVisibility(View.VISIBLE);
         holder.itemName.setText(spi.getName());
         holder.itemDescription.setText(spi.getDetail());

@@ -12,7 +12,7 @@ import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-public interface ProductsBackend {
+public interface BackendAPI {
 
     //LEKÉRDEZÉSEK//
     //teljes lekérdezések
@@ -56,13 +56,6 @@ public interface ProductsBackend {
                                                         @Field("price") Integer price,
                                                         @Field("picture") String picture);
 
-
-
-
-
-
-
-
     //order műveletek
     @FormUrlEncoded
     @POST("/api/v1/orders")
@@ -75,17 +68,8 @@ public interface ProductsBackend {
     Observable<Response<ResponseBody>> finalizeOrder(@Path("id") int id,
                                                      @Field("status") int status);
 
-
     @HTTP(method = "GET", path = "/api/v1/orders/get/{id}")
     Observable<Response<ResponseBody>> finalizeOrder_Gettel(@Path("id") int id);
-
-
-
-
-
-
-
-
 
     //user műveletek
     @FormUrlEncoded

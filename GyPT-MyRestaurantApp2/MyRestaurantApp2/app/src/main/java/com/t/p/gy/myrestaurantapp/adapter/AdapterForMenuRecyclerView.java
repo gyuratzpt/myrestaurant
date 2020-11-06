@@ -45,7 +45,8 @@ public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForM
     }
 
     public AdapterForMenuRecyclerView(TextView _tv){
-        actualProductList = myDataProcessor.getProductList();
+        //actualProductList = myDataProcessor.getProductList();
+        //Log.i("myLog", "új" + actualProductList.toString());
         textView = _tv;
     }
     public AdapterForMenuRecyclerView(TextView _tv, List<SingleProductItem> _inputList){
@@ -76,13 +77,17 @@ public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForM
         final SingleProductItem spi;
 
         spi = actualProductList.get(position);
-        holder.itemImage.setImageResource(spi.getImageResourceID());
+        /*
+        //holder.itemImage.setImageResource(spi.getImageResourceID());
         if(spi.hasImage()) {
             // Get the image resource ID from the current AndroidFlavor object and set the image to iconView
             holder.itemImage.setImageResource(spi.getImageResourceID());
             holder.itemImage.setVisibility(View.VISIBLE);
         }
         else {holder.itemImage.setVisibility(View.GONE);}
+        */
+
+        holder.itemImage.setImageBitmap(myDataProcessor.getImage(spi.getImageName()));
 
         holder.itemName.setText(spi.getName());
         holder.itemDescription.setText(spi.getDetail());

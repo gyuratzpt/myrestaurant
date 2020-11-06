@@ -55,8 +55,6 @@ public class Order {
         soiitems.add(new ShortOrderInfo(_orderid, _itemName, _itemAmount, _itemPrice));
     }
 
-
-
     @Override
     public String toString() {
         StringBuilder tmpString = new StringBuilder();

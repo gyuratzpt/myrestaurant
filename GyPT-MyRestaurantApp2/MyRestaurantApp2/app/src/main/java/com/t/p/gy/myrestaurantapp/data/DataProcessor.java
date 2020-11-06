@@ -1,13 +1,20 @@
 package com.t.p.gy.myrestaurantapp.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.t.p.gy.myrestaurantapp.CartActivity;
+import com.t.p.gy.myrestaurantapp.LoginActivity;
+import com.t.p.gy.myrestaurantapp.MainActivity;
 import com.t.p.gy.myrestaurantapp.connection.NetworkConnector;
 
 import java.util.ArrayList;
@@ -17,26 +24,65 @@ import java.util.Map;
 
 public class DataProcessor {
     private static DataProcessor dataProcessorInstance;
-    private NetworkConnector netConn;
-    private List<SingleProductItem> productList = new ArrayList<>();;
+    Gson gson = new GsonBuilder().setLenient().create();
+
+    //saját változók
     private List<SingleProductItem> cart = new ArrayList<>();
+    private List<SingleProductItem> productList;
+    private List<String> categoriesList;
     private static Map<String, Integer> drawableMap = new HashMap<>();
+    private User user;
+
+    //network
+    private NetworkConnector netConn;
+
+    //User
+    SharedPreferences settings;
 
     //private constructor.
     private DataProcessor(){
         netConn = NetworkConnector.getInstance();
-        //productList = netConn.getDownloadedList();
-
+        productList = netConn.downloadAllProducts();
+        categoriesList = netConn.downloadCategories_original();
+        categoriesList.add(0,"Összes tétel");
     }
     public static DataProcessor getInstance(){
         if (dataProcessorInstance == null){ //if there is no instance available... create new one
             dataProcessorInstance = new DataProcessor();
         }
-        Log.i("myLog", "DataProcessor singleton");
         return dataProcessorInstance;
     }
 
+    //User
+    public void initSP(Context _context){
+        settings = PreferenceManager.getDefaultSharedPreferences(_context);
+    }
+    public boolean checkUserToken(){
+        final String token = settings.getString("token", "not found");
+        Log.i("myLog", "usertoken: " + token);
+        final String userString = settings.getString("user", "not found");
+        Log.i("myLog", "userString: " + userString);
+        return !token.equals("not found") || !userString.equals("not found");
+    }
+    public User getUser(){
+        user = gson.fromJson(settings.getString("user","{}"), User.class);
+        return user;
+    }
+    public void loginUser(String _password){
+        //netConn.loginUser(settings, user.getEmail(), _password );
+    }
+
+
+
+
+
+
+
+
+
+
     //közös funkciók
+
     public static Map getDrawableMap(){
         return drawableMap;
     }
@@ -44,8 +90,10 @@ public class DataProcessor {
         this.drawableMap = _drawableMap;
     }
 
-
-
+    public Bitmap getImage(String _str){
+        Bitmap bmp = netConn.getImage(_str);
+        return  bmp;
+    }
 
 
     //admin funkciók
@@ -62,6 +110,10 @@ public class DataProcessor {
         Log.i("myLog", "modifyDatabaseItem running...");
         netConn.modifyDatabaseItem(_id, _category, _name,  _desc,  _price,  _image);
     }
+    //admin/list
+    public void addItemToList(SingleProductItem _spi){
+        productList.add(_spi);
+    }
 
     //admin/order
     public List<Order> getOrders_list(){
@@ -71,33 +123,20 @@ public class DataProcessor {
         netConn.setOrderToCompleted(_orderIDs);
     }
 
-
-
-
-
-
-
     //user funkciók
 
-
     public List<SingleProductItem> getProductList(){
-        Log.i("myLog", "DataProcessor / getProductList running...");
-        productList = netConn.getDownloadedList();
-        Log.i("myLog", "productList tartalma:" + productList.toString());
         return productList;
     }
-    //public List<SingleProductItem> getProductList(List<SingleProductItem> _list, int _cat){
-    public void getProductList(List<SingleProductItem> _list, int _cat){
-        productList.clear();
-        Log.i("myLog", "DataProcessor / getProductList(" + _cat + ") running...");
-        //productList = netConn.getDownloadedList(_cat);
-        netConn.downloadFilteredProducts(_list, _cat);
-        Log.i("myLog", "productList tartalma:" + productList.toString());
-        //return productList;
-    }
-
     public List<String> getSpinnerList(){
-        return netConn.downloadCategories();
+        return categoriesList;
+    }
+    public List<SingleProductItem> getFilteredProducts(int _catID){
+        List<SingleProductItem> tmpList = new ArrayList<>();
+        for(SingleProductItem x : productList){
+         if(x.getCategory() == _catID) tmpList.add(x);
+        }
+        return tmpList;
     }
     public int getActualOrderPrice(){
         int sum = 0;
@@ -166,6 +205,7 @@ public class DataProcessor {
         CartActivity.refreshPriceTextView(getCartFullPrice());
     }
 
+    //order
     public void sendOrder(){
         for(SingleProductItem x : cart){
             netConn.sendOrder(x);

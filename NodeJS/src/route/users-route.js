@@ -17,6 +17,7 @@ export default function(router) {
         '/register', 
         users.create_user
     );
+
     router.post(
         '/login', 
         users.login_user

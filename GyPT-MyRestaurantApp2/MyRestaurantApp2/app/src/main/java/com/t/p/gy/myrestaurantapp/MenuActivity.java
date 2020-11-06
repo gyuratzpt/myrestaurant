@@ -33,27 +33,24 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 public class MenuActivity extends AppCompatActivity {
     DataProcessor myDataProcessor = DataProcessor.getInstance();
-    RecyclerView menuRecyclerView;
-    Spinner menuSpinner;
+
     private RecyclerView.Adapter menuRecyclerViewAdapter;
+
+    //UI elemek
+    Spinner menuSpinner;
+    RecyclerView menuRecyclerView;
+    TextView placeholder;
     static TextView tv_SummedPrice;
+    Button addToCartbutton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
         initBackButton();
-        initSpinnerValues();
-
-        Log.i("myLog", "Menuactivity: start");
-        Button addToCartbutton;
-
-
-        tv_SummedPrice = (TextView) findViewById(R.id.menuactivity_price);
-        tv_SummedPrice.setText(R.string.menuactivity_price_text);
-        addToCartbutton = (Button) findViewById(R.id.menuactivity_addtocartbutton);
-        addToCartbutton.setText(R.string.menuactivity_addtocart_button_text);
-
+        initUI();
 
         menuRecyclerView = (RecyclerView) findViewById(R.id.menuactivity_recyclerview) ;
         menuRecyclerView.setHasFixedSize(true);
@@ -63,31 +60,10 @@ public class MenuActivity extends AppCompatActivity {
         menuRecyclerView.addItemDecoration(decoration);
         menuRecyclerView.setAdapter(menuRecyclerViewAdapter);
 
-        initSpinnerBehavior();
-
-        addToCartbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String tmpMessage;
-                if (myDataProcessor.addSelectedItemsToCart(MenuActivity.this)){
-                    tmpMessage ="A tételek a kosárba kerültek!";
-                    Toast.makeText(MenuActivity.this, "A tételek a kosárba kerültek!", Toast.LENGTH_LONG).show();
-                    refreshPriceTextView(0);
-                }
-                else {
-                    tmpMessage ="Nincs rendelendő tétel!";
-                    }
-                Toast.makeText(MenuActivity.this, tmpMessage, Toast.LENGTH_LONG).show();
-                //recyclerview frissítése!
-                //refreshPriceTextView(0);
-            }
-        });
-
-        Log.i("myLog","Menuactivity Konstruktor kész");
     }
 
     //*******************************************//
-                        //menu
+                        //action bar / menu
     private void initBackButton() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -118,58 +94,56 @@ public class MenuActivity extends AppCompatActivity {
                         //menu vége
     //*******************************************//
 
+    private void initUI(){
+        menuSpinner = (Spinner) findViewById(R.id.menuactivity_spinner);
+        tv_SummedPrice = (TextView) findViewById(R.id.menuactivity_price);
+        placeholder = (TextView) findViewById(R.id.menuactivity_title);
+        addToCartbutton = (Button) findViewById(R.id.menuactivity_addtocartbutton);
 
-
-    private void initSpinnerValues(){
-        menuSpinner = findViewById(R.id.menuactivity_spinner);
-        //NetworkConnector nc = new NetworkConnector();
-        List<String> testList = new ArrayList<>();
-        //List<String> testList;
-        //testList = nc.downloadCategories();
-        testList.add("food2");
-        testList.add("drink2");
-        testList.add("drug2");
-
-        ArrayAdapter menuSpinnerArrayAdapter = new ArrayAdapter(MenuActivity.this, R.layout.spinner_item, testList);
+        tv_SummedPrice.setText(R.string.menuactivity_price_text);
+        addToCartbutton.setText(R.string.menuactivity_addtocart_button_text);
+        addToCartbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String tmpMessage;
+                if (myDataProcessor.addSelectedItemsToCart(MenuActivity.this)){
+                    tmpMessage ="A tételek a kosárba kerültek!";
+                    Toast.makeText(MenuActivity.this, "A tételek a kosárba kerültek!", Toast.LENGTH_LONG).show();
+                    refreshPriceTextView(0);
+                }
+                else {
+                    tmpMessage ="Nincs rendelendő tétel!";
+                }
+                Toast.makeText(MenuActivity.this, tmpMessage, Toast.LENGTH_LONG).show();
+                //recyclerview frissítése!
+                //refreshPriceTextView(0);
+            }
+        });
+        //spinner
+        ArrayAdapter menuSpinnerArrayAdapter;
+        menuSpinnerArrayAdapter = new ArrayAdapter(MenuActivity.this, R.layout.spinner_item, myDataProcessor.getSpinnerList());
         menuSpinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         menuSpinner.setAdapter(menuSpinnerArrayAdapter);
 
-    }
-
-    private void initSpinnerBehavior() {
+        //viselkedés
         menuSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                Log.i("myLog", "Selected spinner value: " + adapterView.getSelectedItem());
-                List<SingleProductItem> actualProductList = new ArrayList<SingleProductItem>();
-                switch (adapterView.getSelectedItem().toString()){
-                    case "food2":
-                        //actualProductList = myDataProcessor.getProductList(actualProductList, 1);
-                        myDataProcessor.getProductList(actualProductList, 1);
-                        break;
-                    case "drink2":
-                        //actualProductList = myDataProcessor.getProductList(actualProductList, 2);
-                        myDataProcessor.getProductList(actualProductList, 2);
-                        break;
-                    case "drug2":
-                        //actualProductList = myDataProcessor.getProductList(actualProductList, 3);
-                        myDataProcessor.getProductList(actualProductList, 3);
-                        break;
+                if(i>0) {
+                    placeholder.setText(adapterView.getSelectedItem().toString());
+                    menuRecyclerViewAdapter = new AdapterForMenuRecyclerView(tv_SummedPrice, myDataProcessor.getFilteredProducts(adapterView.getSelectedItemPosition()));
                 }
-
-                menuRecyclerViewAdapter = new AdapterForMenuRecyclerView(tv_SummedPrice, actualProductList);
-                menuRecyclerView.swapAdapter(menuRecyclerViewAdapter,true);
-
-
-
+                else{
+                    placeholder.setText("Teljes választék");
+                    menuRecyclerViewAdapter = new AdapterForMenuRecyclerView(tv_SummedPrice, myDataProcessor.getProductList());
+                }
+                menuRecyclerView.swapAdapter(menuRecyclerViewAdapter, true);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
     }
-
 
     //actions
     public static void refreshPriceTextView(int x){

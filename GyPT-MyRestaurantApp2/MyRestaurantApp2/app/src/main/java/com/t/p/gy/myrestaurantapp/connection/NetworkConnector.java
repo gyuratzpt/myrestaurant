@@ -1,72 +1,100 @@
 package com.t.p.gy.myrestaurantapp.connection;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.provider.ContactsContract;
-import android.support.v7.app.AlertDialog;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.auth0.android.jwt.JWT;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.t.p.gy.myrestaurantapp.AdminMaintenanceActivity;
 import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 import com.t.p.gy.myrestaurantapp.data.Order;
 import com.t.p.gy.myrestaurantapp.data.SingleProductItem;
-
-import org.json.JSONObject;
+import com.t.p.gy.myrestaurantapp.data.User;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
 import javax.net.ssl.HttpsURLConnection;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
-import static java.sql.Types.NULL;
-
 public class NetworkConnector extends Application {
     private static NetworkConnector networkConnectorInstance;
-    private ProductsBackend myAPI;
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
-
+    private BackendAPI myAPI;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private List<SingleProductItem> tmpList = new ArrayList<>();
     private List<Order> orderList = new ArrayList<>();
+    private String ipAddress = "http://10.0.2.2:3000/";
 
-    public NetworkConnector(){
+
+    private NetworkConnector(){
         Retrofit retrofit = RetrofitClient.getInstance();
-        myAPI = retrofit.create(ProductsBackend.class);
+        myAPI = retrofit.create(BackendAPI.class);
     }
+
     public static NetworkConnector getInstance(){
-        if (networkConnectorInstance == null){ //if there is no instance available... create new one
+        if (networkConnectorInstance == null){
             networkConnectorInstance = new NetworkConnector();
         }
         Log.i("myLog", "AdminNetworkConnector singleton");
-
         return networkConnectorInstance;
     }
+/*
+    //USER
+    public void loginUser(SharedPreferences _settings, String _email, String _password){
+        compositeDisposable.add(myAPI.login(_email, _password)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(response -> {
+                        if (response.code() >= 200 && response.code() < 300) {
+                            Gson gson = new GsonBuilder().setLenient().create();
+                            String token = response.body().get("token").getAsString();
+                            User user = new User();
+                            JWT jwt = new JWT(token);
+                            user.setEmail(jwt.getClaim("email").asString());
+                            user.setIs_admin(jwt.getClaim("is_admin").asInt());
+
+                            _settings.edit().putString("token", token).apply();
+                            _settings.edit().putString("user", gson.toJson(user)).apply();
+                        }
+                        else()
+                    }));
+    }
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //lekérések
         // teljes listák
     //JsonArray
     public List<SingleProductItem> downloadAllProducts(){
-        List<SingleProductItem> downloadedDataSet = new ArrayList<SingleProductItem>();
-
+        List<SingleProductItem> downloadedDataSet = new ArrayList<>();
         compositeDisposable.add(myAPI.getAllProducts()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -80,8 +108,7 @@ public class NetworkConnector extends Application {
                                     inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""),
                                     inputJSONArray.get(i).getAsJsonObject().get("detail").toString().replaceAll("\"", ""),
                                     Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", "")),
-                                    getImageID(inputJSONArray.get(i).getAsJsonObject().get("picture"))
-
+                                    inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", "")
                             ));
                         }
                     }
@@ -91,11 +118,13 @@ public class NetworkConnector extends Application {
                 }));
         return downloadedDataSet;
     }
+
+
     //JsonArray
-    public List<String> downloadCategories(){
+    public List<String> downloadCategories_original(){
         List<String> catList = new ArrayList<>();
         try {
-            Log.i("myLog", "downloadCategories try");
+            //Log.i("myLog", "downloadCategories try");
             compositeDisposable.add(myAPI.getCategories()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -103,9 +132,9 @@ public class NetworkConnector extends Application {
                         if (response.code() >= 200 && response.code() < 300) {
                             JsonArray inputJSONArray = response.body().getAsJsonArray("category");
                             for (int i = 0; i < inputJSONArray.size(); i++) {
-                                Log.i("myLog", inputJSONArray.get(i).getAsJsonObject().get("name").toString());
+                                //Log.i("myLog", inputJSONArray.get(i).getAsJsonObject().get("name").toString());
                                 catList.add(inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""));
-                                Log.i("myLog", "downloadCategories response: " + catList.toString());
+                                //Log.i("myLog", "downloadCategories response: " + catList.toString());
                             }
                         } else {
                             Log.i("myLog", "Response error: " + response.code());
@@ -114,7 +143,7 @@ public class NetworkConnector extends Application {
         }catch (Exception e){
             Log.i("myLog", "Hiba a letöltéskor: " + e);
         }
-        Log.i("myLog", "downloadCategories listája: " + catList.toString());
+        //Log.i("myLog", "downloadCategories listája: " + catList.toString());
         return catList;
     }
     //JsonArray
@@ -144,7 +173,6 @@ public class NetworkConnector extends Application {
                                     orderList.add(new Order(tmpCustomerName, tmpCustomerAddress, tmpCustomerPhoneNumber, "2020.02.22"));
                                 }
                                 orderList.get(getOrderPosition(tmpCustomerName)).addSOIItem(tmpOrderid, tmpItemName, tmpAmount, tmpPrice);
-
                         }
                     }
                     else {
@@ -156,10 +184,8 @@ public class NetworkConnector extends Application {
         return orderList;
     }
 
-
         //szűrt listák
     //JsonArray
-    //public List<SingleProductItem> downloadFilteredProducts(List<SingleProductItem> _list, int _cat){
     public void downloadFilteredProducts(List<SingleProductItem> _list, int _cat){
         tmpList.clear();
             compositeDisposable.add(myAPI.getFilteredProducts(_cat)
@@ -176,7 +202,7 @@ public class NetworkConnector extends Application {
                                         inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""),
                                         inputJSONArray.get(i).getAsJsonObject().get("detail").toString().replaceAll("\"", ""),
                                         Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", "")),
-                                        getImageID(inputJSONArray.get(i).getAsJsonObject().get("picture"))
+                                        inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", "")
                                 ));
                             }
                         }
@@ -187,9 +213,6 @@ public class NetworkConnector extends Application {
             Log.i("myLog", "ANC filteredproducts: " + tmpList.toString());
             //return tmpList;
         }
-
-
-
 
         //egyedi adatok
     //JsonObject
@@ -214,7 +237,6 @@ public class NetworkConnector extends Application {
                         }
                     }));
         }
-
     public String getOneUserByEmail(String _email){
         compositeDisposable.add(myAPI.getOneUserByEmail(_email)
                 .subscribeOn(Schedulers.io())
@@ -230,9 +252,6 @@ public class NetworkConnector extends Application {
         );
         return "user download kész";
     }
-
-
-
 
     //törlések, zárások
     public boolean deleteProduct(final Integer id){
@@ -257,9 +276,22 @@ public class NetworkConnector extends Application {
             return false;
         }
     }
-
-
-
+    public void setOrderToCompleted(List<Integer> _orderIDs){
+        for(Integer id : _orderIDs){
+            //compositeDisposable.add(myAPI.finalizeOrder(id, 1)
+            compositeDisposable.add(myAPI.finalizeOrder_Gettel(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(response -> {
+                        //Log.i("myLog", response.body().toString());
+                        if (response.code() >= 200 && response.code() < 300){
+                            Log.i("myLog", "setOrderToCompleted response code: " + response.toString());
+                        } else {
+                            Log.i("myLog", "setOrderToCompleted error, code: " + response.toString());
+                        }
+                    }));
+        }
+    }
 
     //beírások
     public void createNewItem(final Integer category, final String name, final String description, final Integer price,final String picture){
@@ -290,8 +322,6 @@ public class NetworkConnector extends Application {
         );
     }
 
-
-
     //módosítások
     public void modifyDatabaseItem(final int id, final int category, final String name, final String description, final Integer price,final String picture){
         compositeDisposable.add(myAPI.updateProduct(id, category, name, description, price, picture)
@@ -306,40 +336,6 @@ public class NetworkConnector extends Application {
                     }
                 }));
     }
-    public void setOrderToCompleted(List<Integer> _orderIDs){
-        for(Integer id : _orderIDs){
-            //compositeDisposable.add(myAPI.finalizeOrder(id, 1)
-            compositeDisposable.add(myAPI.finalizeOrder_Gettel(id)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> {
-                        //Log.i("myLog", response.body().toString());
-                        if (response.code() >= 200 && response.code() < 300){
-                            Log.i("myLog", "setOrderToCompleted response code: " + response.toString());
-                        } else {
-                            Log.i("myLog", "setOrderToCompleted error, code: " + response.toString());
-                        }
-                    }));
-        }
-    }
-
-
-
-
-
-
-
-
-
-    //kiváltani, felesleges
-    public List<SingleProductItem> getDownloadedList(){
-        return downloadAllProducts();
-    }
-
-
-
-
-
 
     //segédfüggvények
     private boolean isCustomerHasOrder(String _name){
@@ -362,7 +358,7 @@ public class NetworkConnector extends Application {
         Integer resID;
         boolean x = _imageName.isJsonNull();
         if (!x && DataProcessor.getDrawableMap().containsKey(_imageName.toString().replaceAll("\"", ""))){
-            Log.i("myLog", "getImageID: " + _imageName.toString());
+            //Log.i("myLog", "getImageID: " + _imageName.toString());
             resID = Integer.parseInt(DataProcessor.getDrawableMap().get(_imageName.toString().replaceAll("\"", "")).toString());
             String url = "http://10.0.2.2:3000/images/" + _imageName.toString().replaceAll("\"", "");
 
@@ -371,36 +367,101 @@ public class NetworkConnector extends Application {
         return resID;
     }
 
-
-
-
     public Bitmap setImage(){
         Bitmap downloadedImage = null;
         try {
         SingleImageDownloadTask sIDTask = new SingleImageDownloadTask();
-        downloadedImage = sIDTask.execute("https://picsum.photos/seed/picsum/600/600").get();
+        //downloadedImage = sIDTask.execute("https://picsum.photos/seed/picsum/600/600").get();
+        downloadedImage = sIDTask.execute("http://10.0.2.2:3000/images/csiga.jpg").get();
         }catch(Exception e){
             Log.i("GyPT", e.toString());
         }
         return downloadedImage;
     }
-    public class SingleImageDownloadTask extends AsyncTask<String, Void, Bitmap> {
+    public class SingleImageDownloadTask_original extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... urls) {
             Log.i("GyPT: URL", urls[0]);
             Bitmap outputImage=null;
             URL url = null;
             HttpsURLConnection httpsURLConnection = null;
-
             try{
                 url = new URL(urls[0]);
+                Log.i("myLog", url.toString());
                 httpsURLConnection = (HttpsURLConnection) url.openConnection();
                 httpsURLConnection.connect();
                 InputStream downloadedData = httpsURLConnection.getInputStream();
                 outputImage = BitmapFactory.decodeStream(downloadedData);
+                Log.i("myLog", outputImage.toString());
+            }catch (Exception e) {
+                Log.i("myLog", "error" + e.toString());
+            }
+            return outputImage;
+        }
+    }
+
+    public class SingleImageDownloadTask extends AsyncTask<String, Void, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            Log.i("GyPT: URL", urls[0]);
+            Bitmap outputImage=null;
+            URL url = null;
+            HttpURLConnection httpURLConnection = null;
+            try{
+                url = new URL(urls[0]);
+                Log.i("myLog", url.toString());
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.connect();
+                InputStream downloadedData = httpURLConnection.getInputStream();
+                outputImage = BitmapFactory.decodeStream(downloadedData);
+                Log.i("myLog", outputImage.toString());
+            }catch (Exception e) {
+                Log.i("myLog", "error: " + e.toString());
+            }
+            return outputImage;
+        }
+    }
+
+
+    public Bitmap getImage(String _str){
+        Bitmap downloadedImage = null;
+        try {
+            SingleImageDownloadTaskV2 sIDTask = new SingleImageDownloadTaskV2();
+            downloadedImage = sIDTask.execute(_str).get();
+        }catch(Exception e){
+            Log.i("myLog", e.toString());
+        }
+        return downloadedImage;
+    }
+    public class SingleImageDownloadTaskV2 extends AsyncTask<String, Void, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            Log.i("myLog", "inputString: " + urls[0]);
+            Bitmap outputImage = null;
+            URL url = null;
+            HttpURLConnection httpURLConnection = null;
+            StringBuilder tmpString = new StringBuilder(ipAddress + "images/" + urls[0] + ".jpg");
+            try{
+                url = new URL(tmpString.toString());
+                Log.i("myLog", url.toString());
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.connect();
+                InputStream downloadedData = httpURLConnection.getInputStream();
+                outputImage = BitmapFactory.decodeStream(downloadedData);
 
             }catch (Exception e) {
-                Log.i("GyPT", e.toString());
+            Log.i("myLog", "error: " + e.toString());
+                String noImageURL = ipAddress + "images/noimage.jpg";
+                try {
+                    url = new URL(noImageURL);
+                    Log.i("myLog", url.toString());
+                    httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.connect();
+                    InputStream downloadedData = httpURLConnection.getInputStream();
+                    outputImage = BitmapFactory.decodeStream(downloadedData);
+                }catch (Exception exc){
+                    Log.i("myLog", "error: " + exc.toString());
+                }
             }
 
             return outputImage;

@@ -1,7 +1,9 @@
 package com.t.p.gy.myrestaurantapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,11 +14,13 @@ import android.widget.EditText;
 
 
 public class ContactActivity extends AppCompatActivity {
+    SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact_v2);
+        setContentView(R.layout.activity_contact);
+        settings = PreferenceManager.getDefaultSharedPreferences(ContactActivity.this);
         //vissza gomb
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -26,12 +30,12 @@ public class ContactActivity extends AppCompatActivity {
     }
 
     public void sendEmail(View view) {
-        EditText nameField = (EditText) findViewById(R.id.emailEditText);
+        EditText messageField = (EditText) findViewById(R.id.emailEditText);
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setData(Uri.parse("mailto:")); // only email apps should handle this
         intent.putExtra(Intent.EXTRA_SUBJECT, "App üzenet");
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"gyuratzpt@gmail.com"});
-        intent.putExtra(Intent.EXTRA_TEXT, nameField.getText().toString());
+        intent.putExtra(Intent.EXTRA_TEXT, messageField.getText().toString());
 
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);

@@ -3,52 +3,46 @@ package com.t.p.gy.myrestaurantapp.data;
 import android.util.Log;
 
 public class SingleProductItem {
-    private static final int NO_IMAGE_PROVIDED = -1;
 
-    //private final String mCategory;
-    private final int mIDNumber;
-    private int mCategory;
-    private String mName;
-    private String mDetail;
-    private int mPrice;
-    private int mImageResourceID = NO_IMAGE_PROVIDED;
+    private final Integer idNumber;
+    private int category;
+    private String name;
+    private String detail;
+    private int price;
+    private String imageName;
 
     private int mOrderAmount; //listview miatt, különben scrollozáskor elfeljtheti a korábbi értéket
     private int mCartAmount;
 
-    public SingleProductItem(int _id, int _cat, String _name, String _detail, int _price, int _imageResourceID) {
-        mIDNumber = _id;
-        mCategory = _cat;
-        mName = _name;
-        mDetail = _detail;
-        mPrice = _price;
-        mImageResourceID = _imageResourceID;
+    public SingleProductItem(Integer _id, int _cat, String _name, String _detail, int _price, String _imageName) {
+        idNumber = _id;
+        category = _cat;
+        name = _name;
+        detail = _detail;
+        price = _price;
+        imageName = _imageName;
         mOrderAmount = 0;
         mCartAmount = 0;
     }
 
     //GETTER-ek
-    public int getCategory() {
-        return mCategory;
+    public Integer getCategory() {
+        return category;
     }
     public String getName() {
-        return mName;
+        return name;
     }
     public String getDetail() {
-        return mDetail;
+        return detail;
     }
-    public boolean hasImage() {
-        return mImageResourceID != NO_IMAGE_PROVIDED;
-    }
-    public int getImageResourceID() {
-        return mImageResourceID;
-    }
+    public String getImageName(){return imageName;}
     public int getID() {
-        return mIDNumber;
+        return idNumber;
     }
 
+
     public int getPrice() {
-        return mPrice;
+        return price;
     }
     public int getOrderAmount(){
         return mOrderAmount;
@@ -61,32 +55,32 @@ public class SingleProductItem {
     //SETTER-ek
 
     public void setCategory(int mCategory) {
-        this.mCategory = mCategory;
+        this.category = mCategory;
     }
 
     public void setName(String mName) {
-        this.mName = mName;
+        this.name = mName;
     }
 
     public void setDetail(String mDetail) {
-        this.mDetail = mDetail;
+        this.detail = mDetail;
     }
 
     public void setPrice(int mPrice) {
-        this.mPrice = mPrice;
+        this.price = mPrice;
     }
 
     public void setOrderAmount(boolean bool){
         Log.i("Bool is", String.valueOf(bool));
         if (bool) {
-            Log.i("Előtte:", this.mName + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
+            Log.i("Előtte:", this.name + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
             mOrderAmount++;
-            Log.i("Utána:", this.mName + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
+            Log.i("Utána:", this.name + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
         }
         else if (!bool && mOrderAmount>0){
-            Log.i("Előtte:", this.mName + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
+            Log.i("Előtte:", this.name + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
             mOrderAmount--;
-            Log.i("Utána:", this.mName + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
+            Log.i("Utána:", this.name + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
         }
     }
     public void setCartAmount(int x){if (x>=0)this.mCartAmount=x;}
