@@ -8,24 +8,24 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 
 
 public class ContactActivity extends AppCompatActivity {
-    SharedPreferences settings;
+    DataProcessor myDataProcessor = DataProcessor.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
-        settings = PreferenceManager.getDefaultSharedPreferences(ContactActivity.this);
-        //vissza gomb
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+
         Log.v("MyLog","ContactActivity OK");
     }
 
@@ -53,13 +53,29 @@ public class ContactActivity extends AppCompatActivity {
 
     }
 
-    //vissza gomb
-    public boolean onOptionsItemSelected(MenuItem item){
+    //******************Action bar********************//
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
+            case R.id.cart:
+                Intent myIntent = new Intent(ContactActivity.this, CartActivity.class);
+                startActivity(myIntent);
+                return true;
+            case R.id.logout:
+                Toast.makeText(this, "Kilépés", Toast.LENGTH_LONG).show();
+                myDataProcessor.logout();
+                startActivity(new Intent(ContactActivity.this, LoginActivity.class));
                 finish();
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
+    //******************Action bar********************//
 }

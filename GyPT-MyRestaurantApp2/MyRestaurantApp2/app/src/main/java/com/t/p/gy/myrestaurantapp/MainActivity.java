@@ -27,8 +27,8 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     DataProcessor myDataProcessor = DataProcessor.getInstance();;
-    Gson gson = new GsonBuilder().setLenient().create();
 
+    //UI
     ImageView logo_imageView, actual_story_imageView, menu_imageView, gallery_imageView, contact_imageView;
     Button adminMaintenanceButton, adminOrdersButton;
 
@@ -39,10 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_v2);
 
         initUI();
-        if (myDataProcessor.getUser().getIs_admin()==1) initAdmin();
-
-
-
+        if (myDataProcessor.isUserAdmin()) initAdmin();
 
         //felhasználó törlésére
         //settings.edit().clear().apply();
@@ -57,28 +54,34 @@ public class MainActivity extends AppCompatActivity {
         */
 
      }
-
+    //******************Action bar********************//
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.cart:
-                Intent myIntent = new Intent(MainActivity.this, CartActivity.class);
-                startActivity(myIntent);
+                startActivity(new Intent(MainActivity.this, CartActivity.class));
                 return true;
             case R.id.logout:
                 Toast.makeText(this, "Kilépés", Toast.LENGTH_LONG).show();
+                myDataProcessor.logout();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+    //******************Action bar********************//
+
+
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
     private void logout() {
@@ -97,11 +100,12 @@ public class MainActivity extends AppCompatActivity {
         gallery_imageView = findViewById(R.id.gallery);
         contact_imageView = findViewById(R.id.contact);
 
-        logo_imageView.setImageResource(R.drawable.logo);
-        actual_story_imageView.setImageResource(R.drawable.actual_story2);
         menu_imageView.setImageResource(R.drawable.menu);
         gallery_imageView.setImageResource(R.drawable.gallery);
         contact_imageView.setImageResource(R.drawable.contact);
+
+        logo_imageView.setImageBitmap(myDataProcessor.getImage("UI", "logo"));
+        actual_story_imageView.setImageBitmap(myDataProcessor.getImage("stories", "actual_story"));
 
         adminMaintenanceButton = findViewById(R.id.admin_maintenancebutton);
         adminOrdersButton = findViewById(R.id.admin_ordersbutton);
@@ -135,10 +139,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
-
-        //próba, majd törölni
-        NetworkConnector anc = NetworkConnector.getInstance();
-        logo_imageView.setImageBitmap(anc.setImage());
     }
 
     private void initAdmin(){

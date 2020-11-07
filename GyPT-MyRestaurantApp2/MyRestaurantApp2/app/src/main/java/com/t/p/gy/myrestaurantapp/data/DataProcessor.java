@@ -24,22 +24,20 @@ import java.util.Map;
 
 public class DataProcessor {
     private static DataProcessor dataProcessorInstance;
-    Gson gson = new GsonBuilder().setLenient().create();
 
-    //saját változók
+    //user
+    private User user;
+    Gson gson = new GsonBuilder().setLenient().create();
+    SharedPreferences settings;
+
+    //listák
     private List<SingleProductItem> cart = new ArrayList<>();
     private List<SingleProductItem> productList;
     private List<String> categoriesList;
-    private static Map<String, Integer> drawableMap = new HashMap<>();
-    private User user;
 
     //network
     private NetworkConnector netConn;
 
-    //User
-    SharedPreferences settings;
-
-    //private constructor.
     private DataProcessor(){
         netConn = NetworkConnector.getInstance();
         productList = netConn.downloadAllProducts();
@@ -47,7 +45,8 @@ public class DataProcessor {
         categoriesList.add(0,"Összes tétel");
     }
     public static DataProcessor getInstance(){
-        if (dataProcessorInstance == null){ //if there is no instance available... create new one
+        if (dataProcessorInstance == null){
+            Log.i("myLog", "új DataProcessor születőben...");
             dataProcessorInstance = new DataProcessor();
         }
         return dataProcessorInstance;
@@ -55,22 +54,53 @@ public class DataProcessor {
 
     //User
     public void initSP(Context _context){
-        settings = PreferenceManager.getDefaultSharedPreferences(_context);
+        settings = PreferenceManager.getDefaultSharedPreferences(_context); //kell külön a context miatt!(?)
     }
     public boolean checkUserToken(){
         final String token = settings.getString("token", "not found");
         Log.i("myLog", "usertoken: " + token);
-        final String userString = settings.getString("user", "not found");
-        Log.i("myLog", "userString: " + userString);
-        return !token.equals("not found") || !userString.equals("not found");
+        final String userData = settings.getString("user", "not found");
+        Log.i("myLog", "userData: " + userData);
+        if(!userData.equals("not found")) user = gson.fromJson(settings.getString("user","{}"), User.class);
+        return !token.equals("not found") || !userData.equals("not found");
     }
-    public User getUser(){
-        user = gson.fromJson(settings.getString("user","{}"), User.class);
-        return user;
+    public boolean isUserAdmin(){
+        if(user.getIs_admin()==1) return true;
+        else return false;
     }
-    public void loginUser(String _password){
-        //netConn.loginUser(settings, user.getEmail(), _password );
+
+    public String getUserName(){
+        return user.getName();
     }
+    public String getUserAddress(){
+        return user.getAddress();
+    }
+    public String getUserPhoneNumber(){
+        return user.getPhoneNumber();
+    }
+
+    public void loginUserV2(String _email, String _password){
+        try {
+            netConn.loginUserV2(settings, _email, _password );
+        }catch (Exception e){
+            Log.i("myLog", "login hiba: " + e);
+            Log.i("myLog", settings.getString("user", "üres") + " " + e);
+        }
+    }
+    public void registerUserV2(String _email, String _password, String _name, String _address, String _phone){
+        try {
+            netConn.registerUserV2(_email, _password, _name, _address, _phone);
+        }catch (Exception e){
+            Log.i("myLog", "regisztráció hiba: " + e);
+            Log.i("myLog", settings.getString("user", "üres") + " " + e);
+        }
+    }
+    public void logout(){
+        settings.edit().remove("token").apply();
+        settings.edit().remove("user").apply();
+        cart.clear();
+    }
+
 
 
 
@@ -82,18 +112,15 @@ public class DataProcessor {
 
 
     //közös funkciók
-
+/*
     public static Map getDrawableMap(){
         return drawableMap;
     }
     public void setDrawableMap(Map _drawableMap){
         this.drawableMap = _drawableMap;
     }
+*/
 
-    public Bitmap getImage(String _str){
-        Bitmap bmp = netConn.getImage(_str);
-        return  bmp;
-    }
 
 
     //admin funkciók
@@ -110,6 +137,9 @@ public class DataProcessor {
         Log.i("myLog", "modifyDatabaseItem running...");
         netConn.modifyDatabaseItem(_id, _category, _name,  _desc,  _price,  _image);
     }
+    public void deleteProductItem(int _prodId){
+        netConn.deleteProduct(_prodId);
+    }
     //admin/list
     public void addItemToList(SingleProductItem _spi){
         productList.add(_spi);
@@ -125,9 +155,22 @@ public class DataProcessor {
 
     //user funkciók
 
-    public List<SingleProductItem> getProductList(){
-        return productList;
+    public List<SingleProductItem> getProductList(int _cat){
+        if(_cat==0){
+            return productList;
+        }
+        else{
+            List<SingleProductItem> tmpList = new ArrayList<>();
+            for(SingleProductItem x : productList){
+                if(x.getCategory()==_cat){
+                    tmpList.add(x);
+                }
+            }
+            return tmpList;
+        }
+
     }
+
     public List<String> getSpinnerList(){
         return categoriesList;
     }
@@ -212,5 +255,17 @@ public class DataProcessor {
         }
         Log.i("myLog", "sendOrder finish");
     }
+
+
+    //BRIDGE metódusok NetworkConnector felé
+    //közös
+    public Bitmap getImage(String _dir, String _str){
+        Bitmap bmp = netConn.getImage(_dir, _str);
+        return bmp;
+    }
+    //LoginActivity
+
+
+
 
 }

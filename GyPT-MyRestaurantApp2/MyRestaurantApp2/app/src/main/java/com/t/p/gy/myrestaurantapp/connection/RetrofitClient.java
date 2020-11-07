@@ -1,5 +1,7 @@
 package com.t.p.gy.myrestaurantapp.connection;
 
+import android.util.Log;
+
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -9,6 +11,7 @@ public class RetrofitClient {
     private static Retrofit instance;
     public static Retrofit getInstance() {
         if(instance == null)
+            Log.i("myLog", "új Retrofit születőben...");
             instance = new Retrofit.Builder()
                     // Use "10.0.2.2" ip if you deploy to virtual device
                     // Use "192.168.29.114" ip if you deploy to physical device
@@ -20,5 +23,4 @@ public class RetrofitClient {
                     .build();
         return instance;
     }
-
 }

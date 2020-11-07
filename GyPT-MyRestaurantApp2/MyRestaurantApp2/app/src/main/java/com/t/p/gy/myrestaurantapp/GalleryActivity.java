@@ -2,10 +2,12 @@ package com.t.p.gy.myrestaurantapp;
 
 
 import android.content.Context;
-import android.support.v7.app.ActionBar;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.Gallery;
 
+import com.t.p.gy.myrestaurantapp.data.DataProcessor;
+
 public class GalleryActivity extends AppCompatActivity {
+    DataProcessor myDataProcessor = DataProcessor.getInstance();
     private Integer[] images={
             R.drawable.rest0,
             R.drawable.rest1,
@@ -38,10 +43,6 @@ public class GalleryActivity extends AppCompatActivity {
             }
         });
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
         Log.v("MyLog","Gallery OK");
     }
 
@@ -81,16 +82,31 @@ public class GalleryActivity extends AppCompatActivity {
         }
     }
 
-
-    public boolean onOptionsItemSelected(MenuItem item){
+    //******************Action bar********************//
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
+            case R.id.cart:
+                Intent myIntent = new Intent(GalleryActivity.this, CartActivity.class);
+                startActivity(myIntent);
+                return true;
+            case R.id.logout:
+                Toast.makeText(this, "Kilépés", Toast.LENGTH_LONG).show();
+                myDataProcessor.logout();
+                startActivity(new Intent(GalleryActivity.this, LoginActivity.class));
                 finish();
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
-
+    //******************Action bar********************//
 
 
 

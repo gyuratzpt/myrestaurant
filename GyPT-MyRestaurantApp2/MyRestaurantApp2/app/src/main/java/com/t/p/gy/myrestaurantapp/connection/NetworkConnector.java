@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.auth0.android.jwt.JWT;
 import com.google.gson.Gson;
@@ -15,6 +16,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.t.p.gy.myrestaurantapp.LoginActivity;
 import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 import com.t.p.gy.myrestaurantapp.data.Order;
 import com.t.p.gy.myrestaurantapp.data.SingleProductItem;
@@ -48,14 +50,15 @@ public class NetworkConnector extends Application {
 
     public static NetworkConnector getInstance(){
         if (networkConnectorInstance == null){
+            Log.i("myLog", "új NetworkConnector születőben...");
             networkConnectorInstance = new NetworkConnector();
         }
         Log.i("myLog", "AdminNetworkConnector singleton");
         return networkConnectorInstance;
     }
-/*
+
     //USER
-    public void loginUser(SharedPreferences _settings, String _email, String _password){
+    public void loginUserV2(SharedPreferences _settings, String _email, String _password){
         compositeDisposable.add(myAPI.login(_email, _password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -67,18 +70,53 @@ public class NetworkConnector extends Application {
                             JWT jwt = new JWT(token);
                             user.setEmail(jwt.getClaim("email").asString());
                             user.setIs_admin(jwt.getClaim("is_admin").asInt());
-
+                            user.setName(jwt.getClaim("name").asString());
+                            user.setAddress(jwt.getClaim("address").asString());
+                            user.setPhoneNumber(jwt.getClaim("phonenumber").asString());
+                            Log.i("myLog", user.toString());
                             _settings.edit().putString("token", token).apply();
                             _settings.edit().putString("user", gson.toJson(user)).apply();
+                            /*
+                            _settings.edit().putString("email", user.getEmail()).apply();
+                            _settings.edit().putString("is_admin", Boolean.toString(user.getIs_admin())).apply();
+                            _settings.edit().putString("name", user.getName()).apply();
+                            */
                         }
-                        else()
+                        else{
+                            try{
+                                Log.i("myLog", "login hiba: " + response.code() + " " + response.errorBody().string());
+                            }catch (Exception e){
+                                Log.i("myLog", "login exception: " + e);
+                            }
+                        }
                     }));
     }
-*/
 
 
-
-
+    public void registerUserV2(String _email, String _password, String _name, String _address, String _phone) {
+        Log.i("myLog", "Bejövő adatok regisztrációhoz: " +
+                        _email+ " "+
+                        _password+ " "+
+                        _name+ " "+
+                        _address+ " "+
+                        _phone
+        );
+        try {
+            compositeDisposable.add(myAPI.registration(_email, _password, _name, _address, _phone)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(response -> {
+                        if (response.code() >= 200 && response.code() < 300) {
+                            Log.i("myLog", "Registration successful");
+                        } else {
+                            Log.i("myLog", "Registration error: " + response.code() + " " + response.errorBody().string());
+                            //Toast.makeText(LoginActivity.this, response.code() + " " + response.errorBody().string(), Toast.LENGTH_LONG).show();
+                        }
+                    }));
+        }catch (Exception e){
+            Log.i("myLog", "registerUserV2 error: " + e);
+        }
+    }
 
 
 
@@ -254,7 +292,7 @@ public class NetworkConnector extends Application {
     }
 
     //törlések, zárások
-    public boolean deleteProduct(final Integer id){
+    public boolean deleteProduct(final int id){
         try {
             Log.i("myLog", "deleteProduct try start... id: " + id);
             compositeDisposable.add(myAPI.deleteProduct(id)
@@ -354,6 +392,7 @@ public class NetworkConnector extends Application {
         Log.i("myLog", "getOrderID: " + i);
         return i;
     }
+    /*
     private int getImageID(JsonElement _imageName){
         Integer resID;
         boolean x = _imageName.isJsonNull();
@@ -366,18 +405,9 @@ public class NetworkConnector extends Application {
         else resID = Integer.parseInt(DataProcessor.getDrawableMap().get("noimage").toString());
         return resID;
     }
+    */
 
-    public Bitmap setImage(){
-        Bitmap downloadedImage = null;
-        try {
-        SingleImageDownloadTask sIDTask = new SingleImageDownloadTask();
-        //downloadedImage = sIDTask.execute("https://picsum.photos/seed/picsum/600/600").get();
-        downloadedImage = sIDTask.execute("http://10.0.2.2:3000/images/csiga.jpg").get();
-        }catch(Exception e){
-            Log.i("GyPT", e.toString());
-        }
-        return downloadedImage;
-    }
+
     public class SingleImageDownloadTask_original extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... urls) {
@@ -399,7 +429,6 @@ public class NetworkConnector extends Application {
             return outputImage;
         }
     }
-
     public class SingleImageDownloadTask extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... urls) {
@@ -423,11 +452,12 @@ public class NetworkConnector extends Application {
     }
 
 
-    public Bitmap getImage(String _str){
+
+    public Bitmap getImage(String _dir, String _str){
         Bitmap downloadedImage = null;
         try {
             SingleImageDownloadTaskV2 sIDTask = new SingleImageDownloadTaskV2();
-            downloadedImage = sIDTask.execute(_str).get();
+            downloadedImage = sIDTask.execute(_dir, _str).get();
         }catch(Exception e){
             Log.i("myLog", e.toString());
         }
@@ -436,14 +466,14 @@ public class NetworkConnector extends Application {
     public class SingleImageDownloadTaskV2 extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... urls) {
-            Log.i("myLog", "inputString: " + urls[0]);
+            //Log.i("myLog", "inputString: " + urls[0]);
             Bitmap outputImage = null;
             URL url = null;
             HttpURLConnection httpURLConnection = null;
-            StringBuilder tmpString = new StringBuilder(ipAddress + "images/" + urls[0] + ".jpg");
+            StringBuilder tmpString = new StringBuilder(ipAddress + "images/" + urls[0] + "/"+ urls[1] + ".jpg");
             try{
                 url = new URL(tmpString.toString());
-                Log.i("myLog", url.toString());
+                //Log.i("myLog", url.toString());
                 httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.connect();
                 InputStream downloadedData = httpURLConnection.getInputStream();
@@ -463,8 +493,9 @@ public class NetworkConnector extends Application {
                     Log.i("myLog", "error: " + exc.toString());
                 }
             }
-
             return outputImage;
         }
     }
+
+
 }

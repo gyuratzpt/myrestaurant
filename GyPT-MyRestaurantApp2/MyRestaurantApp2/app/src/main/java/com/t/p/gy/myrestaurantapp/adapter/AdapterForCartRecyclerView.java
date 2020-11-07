@@ -1,5 +1,6 @@
 package com.t.p.gy.myrestaurantapp.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.t.p.gy.myrestaurantapp.data.SingleProductItem;
 
 public class AdapterForCartRecyclerView extends RecyclerView.Adapter<AdapterForCartRecyclerView.ViewHolder>{
     DataProcessor myDataProcessor = DataProcessor.getInstance();
+    private Context context;
     private TextView textView;
 
     protected class ViewHolder extends RecyclerView.ViewHolder{
@@ -42,7 +44,8 @@ public class AdapterForCartRecyclerView extends RecyclerView.Adapter<AdapterForC
         }
     }
 
-    public AdapterForCartRecyclerView(TextView _tv){
+    public AdapterForCartRecyclerView(Context _context, TextView _tv){
+        context = _context;
         textView = _tv;
     }
 
@@ -71,7 +74,7 @@ public class AdapterForCartRecyclerView extends RecyclerView.Adapter<AdapterForC
         }
         else {holder.itemImage.setImageResource(Integer.parseInt(DataProcessor.getDrawableMap().get("noimage").toString()));}
 */
-        holder.itemImage.setImageBitmap(myDataProcessor.getImage(spi.getImageName()));
+        holder.itemImage.setImageBitmap(myDataProcessor.getImage("products", spi.getImageName()));
         holder.itemImage.setVisibility(View.VISIBLE);
         holder.itemName.setText(spi.getName());
         holder.itemDescription.setText(spi.getDetail());

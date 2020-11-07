@@ -1,12 +1,17 @@
 package com.t.p.gy.myrestaurantapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.t.p.gy.myrestaurantapp.adapter.AdapterForOrderRecyclerView;
 import com.t.p.gy.myrestaurantapp.connection.BackendAPI;
@@ -20,24 +25,13 @@ import retrofit2.Retrofit;
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 public class AdminOrdersActivity extends AppCompatActivity {
-    NetworkConnector anc = NetworkConnector.getInstance();
-    DataProcessor dp = DataProcessor.getInstance();
-    BackendAPI myAPI;
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
     private RecyclerView orderRecyclerView;
     private RecyclerView.Adapter orderRecyclerViewAdapter;
-    TextView tempTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_orders);
-        Retrofit retrofit = RetrofitClient.getInstance();
-        myAPI = retrofit.create(BackendAPI.class);
-
-        tempTV = (TextView) findViewById(R.id.admin_orders_temptv);
-        //dp.getOrders(tempTV);
-        tempTV.setVisibility(View.GONE);
 
         orderRecyclerView = (RecyclerView) findViewById(R.id.admin_orders_recyclerview) ;
         orderRecyclerView.setHasFixedSize(true);
@@ -47,4 +41,29 @@ public class AdminOrdersActivity extends AppCompatActivity {
         DividerItemDecoration decoration = new DividerItemDecoration(this, VERTICAL);
         orderRecyclerView.addItemDecoration(decoration);
     }
+    //******************Action bar********************//
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.cart:
+                Toast.makeText(this, "A kosár itt nem elérhető", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.logout:
+                Toast.makeText(this, "Kilépés", Toast.LENGTH_LONG).show();
+                DataProcessor myDataProcessor = DataProcessor.getInstance();
+                myDataProcessor.logout();
+                startActivity(new Intent(AdminOrdersActivity.this, LoginActivity.class));
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    //******************Action bar********************//
 }

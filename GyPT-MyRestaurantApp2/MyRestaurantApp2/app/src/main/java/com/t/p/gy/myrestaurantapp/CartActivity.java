@@ -2,35 +2,85 @@ package com.t.p.gy.myrestaurantapp;
 
 
 import android.content.Intent;
-        import android.os.Bundle;
-        import android.support.v7.app.ActionBar;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
         import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
         import android.support.v7.widget.RecyclerView;
         import android.util.Log;
-        import android.view.MenuItem;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
         import android.view.View;
         import android.widget.Button;
         import android.widget.TextView;
+import android.widget.Toast;
 
-        import com.t.p.gy.myrestaurantapp.adapter.AdapterForCartRecyclerView;
+import com.t.p.gy.myrestaurantapp.adapter.AdapterForCartRecyclerView;
         import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 public class CartActivity extends AppCompatActivity{
+    DataProcessor myDataProcessor = DataProcessor.getInstance();
+
+    //UI
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerViewAdapter;
     private TextView tv_price;
     static TextView tv_price_new;
-    DataProcessor myDataProcessor = DataProcessor.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
-        initBackButton();
+
+        initUI();
+
+        recyclerView = (RecyclerView) findViewById(R.id.cart_layout_recyclerview) ;
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewAdapter = new AdapterForCartRecyclerView(getApplicationContext(), tv_price);
+        DividerItemDecoration decoration = new DividerItemDecoration(this, VERTICAL);
+        recyclerView.addItemDecoration(decoration);
+        recyclerView.setAdapter(recyclerViewAdapter);
+        Log.v("MyLog","CartActivity Konstruktor kész");
+    }
+
+    //******************Action bar********************//
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.cart:
+                Toast.makeText(this, "Ez már a kosár!", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.logout:
+                Toast.makeText(this, "Kilépés", Toast.LENGTH_LONG).show();
+                myDataProcessor.logout();
+                Intent myIntent = new Intent(CartActivity.this, LoginActivity.class);
+                startActivity(myIntent);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    //******************Action bar********************//
+
+    private void initUI(){
+        tv_price = (TextView) findViewById(R.id.cart_layout_price);
+        tv_price_new = (TextView) findViewById(R.id.cart_layout_price);
+        tv_price.setText(String.valueOf(myDataProcessor.getCartFullPrice())+"Ft");
 
         Button nextPage = (Button) findViewById(R.id.cart_layout_button);
         nextPage.setOnClickListener(new View.OnClickListener() {
@@ -41,38 +91,8 @@ public class CartActivity extends AppCompatActivity{
                 startActivity(myIntent);
             }
         });
-
-        tv_price = (TextView) findViewById(R.id.cart_layout_price);
-        tv_price_new = (TextView) findViewById(R.id.cart_layout_price);
-        tv_price.setText(String.valueOf(myDataProcessor.getCartFullPrice())+"Ft");
-
-        recyclerView = (RecyclerView) findViewById(R.id.cart_layout_recyclerview) ;
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewAdapter = new AdapterForCartRecyclerView(tv_price);
-        DividerItemDecoration decoration = new DividerItemDecoration(this, VERTICAL);
-        recyclerView.addItemDecoration(decoration);
-        recyclerView.setAdapter(recyclerViewAdapter);
-        Log.v("MyLog","CartActivity Konstruktor kész");
     }
 
-    //vissza gomb
-    private void initBackButton() {
-        //vissza gomb
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-    }
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    //vissza gomb vége
 
     public static void refreshPriceTextView(int x){
         tv_price_new.setText(Integer.toString(x));

@@ -1,5 +1,6 @@
 package com.t.p.gy.myrestaurantapp.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,9 +19,9 @@ import java.util.List;
 
 
 public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForMenuRecyclerView.ViewHolder>{
-    List<SingleProductItem> actualProductList = new ArrayList<SingleProductItem>();
     DataProcessor myDataProcessor = DataProcessor.getInstance();
-    int selectedCategory;
+    private Context context;
+    int selectedCategory = 0;
     private TextView textView;
 
     protected class ViewHolder extends RecyclerView.ViewHolder{
@@ -44,19 +45,16 @@ public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForM
         }
     }
 
-    public AdapterForMenuRecyclerView(TextView _tv){
-        //actualProductList = myDataProcessor.getProductList();
-        //Log.i("myLog", "új" + actualProductList.toString());
+    public AdapterForMenuRecyclerView(Context _context, TextView _tv){
+        context = _context;
+        selectedCategory = 0;
         textView = _tv;
     }
-    public AdapterForMenuRecyclerView(TextView _tv, List<SingleProductItem> _inputList){
-        Log.i("myLog", "menuRecyclerView" + actualProductList.toString());
+    public AdapterForMenuRecyclerView(Context _context, TextView _tv, int _cat){
+        context = _context;
+        selectedCategory = _cat;
         textView = _tv;
-        actualProductList = _inputList;
-        notifyDataSetChanged();
-        Log.i("myLog", "menuRecyclerView" + actualProductList);
     }
-
 
 
     @Override
@@ -76,7 +74,8 @@ public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForM
 
         final SingleProductItem spi;
 
-        spi = actualProductList.get(position);
+        //spi = actualProductList.get(position);
+        spi = myDataProcessor.getProductList(selectedCategory).get(position);
         /*
         //holder.itemImage.setImageResource(spi.getImageResourceID());
         if(spi.hasImage()) {
@@ -87,7 +86,7 @@ public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForM
         else {holder.itemImage.setVisibility(View.GONE);}
         */
 
-        holder.itemImage.setImageBitmap(myDataProcessor.getImage(spi.getImageName()));
+        holder.itemImage.setImageBitmap(myDataProcessor.getImage("products", spi.getImageName()));
 
         holder.itemName.setText(spi.getName());
         holder.itemDescription.setText(spi.getDetail());
@@ -120,7 +119,7 @@ public class AdapterForMenuRecyclerView extends RecyclerView.Adapter<AdapterForM
     @Override
     //visszaadja hány eleme van a listának
     public int getItemCount() {
-        return actualProductList.size();
+        return myDataProcessor.getProductList(selectedCategory).size();
         //return myDataProcessor.getProductList().size();
     }
 

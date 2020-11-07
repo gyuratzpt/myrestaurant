@@ -49,13 +49,12 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        initBackButton();
         initUI();
 
         menuRecyclerView = (RecyclerView) findViewById(R.id.menuactivity_recyclerview) ;
         menuRecyclerView.setHasFixedSize(true);
         menuRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        menuRecyclerViewAdapter = new AdapterForMenuRecyclerView(tv_SummedPrice);
+        menuRecyclerViewAdapter = new AdapterForMenuRecyclerView(getApplicationContext(), tv_SummedPrice);
         DividerItemDecoration decoration = new DividerItemDecoration(this, VERTICAL);
         menuRecyclerView.addItemDecoration(decoration);
         menuRecyclerView.setAdapter(menuRecyclerViewAdapter);
@@ -64,12 +63,6 @@ public class MenuActivity extends AppCompatActivity {
 
     //*******************************************//
                         //action bar / menu
-    private void initBackButton() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -78,15 +71,15 @@ public class MenuActivity extends AppCompatActivity {
     }
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
             case R.id.cart:
                 Intent myIntent = new Intent(MenuActivity.this, CartActivity.class);
                 startActivity(myIntent);
                 return true;
             case R.id.logout:
                 Toast.makeText(this, "Kilépés", Toast.LENGTH_LONG).show();
+                myDataProcessor.logout();
+                startActivity(new Intent(MenuActivity.this, LoginActivity.class));
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -131,11 +124,15 @@ public class MenuActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(i>0) {
                     placeholder.setText(adapterView.getSelectedItem().toString());
-                    menuRecyclerViewAdapter = new AdapterForMenuRecyclerView(tv_SummedPrice, myDataProcessor.getFilteredProducts(adapterView.getSelectedItemPosition()));
+                    //menuRecyclerViewAdapter = new AdapterForMenuRecyclerView(tv_SummedPrice, myDataProcessor.getFilteredProducts(adapterView.getSelectedItemPosition()));
+                    menuRecyclerViewAdapter = new AdapterForMenuRecyclerView(getApplicationContext(), tv_SummedPrice, adapterView.getSelectedItemPosition());
+
                 }
                 else{
                     placeholder.setText("Teljes választék");
-                    menuRecyclerViewAdapter = new AdapterForMenuRecyclerView(tv_SummedPrice, myDataProcessor.getProductList());
+                    //menuRecyclerViewAdapter = new AdapterForMenuRecyclerView(tv_SummedPrice, myDataProcessor.getProductList());
+                    menuRecyclerViewAdapter = new AdapterForMenuRecyclerView(getApplicationContext(), tv_SummedPrice);
+
                 }
                 menuRecyclerView.swapAdapter(menuRecyclerViewAdapter, true);
             }

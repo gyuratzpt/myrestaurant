@@ -23,8 +23,9 @@ import java.util.List;
 
 public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterForOrderRecyclerView.ViewHolder> {
     DataProcessor myDp = DataProcessor.getInstance();
+    private Context context;
     private List<Order> ordersList;
-    private Context mContext;
+
 
     //egy listaelem elemei
     protected class ViewHolder extends RecyclerView.ViewHolder {
@@ -47,8 +48,8 @@ public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterFor
         }
     }
 
-    public AdapterForOrderRecyclerView(Context context) {
-        mContext = context;
+    public AdapterForOrderRecyclerView(Context _context) {
+        context = _context;
         /*
         if(ordersList != null && !ordersList.isEmpty()) {
             ordersList.clear();

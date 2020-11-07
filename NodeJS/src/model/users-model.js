@@ -52,10 +52,7 @@ export default class Users {
                         return res(err, null);
                     }
                     if (result.length === 0) {
-                        res(
-                            'Wrong email address given',
-                            null
-                        );
+                        res('Wrong email address given', null);
                     } else {
                         if (result[0].password == req.body.password)
                             res(null, result[0]);

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.t.p.gy.myrestaurantapp.R;
 import com.t.p.gy.myrestaurantapp.connection.NetworkConnector;
+import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 import com.t.p.gy.myrestaurantapp.data.SingleProductItem;
 import com.t.p.gy.myrestaurantapp.other.AdminDialog;
 
@@ -20,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterForAdminRecyclerView.ViewHolder>{
-    NetworkConnector anc = NetworkConnector.getInstance();
+    DataProcessor myDataProcessor = DataProcessor.getInstance();
+    private Context context;
     private List<SingleProductItem> downloadedDataList;
-    private Context mContext;
 
 
     //egy listaelem elemei
@@ -44,9 +45,8 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
         }
     }
 
-    public AdapterForAdminRecyclerView(Context context){
-        mContext = context;
-        downloadedDataList = anc.downloadAllProducts();
+    public AdapterForAdminRecyclerView(Context _context){
+        context = _context;
     }
 
     @Override
@@ -62,15 +62,15 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
     @Override
 //visszaadja hány eleme van a listának
     public int getItemCount() {
-        return downloadedDataList.size();
+        return myDataProcessor.getProductList(0).size();
     }
 
     @Override
 //adatfeltöltés az egyes elemekhez
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final SingleProductItem spi = downloadedDataList.get(holder.getAdapterPosition());
+        final SingleProductItem spi = myDataProcessor.getProductList(0).get(holder.getAdapterPosition());
         //holder.itemImage.setImageResource(spi.getImageResourceID());
-        holder.itemImage.setImageBitmap(anc.getImage(spi.getImageName()));
+        holder.itemImage.setImageBitmap(myDataProcessor.getImage("products", spi.getImageName()));
         holder.itemImage.setVisibility(View.VISIBLE);
         holder.itemName.setText(spi.getName());
         holder.itemDescription.setText(spi.getDetail());
@@ -81,11 +81,11 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
             public void onClick(View view) {
                 Log.i("myLog", "Deletebutton pressed");
                 Log.i("myLog", "Választott termék: "+ spi.getID());
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setMessage("Biztos törlöd a " + spi.getName() + " tételt az adatbázisból?");
                 //.setCancelable(false)
                 builder.setPositiveButton("Igen", (dialog, id) -> {
-                    anc.deleteProduct(spi.getID());
+                    myDataProcessor.deleteProductItem(spi.getID());
                     notifyItemRemoved(position);
                 });
                 builder.setNegativeButton("Mégsem", (dialog, id) -> {
@@ -102,7 +102,7 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
                 Log.i("myLog", "Választott termék ID-ja: "+ spi.getID());
 
                 AdminDialog alert = new AdminDialog();
-                alert.showDialog(mContext, "Termék módosítása","Módosít", spi.getID(), spi);
+                alert.showDialog(context, "Termék módosítása","Módosít", spi.getID(), spi);
                 Log.i("myLog", "Admindialog után...");
 
             }

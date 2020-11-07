@@ -40,6 +40,9 @@ export function login_user(req, res) {
                     id: user.id,
                     email: user.email,
                     is_admin: user.is_admin,
+                    name: user.username,
+                    address: user.address,
+                    phonenumber: user.phonenumber                    
                 },
                 config.tokenKey,
                 { expiresIn: config.tokenExpiration },
