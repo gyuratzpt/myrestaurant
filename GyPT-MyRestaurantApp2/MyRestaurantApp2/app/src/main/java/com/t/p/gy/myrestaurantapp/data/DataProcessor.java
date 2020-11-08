@@ -41,7 +41,7 @@ public class DataProcessor {
     private DataProcessor(){
         netConn = NetworkConnector.getInstance();
         productList = netConn.downloadAllProducts();
-        categoriesList = netConn.downloadCategories_original();
+        categoriesList = netConn.downloadCategories();
         categoriesList.add(0,"Összes tétel");
     }
     public static DataProcessor getInstance(){
@@ -251,11 +251,10 @@ public class DataProcessor {
     //order
     public void sendOrder(){
         for(SingleProductItem x : cart){
-            netConn.sendOrder(x);
+            netConn.sendOrder(user.getId(), x);
         }
         Log.i("myLog", "sendOrder finish");
     }
-
 
     //BRIDGE metódusok NetworkConnector felé
     //közös

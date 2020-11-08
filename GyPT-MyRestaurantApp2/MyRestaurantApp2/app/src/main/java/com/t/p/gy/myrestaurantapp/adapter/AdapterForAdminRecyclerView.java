@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
                             itemPrice;
         private Button      modifyButton,
                             deleteButton;
+        private CheckBox    isOnSaleCheckBox;
         private ViewHolder(View itemView){
             super(itemView);
             itemImage = (ImageView) itemView.findViewById(R.id.admin_listitem_imageView) ;
@@ -42,6 +44,7 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
             itemPrice = (TextView) itemView.findViewById(R.id.admin_listitem_price);
             modifyButton = (Button) itemView.findViewById(R.id.admin_listitem_modifybutton);
             deleteButton = (Button) itemView.findViewById(R.id.admin_listitem_deletebutton);
+            isOnSaleCheckBox = (CheckBox) itemView.findViewById(R.id.admin_listitem_isonsalecheckbox);
         }
     }
 
@@ -72,6 +75,7 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
         //holder.itemImage.setImageResource(spi.getImageResourceID());
         holder.itemImage.setImageBitmap(myDataProcessor.getImage("products", spi.getImageName()));
         holder.itemImage.setVisibility(View.VISIBLE);
+        holder.isOnSaleCheckBox.setVisibility(View.GONE);
         holder.itemName.setText(spi.getName());
         holder.itemDescription.setText(spi.getDetail());
         holder.itemPrice.setText(Integer.toString(spi.getPrice()));
@@ -85,8 +89,9 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
                 builder.setMessage("Biztos törlöd a " + spi.getName() + " tételt az adatbázisból?");
                 //.setCancelable(false)
                 builder.setPositiveButton("Igen", (dialog, id) -> {
+                    myDataProcessor.getProductList(0).remove(spi);
                     myDataProcessor.deleteProductItem(spi.getID());
-                    notifyItemRemoved(position);
+                    notifyItemRemoved(holder.getLayoutPosition());
                 });
                 builder.setNegativeButton("Mégsem", (dialog, id) -> {
                 });
@@ -104,7 +109,7 @@ public class AdapterForAdminRecyclerView extends RecyclerView.Adapter<AdapterFor
                 AdminDialog alert = new AdminDialog();
                 alert.showDialog(context, "Termék módosítása","Módosít", spi.getID(), spi);
                 Log.i("myLog", "Admindialog után...");
-
+                notifyItemChanged(holder.getLayoutPosition(), null);
             }
         });
         //Log.i("myLog","Admin adapterForRecyclerView, konstruktor: OK");

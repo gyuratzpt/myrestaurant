@@ -58,7 +58,7 @@ public class OrderInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (myDataProcessor.getCart().size()>0) {
                     Log.i("myLog", "Kosár tartalma: " + myDataProcessor.getCart().toString());
-                    Toast.makeText(OrderInfoActivity.this, "Rednelés leadható!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(OrderInfoActivity.this, "Rendelés elküldve!", Toast.LENGTH_LONG).show();
                     myDataProcessor.sendOrder();
                     myDataProcessor.getCart().clear();
                 }

@@ -1,7 +1,10 @@
 package com.t.p.gy.myrestaurantapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -44,6 +47,14 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         initUI();
+        ConnectivityManager cm =
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        if(isConnected) Log.i("myLog", "van net! :)");
+        else Log.i("myLog", "nincs net! :(");
 
         //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
         //settings.edit().clear().apply();
@@ -51,8 +62,6 @@ public class LoginActivity extends AppCompatActivity {
         //felhasználó ellenőrzése
         myDataProcessor.initSP(LoginActivity.this);
         tryLogin("Activity");
-
-
 
 
         //token törlése (ezt mikor (logout felső menübe))?

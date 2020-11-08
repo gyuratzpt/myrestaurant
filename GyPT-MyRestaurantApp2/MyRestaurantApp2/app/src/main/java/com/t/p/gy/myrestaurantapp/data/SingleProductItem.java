@@ -57,19 +57,16 @@ public class SingleProductItem {
     public void setCategory(int mCategory) {
         this.category = mCategory;
     }
-
     public void setName(String mName) {
         this.name = mName;
     }
-
     public void setDetail(String mDetail) {
         this.detail = mDetail;
     }
-
     public void setPrice(int mPrice) {
         this.price = mPrice;
     }
-
+    public void setImageName(String mName) {this.imageName = mName;}
     public void setOrderAmount(boolean bool){
         Log.i("Bool is", String.valueOf(bool));
         if (bool) {
