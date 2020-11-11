@@ -99,6 +99,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
 
+    <Spinner
+        android:id="@+id/dialog_additem_categoryspinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+
+        app:layout_constraintTop_toBottomOf="@id/dialog_additem_title"
+        app:layout_constraintBottom_toTopOf="@id/dialog_additem_name"
+        app:layout_constraintStart_toStartOf="@id/dialog_additem_image"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        />
+
     <EditText
         android:id="@+id/dialog_additem_name"
         android:layout_width="0dp"
@@ -176,4 +189,6 @@
         app:layout_constraintBaseline_toBaselineOf="@id/dialog_additem_okbutton"
         app:layout_constraintStart_toEndOf="@id/dialog_additem_okbutton"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+
 </android.support.constraint.ConstraintLayout>

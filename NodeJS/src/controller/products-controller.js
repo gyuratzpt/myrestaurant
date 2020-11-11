@@ -2,12 +2,12 @@
 import Products from "../model/products-model";
 
 export function read_all_products(req, res) {
-    Products.getAllProducts(function(err, product) {
+    Products.getAllProducts(function(err, productlist) {
         if (err) {
             res.status(400).send(err);
             return;
         } else {
-            res.json({ product });
+            res.json({ productlist });
             return;
         }
     });
@@ -37,6 +37,24 @@ export function read_one_product(req, res) {
     });
 }
 
+export function delete_products_item(req, res) {
+    Products.deleteItemByID(req.params.id, function(err, response) {
+        if (err) {
+            res.status(400).send(err);
+            return;
+        } else if (response.affectedRows === 0 && response.changedRows === 0) {
+            res.status(404).send(errorMessages.get(404));
+            return;
+        } else {
+            res.status(200).send(
+                `Drinks item with ${req.params.id} name successfully deleted!`);
+            return;
+        }
+    });
+}
+
+
+
     export function create_new_item(req, res) {
         const newItem = new Products(req.body);
         Products.addNewItem(newItem, function(err, insertId) {
@@ -51,26 +69,12 @@ export function read_one_product(req, res) {
         });
     }
 
-    export function delete_products_item(req, res) {
-        Products.deleteItemByID(req.params.id, function(err, response) {
-            if (err) {
-                res.status(400).send(err);
-                return;
-            } else if (response.affectedRows === 0 && response.changedRows === 0) {
-                res.status(404).send(errorMessages.get(404));
-                return;
-            } else {
-                res.status(200).send(
-                    `Drinks item with ${req.params.id} name successfully deleted!`);
-                return;
-            }
-        });
-    
-    }
+
 
 export function modify_products_item(req, res) {
     Products.modifyItemByID(
         req.params.id,
+        req.body.categoryID,
         req.body.name,
         req.body.detail,
         req.body.price,
@@ -81,8 +85,8 @@ export function modify_products_item(req, res) {
                 return;
             } else {
                 res.status(200).send({
-                    message: `Products successfully updated for ${req.body.name}!`});
+                    message: `Products successfully updated for ${req.params.id}!`});
                 return;
             }
         });
-    }
+    } 

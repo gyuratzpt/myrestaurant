@@ -51,9 +51,10 @@ export default class Products {
             [id],
             function(err, result) {
                 if (err) {
-                    console.log('Error: ', err);
+                    console.log('Error üzenet száll a szélben: ', err);
                     res(err, null);
                 } else {
+                    console.log('Az %i tétel értékei: %s' ,id, result);
                     res(null, result[0]);
                 }
             }
@@ -71,12 +72,13 @@ export default class Products {
                 newItem.price,
                 newItem.picture
             ],
-            function(err, response) {
+            function(err, result) {
                 if (err) {
-                    console.log('Error: ', err);
+                    console.log('Error üzenet száll a szélben: ', err);
                     res(err, null);
                 } else {
-                    res(null, response.insertId);
+                    console.log('Hozzáadás sikeres, az új tétel ID-ja: ', result);
+                    res(null, result.insertId);
                 }
             }
         );
@@ -89,44 +91,29 @@ export default class Products {
             [id],
             function(err, result) {
                 if (err) {
+                    console.log('Error üzenet száll a szélben: ', err);
                     res(err, null);
                 } else {
+                    console.log('A %i ID-jú tétel törlése sikeres! A result objektum tartalma: ', id, result);
                     res(null, result);
                 }
             }
         );
     }
 
-    static modifyItemByID(id, name, detail, price, picture, res) {
+    static modifyItemByID(id, categoryID, name, detail, price, picture, res) {
         conn.query(
-            'UPDATE products SET name = ?, detail = ?, price = ?, picture = ? WHERE id = ?',
-            [name, detail, price, picture, id],
+            'UPDATE products SET categoryID=?, name = ?, detail = ?, price = ?, picture = ? WHERE id = ?',
+            [categoryID, name, detail, price, picture, id],
             function(err, result) {
                 if (err) {
-                    console.log('Error: ', err);
+                    console.log('Error üzenet száll a szélben: ', err);
                     res(err, null);
                 } else {
+                    console.log('A %i ID-jú tétel módosítása sikeres! A result objektum tartalma: ', id, result.info);
                     res(null, result);
                 }
             }
         );
     }
-
-
-
-
-    static getImage(id ,res) {
-
-
-        fs = require('fs')
-        fs.readFile('/etc/hosts', 'utf8', function (err,data) {
-          if (err) {
-            return console.log(err);
-          }
-          console.log(data);
-        });
-    }
-
-
-
 }

@@ -65,11 +65,7 @@ public class CartActivity extends AppCompatActivity{
                 Toast.makeText(this, "Ez már a kosár!", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.logout:
-                Toast.makeText(this, "Kilépés", Toast.LENGTH_LONG).show();
-                myDataProcessor.logout();
-                Intent myIntent = new Intent(CartActivity.this, LoginActivity.class);
-                startActivity(myIntent);
-                finish();
+                myDataProcessor.initLogoutOption(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

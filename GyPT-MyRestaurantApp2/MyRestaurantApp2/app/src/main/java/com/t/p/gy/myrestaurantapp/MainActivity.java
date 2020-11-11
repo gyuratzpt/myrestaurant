@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,11 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, CartActivity.class));
                 return true;
             case R.id.logout:
-                Toast.makeText(this, "Kilépés", Toast.LENGTH_LONG).show();
-                myDataProcessor.logout();
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                finish();
-                return true;
+                myDataProcessor.initLogoutOption(this);
             default:
                 return super.onOptionsItemSelected(item);
         }

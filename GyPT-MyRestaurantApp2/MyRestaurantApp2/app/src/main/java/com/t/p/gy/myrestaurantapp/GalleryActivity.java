@@ -97,10 +97,7 @@ public class GalleryActivity extends AppCompatActivity {
                 startActivity(myIntent);
                 return true;
             case R.id.logout:
-                Toast.makeText(this, "Kilépés", Toast.LENGTH_LONG).show();
-                myDataProcessor.logout();
-                startActivity(new Intent(GalleryActivity.this, LoginActivity.class));
-                finish();
+                myDataProcessor.initLogoutOption(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

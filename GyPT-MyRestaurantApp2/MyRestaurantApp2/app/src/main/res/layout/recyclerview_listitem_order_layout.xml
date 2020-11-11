@@ -151,7 +151,7 @@
         android:id="@+id/orders_listitem_sentbutton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Sent"
+        android:text="Kész"
         app:layout_constraintHorizontal_weight="1"
 
 

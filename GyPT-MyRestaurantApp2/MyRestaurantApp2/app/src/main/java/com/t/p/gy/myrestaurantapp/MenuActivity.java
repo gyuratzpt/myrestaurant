@@ -76,10 +76,7 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(myIntent);
                 return true;
             case R.id.logout:
-                Toast.makeText(this, "Kilépés", Toast.LENGTH_LONG).show();
-                myDataProcessor.logout();
-                startActivity(new Intent(MenuActivity.this, LoginActivity.class));
-                finish();
+                myDataProcessor.initLogoutOption(this);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -114,7 +111,7 @@ public class MenuActivity extends AppCompatActivity {
         });
         //spinner
         ArrayAdapter menuSpinnerArrayAdapter;
-        menuSpinnerArrayAdapter = new ArrayAdapter(MenuActivity.this, R.layout.spinner_item, myDataProcessor.getSpinnerList());
+        menuSpinnerArrayAdapter = new ArrayAdapter(MenuActivity.this, R.layout.spinner_item, myDataProcessor.getCustomizedCategoryList("Összes tétel"));
         menuSpinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         menuSpinner.setAdapter(menuSpinnerArrayAdapter);
 

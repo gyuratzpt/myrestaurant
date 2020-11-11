@@ -44,6 +44,7 @@ public class NetworkConnector extends Application {
     private NetworkConnector(){
         Retrofit retrofit = RetrofitClient.getInstance();
         myAPI = retrofit.create(BackendAPI.class);
+        Log.i("myLog", "retrofit ip cím: " + retrofit.baseUrl().toString());
     }
 
     public static NetworkConnector getInstance(){
@@ -57,7 +58,7 @@ public class NetworkConnector extends Application {
 
     //**********************USER*********************//
     public void loginUserV2(SharedPreferences _settings, String _email, String _password){
-        compositeDisposable.add(myAPI.login(_email, _password)
+        compositeDisposable.add(myAPI.login_get(_email, _password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
@@ -125,7 +126,7 @@ public class NetworkConnector extends Application {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response.code() >= 200 && response.code() < 300) {
-                        JsonArray inputJSONArray = response.body().getAsJsonArray("product");
+                        JsonArray inputJSONArray = response.body().getAsJsonArray("productlist");
                         for (int i = 0; i < inputJSONArray.size(); i++) {
                             downloadedDataSet.add(new SingleProductItem(
                                     Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("id").toString().replaceAll("\"", "")),
@@ -225,8 +226,8 @@ public class NetworkConnector extends Application {
     }
     public void setOrderToCompleted(List<Integer> _orderIDs){
         for(Integer id : _orderIDs){
-            //compositeDisposable.add(myAPI.finalizeOrder(id, 1)
-            compositeDisposable.add(myAPI.finalizeOrder_Gettel(id)
+            compositeDisposable.add(myAPI.finalizeOrder(id, 1)
+            //compositeDisposable.add(myAPI.finalizeOrder_Gettel(id)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
@@ -257,10 +258,11 @@ public class NetworkConnector extends Application {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-                    Log.i("myLog", response.body().toString());
-                    Log.i("myLog", response.message());
+                    Log.i("myLog", "modifyDatabaseItem: " + response.body().toString());
+                    Log.i("myLog", "modifyDatabaseItem: " + response.message());
                     if (response.code() >= 200 && response.code() < 300){
                         Log.i("myLog", "ChangeProduct response code: " + response.toString());
+                        Log.i("myLog", "ChangeProduct response code: " + response.message());
                     } else {
                         Log.i("myLog", "ChangeProduct error, code: " + response.toString());
                     }

@@ -55,11 +55,7 @@ public class AdminOrdersActivity extends AppCompatActivity {
                 Toast.makeText(this, "A kosár itt nem elérhető", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.logout:
-                Toast.makeText(this, "Kilépés", Toast.LENGTH_LONG).show();
-                DataProcessor myDataProcessor = DataProcessor.getInstance();
-                myDataProcessor.logout();
-                startActivity(new Intent(AdminOrdersActivity.this, LoginActivity.class));
-                finish();
+                DataProcessor.getInstance().initLogoutOption(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

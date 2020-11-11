@@ -11,6 +11,7 @@ import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface BackendAPI {
 
@@ -72,6 +73,9 @@ public interface BackendAPI {
     Observable<Response<ResponseBody>> finalizeOrder_Gettel(@Path("id") int id);
 
     //user műveletek
+    @HTTP(method = "GET", path = "/api/v1/login", hasBody = false)
+    Observable<Response<JsonObject>> login_get(@Query("email") String email,
+                                           @Query("password") String password);
     @FormUrlEncoded
     @POST("/api/v1/login")
     Observable<Response<JsonObject>> login(@Field("email") String email,

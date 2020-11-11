@@ -18,14 +18,14 @@ export default function(router) {
         products.read_one_product
     );
 
-    router.post(
-        '/products',
-        products.create_new_item
-    );
-
     router.delete(
         '/products/items/:id',
         products.delete_products_item
+    );
+
+    router.post(
+        '/products',
+        products.create_new_item
     );
 
     router.put(
@@ -33,6 +33,4 @@ export default function(router) {
         products.modify_products_item
     );
 
-    
-        
 }

@@ -28,8 +28,7 @@ export function read_one_user(req, res) {
 }
 
 
-
-export function login_user(req, res) {
+export function login_user_get(req, res) {
     Users.loginUserByEmailAndPassword(req, function(err, user) {
         if (err) {
             res.status(400).send(err);
@@ -54,6 +53,34 @@ export function login_user(req, res) {
         }
     });
 }
+
+
+export function login_user_original(req, res) {
+    Users.loginUserByEmailAndPassword(req, function(err, user) {
+        if (err) {
+            res.status(400).send(err);
+            return;
+        } else {
+            jwt.sign(
+                {
+                    id: user.id,
+                    email: user.email,
+                    is_admin: user.is_admin,
+                    name: user.username,
+                    address: user.address,
+                    phonenumber: user.phonenumber                    
+                },
+                config.tokenKey,
+                { expiresIn: config.tokenExpiration },
+                (err, token) => {
+                    res.json({ token });
+                }
+            );
+            return;
+        }
+    });
+}
+
 
 export function create_user(req, res) {
     const errorMessages = validateFormData(

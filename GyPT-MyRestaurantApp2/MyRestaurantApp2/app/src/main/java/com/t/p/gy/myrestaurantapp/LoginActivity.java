@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,11 +31,12 @@ import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 import com.t.p.gy.myrestaurantapp.data.User;
 
 public class LoginActivity extends AppCompatActivity {
-    DataProcessor myDataProcessor = DataProcessor.getInstance();
-    Gson gson = new GsonBuilder().setLenient().create(); //???
+    //DataProcessor myDataProcessor = DataProcessor.getInstance();
+    DataProcessor myDataProcessor;
+    //Gson gson = new GsonBuilder().setLenient().create(); //???
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-    Retrofit retrofit = RetrofitClient.getInstance(); //retrofit library
-    BackendAPI myAPI = retrofit.create(BackendAPI.class); //interface deklarálás a BackendAPI felé
+    //Retrofit retrofit = RetrofitClient.getInstance(); //retrofit library
+    //BackendAPI myAPI = retrofit.create(BackendAPI.class); //interface deklarálás a BackendAPI felé
 
     //UI
     Button loginButton, regButton, regButtonFinish;
@@ -46,25 +48,30 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        initUI();
+        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+        //settings.edit().clear().apply();
+
         ConnectivityManager cm =
                 (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
+        ImageView mainLogoImageView = (ImageView) findViewById(R.id.mainLogoImageView);
+        if(isConnected){
+            myDataProcessor = DataProcessor.getInstance();
+            mainLogoImageView.setImageBitmap(DataProcessor.getInstance().getImage("UI","logo"));
+            Log.i("myLog", "van net! :)");
+            initUI();
+            //felhasználó ellenőrzése
+            myDataProcessor.initSP(LoginActivity.this);
+            tryLogin("Activity");
+        }
+        else{
+            Log.i("myLog", "nincs net! :(");
+            mainLogoImageView.setImageResource(R.drawable.nointernet);
+            Toast.makeText(this, "Az alkalmazás használatához internetkapcsolat szükséges!", Toast.LENGTH_LONG).show();
+        }
 
-        if(isConnected) Log.i("myLog", "van net! :)");
-        else Log.i("myLog", "nincs net! :(");
-
-        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-        //settings.edit().clear().apply();
-
-        //felhasználó ellenőrzése
-        myDataProcessor.initSP(LoginActivity.this);
-        tryLogin("Activity");
-
-
-        //token törlése (ezt mikor (logout felső menübe))?
 
     }
 
@@ -193,7 +200,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
+    /*
     private void loginUser_original(final String email, final String password){
         myAPI = retrofit.create(BackendAPI.class); //retrofit library-t adja a productbackand api-hoz??
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
@@ -249,7 +256,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }));
     }
-
+    */
         /*
     private void registerUser(final String email, final String password){
         Log.i("myLog", "registerUser running...");

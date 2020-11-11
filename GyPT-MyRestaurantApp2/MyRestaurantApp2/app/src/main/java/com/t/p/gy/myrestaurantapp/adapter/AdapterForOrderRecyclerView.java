@@ -55,8 +55,9 @@ public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterFor
             ordersList.clear();
         }
 */
+        if (ordersList != null) Log.i("myLog", "Order adapter listája get előtt: " + ordersList.toString());
         ordersList = myDp.getOrders_list();
-        Log.i("myLog", "Order adapter listája: " + ordersList.toString());
+        Log.i("myLog", "Order adapter listája get után: " + ordersList.toString());
     }
 
     @Override
@@ -78,6 +79,7 @@ public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterFor
     @Override
 //adatfeltöltés az egyes elemekhez
     public void onBindViewHolder(ViewHolder holder, int position) {
+        Log.i("myLog", "Order adapter listája onBindViewHolder-ben: " + ordersList.toString());
         final Order o = ordersList.get(position);
         holder.customerName.setText(o.getCustomer());
         holder.customerAddress.setText(o.getCustomerAddress());
@@ -90,23 +92,19 @@ public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterFor
             public void onClick(View view) {
 
                 Log.i("myLog", "SentButton pressed");
-                myDp.setOrderToCompleted(o.getOrderIDs());
-                //anc.deleteProduct(spi.getID());
-                //notifyItemRemoved(position);
-            /*
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setMessage("Biztos törlöd a " + spi.getName() + " tételt az adatbázisból?");
-                //.setCancelable(false)
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setPositiveButton("Igen", (dialog, id) -> {
-                    anc.deleteProduct(spi.getID());
-                    notifyItemRemoved(position);
+                    myDp.setOrderToCompleted(o.getOrderIDs());
+                    Log.i("myLog", "Törölt elem: " + ordersList.get(holder.getLayoutPosition()).toString());
+                    ordersList.remove(holder.getLayoutPosition());
+                    notifyItemRemoved(holder.getLayoutPosition());
                 });
                 builder.setNegativeButton("Mégsem", (dialog, id) -> {
                 });
                 AlertDialog alert = builder.create();
-                alert.setTitle("Vigyázz, törlés művelet!");
+                alert.setTitle("Biztos lezárod ezt a rendelést?");
                 alert.show();
-            */
             }
         });
     }

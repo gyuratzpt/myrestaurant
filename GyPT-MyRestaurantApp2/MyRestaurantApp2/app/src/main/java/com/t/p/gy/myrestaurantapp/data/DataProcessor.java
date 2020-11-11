@@ -1,11 +1,15 @@
 package com.t.p.gy.myrestaurantapp.data;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +19,7 @@ import com.google.gson.GsonBuilder;
 import com.t.p.gy.myrestaurantapp.CartActivity;
 import com.t.p.gy.myrestaurantapp.LoginActivity;
 import com.t.p.gy.myrestaurantapp.MainActivity;
+import com.t.p.gy.myrestaurantapp.R;
 import com.t.p.gy.myrestaurantapp.connection.NetworkConnector;
 
 import java.util.ArrayList;
@@ -42,7 +47,7 @@ public class DataProcessor {
         netConn = NetworkConnector.getInstance();
         productList = netConn.downloadAllProducts();
         categoriesList = netConn.downloadCategories();
-        categoriesList.add(0,"Összes tétel");
+        //categoriesList.add(0,"Összes tétel");
     }
     public static DataProcessor getInstance(){
         if (dataProcessorInstance == null){
@@ -170,9 +175,14 @@ public class DataProcessor {
         }
 
     }
-
-    public List<String> getSpinnerList(){
+    public List<String> getCategoriesList(){
         return categoriesList;
+    }
+    public List<String> getCustomizedCategoryList(String _pos0){
+        List<String> tmpList = new ArrayList<>();
+        tmpList.addAll(categoriesList);
+        tmpList.add(0,_pos0);
+        return tmpList;
     }
     public List<SingleProductItem> getFilteredProducts(int _catID){
         List<SingleProductItem> tmpList = new ArrayList<>();
@@ -267,4 +277,17 @@ public class DataProcessor {
 
 
 
+    public void initLogoutOption(Context _context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+        builder.setPositiveButton("Igen", (dialog, id) -> {
+            logout();
+            _context.startActivity(new Intent(_context, LoginActivity.class));
+            Toast.makeText(_context, "Kilépés", Toast.LENGTH_LONG).show();
+        });
+        builder.setNegativeButton("Mégsem", (dialog, id) -> {
+        });
+        AlertDialog alert = builder.create();
+        alert.setTitle("Biztos kilépsz az alkalmazásból?");
+        alert.show();
+    }
 }

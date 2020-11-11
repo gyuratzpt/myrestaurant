@@ -3,16 +3,17 @@ package com.t.p.gy.myrestaurantapp.other;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.t.p.gy.myrestaurantapp.MenuActivity;
 import com.t.p.gy.myrestaurantapp.R;
-import com.t.p.gy.myrestaurantapp.adapter.AdapterForAdminRecyclerView;
 import com.t.p.gy.myrestaurantapp.connection.NetworkConnector;
 import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 import com.t.p.gy.myrestaurantapp.data.SingleProductItem;
@@ -24,7 +25,7 @@ public class AdminDialog {
         final Dialog adminDialog = new Dialog(activity);
         adminDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         adminDialog.setCancelable(false);
-        adminDialog.setContentView(R.layout.dialog_additem);
+        adminDialog.setContentView(R.layout.dialog_maintenance);
         TextView tvTitle = (TextView) adminDialog.findViewById(R.id.dialog_additem_title);
         tvTitle.setText(_dialogTitle);
 
@@ -71,15 +72,23 @@ public class AdminDialog {
         final Dialog adminDialog = new Dialog(_context);
         adminDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         adminDialog.setCancelable(false);
-        adminDialog.setContentView(R.layout.dialog_additem);
+        adminDialog.setContentView(R.layout.dialog_maintenance);
         TextView tvTitle = (TextView) adminDialog.findViewById(R.id.dialog_additem_title);
         tvTitle.setText(_dialogTitle);
 
         EditText etCategory = (EditText) adminDialog.findViewById(R.id.dialog_additem_category);
+        etCategory.setVisibility(View.GONE);
         EditText etName = (EditText) adminDialog.findViewById(R.id.dialog_additem_name);
         EditText etDescription = (EditText) adminDialog.findViewById(R.id.dialog_additem_description);
         EditText etPrice = (EditText) adminDialog.findViewById(R.id.dialog_additem_price);
         EditText etImage = (EditText) adminDialog.findViewById(R.id.dialog_additem_image);
+
+        Spinner categorySpinner = (Spinner) adminDialog.findViewById(R.id.dialog_additem_categoryspinner);
+        ArrayAdapter categorySpinnerArrayAdapter;
+        categorySpinnerArrayAdapter = new ArrayAdapter(_context, R.layout.spinner_item, DataProcessor.getInstance().getCustomizedCategoryList("Válassz..."));
+        categorySpinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        categorySpinner.setAdapter(categorySpinnerArrayAdapter);
+
 
         Button okButton = (Button) adminDialog.findViewById(R.id.dialog_additem_okbutton);
         Button cancelButton = (Button) adminDialog.findViewById(R.id.dialog_additem_cancelbutton);
