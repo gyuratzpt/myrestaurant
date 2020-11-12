@@ -13,13 +13,13 @@ export default function(router) {
         users.read_one_user
     );
 
-    router.post(
-        '/register', 
-        users.create_user
+    router.get(
+        '/login', 
+        users.login_user
     );
 
     router.post(
-        '/login', 
-        users.login_user
+        '/register', 
+        users.create_user
     );
 }

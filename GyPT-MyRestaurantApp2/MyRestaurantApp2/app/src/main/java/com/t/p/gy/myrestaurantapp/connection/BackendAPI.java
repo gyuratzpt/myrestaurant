@@ -68,18 +68,11 @@ public interface BackendAPI {
     @HTTP(method = "PUT", path = "/api/v1/orders/put/{id}", hasBody = true)
     Observable<Response<ResponseBody>> finalizeOrder(@Path("id") int id,
                                                      @Field("status") int status);
-
-    @HTTP(method = "GET", path = "/api/v1/orders/get/{id}")
-    Observable<Response<ResponseBody>> finalizeOrder_Gettel(@Path("id") int id);
-
     //user műveletek
     @HTTP(method = "GET", path = "/api/v1/login", hasBody = false)
-    Observable<Response<JsonObject>> login_get(@Query("email") String email,
+    Observable<Response<JsonObject>> login(@Query("email") String email,
                                            @Query("password") String password);
-    @FormUrlEncoded
-    @POST("/api/v1/login")
-    Observable<Response<JsonObject>> login(@Field("email") String email,
-                                               @Field("password") String password);
+
     @FormUrlEncoded
     @POST("/api/v1/register")
     Observable<Response<JsonObject>> registration(@Field("email") String email,

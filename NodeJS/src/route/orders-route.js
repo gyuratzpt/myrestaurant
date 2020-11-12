@@ -18,9 +18,4 @@ export default function(router) {
         orders.finalizeOrderById
     );
 
-    router.get(
-        '/orders/get/:id',
-        orders.finalizeOrderById_Gettel
-    );
-
 }

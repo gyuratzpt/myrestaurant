@@ -1,10 +1,10 @@
-import Users from "../model/users-model";
+import User from "../model/users-model";
 import jwt from 'jsonwebtoken';
 const config = require('../../config');
 import validateFormData from '../utils/validator.utils';
 
 export function read_all_users(req, res) {
-    Users.getAllUsers(function(err, user) {
+    User.getAllUsers(function(err, user) {
         if (err) {
             res.status(400).send(err);
             return;
@@ -16,7 +16,7 @@ export function read_all_users(req, res) {
 }
 
 export function read_one_user(req, res) {
-    Users.getOneUser(req.params.email, function(err, user) {
+    User.getOneUser(req.params.email, function(err, user) {
         if (err) {
             res.status(400).send(err);
             return;
@@ -28,8 +28,8 @@ export function read_one_user(req, res) {
 }
 
 
-export function login_user_get(req, res) {
-    Users.loginUserByEmailAndPassword(req, function(err, user) {
+export function login_user(req, res) {
+    User.loginUserByEmailAndPassword(req, function(err, user) {
         if (err) {
             res.status(400).send(err);
             return;
@@ -53,34 +53,6 @@ export function login_user_get(req, res) {
         }
     });
 }
-
-
-export function login_user_original(req, res) {
-    Users.loginUserByEmailAndPassword(req, function(err, user) {
-        if (err) {
-            res.status(400).send(err);
-            return;
-        } else {
-            jwt.sign(
-                {
-                    id: user.id,
-                    email: user.email,
-                    is_admin: user.is_admin,
-                    name: user.username,
-                    address: user.address,
-                    phonenumber: user.phonenumber                    
-                },
-                config.tokenKey,
-                { expiresIn: config.tokenExpiration },
-                (err, token) => {
-                    res.json({ token });
-                }
-            );
-            return;
-        }
-    });
-}
-
 
 export function create_user(req, res) {
     const errorMessages = validateFormData(
@@ -91,8 +63,8 @@ export function create_user(req, res) {
         res.status(401).send(errorMessages);
         return;
     } else {
-        const newUser = new Users(req.body);
-        Users.addUser(newUser, function(err, insertId) {
+        const newUser = new User(req.body);
+        User.addUser(newUser, function(err, insertId) {
             if (err) {
                 res.status(400).send(err);
                 return;

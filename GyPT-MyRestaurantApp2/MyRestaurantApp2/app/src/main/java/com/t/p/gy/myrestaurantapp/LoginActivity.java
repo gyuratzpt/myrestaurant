@@ -182,16 +182,16 @@ public class LoginActivity extends AppCompatActivity {
         tryLogin("loginUser");
     }
 
-    private void registerUser(final String email,
-                              final String password,
-                              final String name,
-                              final String address,
-                              final String phone){
+    private void registerUser(final String _email,
+                              final String _password,
+                              final String _username,
+                              final String _address,
+                              final String _phonenumber){
         Log.i("myLog", "registerUser running...");
         Log.i("myLog", "Adatok: " + emailEditText.getText().toString() + " " + passwordEditText.getText().toString() + " " + regETItems[0].getText().toString()+ " " + regETItems[1].getText().toString()+ " " + regETItems[2].getText().toString());
-        myDataProcessor.registerUserV2(email, password, name, address, phone);
-        myDataProcessor.loginUserV2(email, password);
-        tryLogin("registerUser");
+        myDataProcessor.registerUserV2(_email, _password, _username, _address, _phonenumber);
+        //myDataProcessor.loginUserV2(email, password);
+        //tryLogin("registerUser");
     }
 
     private void tryLogin(String _source){

@@ -96,8 +96,8 @@ public class DataProcessor {
         try {
             netConn.registerUserV2(_email, _password, _name, _address, _phone);
         }catch (Exception e){
-            Log.i("myLog", "regisztráció hiba: " + e);
-            Log.i("myLog", settings.getString("user", "üres") + " " + e);
+            Log.i("myLog", "registerUserV2 error, regisztráció hiba: " + e);
+            Log.i("myLog", "registerUserV2 error, user data: " + settings.getString("user", "üres"));
         }
     }
     public void logout(){

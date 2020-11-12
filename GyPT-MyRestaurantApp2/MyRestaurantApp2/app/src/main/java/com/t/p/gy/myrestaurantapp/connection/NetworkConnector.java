@@ -58,7 +58,7 @@ public class NetworkConnector extends Application {
 
     //**********************USER*********************//
     public void loginUserV2(SharedPreferences _settings, String _email, String _password){
-        compositeDisposable.add(myAPI.login_get(_email, _password)
+        compositeDisposable.add(myAPI.login(_email, _password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
@@ -91,20 +91,21 @@ public class NetworkConnector extends Application {
                         }
                     }));
     }
-    public void registerUserV2(String _email, String _password, String _name, String _address, String _phone) {
-        Log.i("myLog", "Bejövő adatok regisztrációhoz: " +
+    public void registerUserV2(String _email, String _password, String _username, String _address, String _phonenumber) {
+        Log.i("myLog", "Kimenő adatok regisztrációhoz: " +
                         _email+ " "+
                         _password+ " "+
-                        _name+ " "+
+                        _username+ " "+
                         _address+ " "+
-                        _phone
+                        _phonenumber
         );
         try {
-            compositeDisposable.add(myAPI.registration(_email, _password, _name, _address, _phone)
+            compositeDisposable.add(myAPI.registration(_email, _password, _username, _address, _phonenumber)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
                         if (response.code() >= 200 && response.code() < 300) {
+                            Gson gson = new GsonBuilder().setLenient().create();
                             Log.i("myLog", "Registration successful");
                         } else {
                             Log.i("myLog", "Registration error: " + response.code() + " " + response.errorBody().string());
@@ -130,8 +131,8 @@ public class NetworkConnector extends Application {
                         for (int i = 0; i < inputJSONArray.size(); i++) {
                             downloadedDataSet.add(new SingleProductItem(
                                     Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("id").toString().replaceAll("\"", "")),
-                                    Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("categoryID").toString().replaceAll("\"", "")),
-                                    inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""),
+                                    Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("category_id").toString().replaceAll("\"", "")),
+                                    inputJSONArray.get(i).getAsJsonObject().get("product_name").toString().replaceAll("\"", ""),
                                     inputJSONArray.get(i).getAsJsonObject().get("detail").toString().replaceAll("\"", ""),
                                     Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", "")),
                                     inputJSONArray.get(i).getAsJsonObject().get("picture").toString().replaceAll("\"", "")
@@ -154,7 +155,7 @@ public class NetworkConnector extends Application {
                         if (response.code() >= 200 && response.code() < 300) {
                             JsonArray inputJSONArray = response.body().getAsJsonArray("category");
                             for (int i = 0; i < inputJSONArray.size(); i++) {
-                                catList.add(inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", ""));
+                                catList.add(inputJSONArray.get(i).getAsJsonObject().get("category_name").toString().replaceAll("\"", ""));
                             }
                         } else {
                             Log.i("myLog", "Response error: " + response.code());
@@ -193,8 +194,8 @@ public class NetworkConnector extends Application {
                     if (response.code() >= 200 && response.code() < 300) {
 
                         JsonObject inputJSONObject = response.body().getAsJsonObject("product");
-                        etCategory.setText(inputJSONObject.get("categoryID").toString().replaceAll("\"", ""));
-                        etName.setText(inputJSONObject.get("name").toString().replaceAll("\"", ""));
+                        etCategory.setText(inputJSONObject.get("category_id").toString().replaceAll("\"", ""));
+                        etName.setText(inputJSONObject.get("product_name").toString().replaceAll("\"", ""));
                         etDescription.setText(inputJSONObject.get("detail").toString().replaceAll("\"", ""));
                         etPrice.setText(inputJSONObject.get("price").toString().replaceAll("\"", ""));
                         etImage.setText(inputJSONObject.get("picture").toString().replaceAll("\"", ""));
@@ -227,7 +228,6 @@ public class NetworkConnector extends Application {
     public void setOrderToCompleted(List<Integer> _orderIDs){
         for(Integer id : _orderIDs){
             compositeDisposable.add(myAPI.finalizeOrder(id, 1)
-            //compositeDisposable.add(myAPI.finalizeOrder_Gettel(id)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
@@ -268,6 +268,11 @@ public class NetworkConnector extends Application {
                     }
                 }));
     }
+
+
+
+
+
     public List<Order> downloadOrders(){
         if(!orderList.isEmpty()) {
             orderList.clear();
@@ -277,7 +282,7 @@ public class NetworkConnector extends Application {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response.code() >= 200 && response.code() < 300) {
-                        JsonArray inputJSONArray = response.body().getAsJsonArray("order");
+                        JsonArray inputJSONArray = response.body().getAsJsonArray("orderlist");
                         for (int i = 0; i < inputJSONArray.size(); i++) {
                             int tmpOrderid = Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("orderID").toString().replaceAll("\"", ""));
                             String tmpCustomerName = inputJSONArray.get(i).getAsJsonObject().get("username").toString().replaceAll("\"", "");
@@ -322,6 +327,9 @@ public class NetworkConnector extends Application {
     }
     //**********************-----*********************//
 
+
+
+
     public Bitmap getImage(String _dir, String _str){
         Bitmap downloadedImage = null;
         try {
@@ -364,7 +372,6 @@ public class NetworkConnector extends Application {
             return outputImage;
         }
     }
-
     //kell még?
     public String getOneUserByEmail(String _email){
         compositeDisposable.add(myAPI.getOneUserByEmail(_email)
