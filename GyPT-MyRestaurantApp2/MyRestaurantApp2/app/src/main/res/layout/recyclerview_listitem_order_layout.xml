@@ -6,13 +6,46 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
+        android:id="@+id/orders_listitem_idnumbertitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rendelési szám:"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"/>
+
+    <TextView
         android:id="@+id/orders_listitem_idnumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="xxx"
 
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@id/orders_listitem_idnumbertitle"
+        app:layout_constraintStart_toEndOf="@id/orders_listitem_idnumbertitle"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"/>
+
+    <TextView
+        android:id="@+id/orders_listitem_timetitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rendelés ideje:"
+
+        app:layout_constraintTop_toBottomOf="@id/orders_listitem_idnumbertitle"
+        app:layout_constraintStart_toStartOf="@id/orders_listitem_idnumbertitle"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"/>
+
+    <TextView
+        android:id="@+id/orders_listitem_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="xxx"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/orders_listitem_timetitle"
+        app:layout_constraintStart_toEndOf="@id/orders_listitem_timetitle"
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"/>
 
@@ -22,13 +55,12 @@
         android:layout_height="wrap_content"
         android:text="Név:"
 
-        app:layout_constraintTop_toBottomOf="@id/orders_listitem_idnumber"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/orders_listitem_timetitle"
+        app:layout_constraintStart_toStartOf="@id/orders_listitem_idnumbertitle"
         app:layout_constraintEnd_toStartOf="@id/orders_listitem_name"
         app:layout_constraintHorizontal_weight="2"
 
         android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
         />
 
     <TextView
@@ -67,7 +99,9 @@
         app:layout_constraintHorizontal_weight="3"
         app:layout_constraintStart_toEndOf="@id/orders_listitem_addresstitle"
         app:layout_constraintTop_toBottomOf="@id/orders_listitem_name"
+
         android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
         />
 
 
@@ -94,7 +128,9 @@
         app:layout_constraintHorizontal_weight="3"
         app:layout_constraintStart_toEndOf="@id/orders_listitem_phonenumbertitle"
         app:layout_constraintTop_toBottomOf="@id/orders_listitem_address"
+
         android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
         />
 
     <TextView
@@ -115,7 +151,7 @@
         android:text="TextView"
 
         app:layout_constraintTop_toBottomOf="@id/orders_listitem_items_title"
-        app:layout_constraintStart_toStartOf="@id/orders_listitem_idnumber"
+        app:layout_constraintStart_toStartOf="@id/orders_listitem_idnumbertitle"
 
         android:layout_marginTop="10dp"
         />
@@ -127,7 +163,7 @@
         android:text="Egyéb információ"
         app:layout_constraintHorizontal_weight="2"
 
-        app:layout_constraintTop_toBottomOf="@id/orders_listitem_items"
+        app:layout_constraintBottom_toBottomOf="@id/orders_listitem_sentbutton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/orders_listitem_other"
 
@@ -155,6 +191,7 @@
         app:layout_constraintHorizontal_weight="1"
 
 
+        app:layout_constraintTop_toBottomOf="@id/orders_listitem_items"
         app:layout_constraintBottom_toBottomOf="@id/orders_listitem_othertitle"
         app:layout_constraintStart_toEndOf="@id/orders_listitem_other"
         app:layout_constraintEnd_toEndOf="parent"

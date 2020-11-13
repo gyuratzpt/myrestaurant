@@ -32,7 +32,7 @@ export default class Products {
 
     static getFilteredProducts(categoryID ,res) {
         conn.query(
-            `SELECT * FROM products WHERE categoryID = ?`,
+            `SELECT * FROM products WHERE category_id = ?`,
             [categoryID],
             function(err, result) {
                 if (err) {
@@ -63,7 +63,7 @@ export default class Products {
 
     static addNewItem(newItem, res) {
         conn.query(
-            'INSERT INTO `products` (`categoryID`,`name`, `detail`, `price`, `picture`) ' +
+            'INSERT INTO `products` (`category_id`,`product_name`, `detail`, `price`, `picture`) ' +
                 'VALUES (?, ?, ?, ?, ?)',
             [
                 newItem.categoryID,
@@ -103,7 +103,7 @@ export default class Products {
 
     static modifyItemByID(id, categoryID, name, detail, price, picture, res) {
         conn.query(
-            'UPDATE products SET categoryID=?, name = ?, detail = ?, price = ?, picture = ? WHERE id = ?',
+            'UPDATE products SET category_id=?, product_name = ?, detail = ?, price = ?, picture = ? WHERE id = ?',
             [categoryID, name, detail, price, picture, id],
             function(err, result) {
                 if (err) {

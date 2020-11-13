@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -26,6 +27,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class DataProcessor {
     private static DataProcessor dataProcessorInstance;
@@ -154,8 +158,8 @@ public class DataProcessor {
     public List<Order> getOrders_list(){
         return netConn.downloadOrders();
     }
-    public void setOrderToCompleted(List<Integer> _orderIDs){
-        netConn.setOrderToCompleted(_orderIDs);
+    public void setOrderToCompleted(int _id){
+        netConn.setOrderToCompleted(_id);
     }
 
     //user funkciók
@@ -259,12 +263,15 @@ public class DataProcessor {
     }
 
     //order
-    public void sendOrder(){
-        for(SingleProductItem x : cart){
-            netConn.sendOrder(user.getId(), x);
-        }
-        Log.i("myLog", "sendOrder finish");
+    public void initOrder(String _note) {
+        netConn.initOrder(user.getId(), _note);
     }
+    public void fillOrder() {
+        for(SingleProductItem x : cart) {
+            netConn.fillOrder(x.getID(), x.getCartAmount());
+        }
+    }
+
 
     //BRIDGE metódusok NetworkConnector felé
     //közös

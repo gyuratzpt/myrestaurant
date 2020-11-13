@@ -2,6 +2,7 @@ package com.t.p.gy.myrestaurantapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -59,8 +60,14 @@ public class OrderInfoActivity extends AppCompatActivity {
                 if (myDataProcessor.getCart().size()>0) {
                     Log.i("myLog", "Kosár tartalma: " + myDataProcessor.getCart().toString());
                     Toast.makeText(OrderInfoActivity.this, "Rendelés elküldve!", Toast.LENGTH_LONG).show();
-                    myDataProcessor.sendOrder();
-                    myDataProcessor.getCart().clear();
+                    myDataProcessor.initOrder(etAdditional.getText().toString());
+                    Handler h = new Handler();
+                    Runnable r = () -> {
+                        Log.i("myLog", "Kések");
+                        myDataProcessor.fillOrder();
+                        myDataProcessor.getCart().clear();
+                    };
+                    h.postDelayed(r, 250);
                 }
                 else Toast.makeText(OrderInfoActivity.this, "Üres rendelést nem lehet leadni!", Toast.LENGTH_LONG).show();
             }

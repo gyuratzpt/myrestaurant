@@ -22,6 +22,8 @@ import com.t.p.gy.myrestaurantapp.data.Order;
 import com.t.p.gy.myrestaurantapp.data.SingleProductItem;
 import com.t.p.gy.myrestaurantapp.data.User;
 
+import org.json.JSONObject;
+
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -40,6 +42,9 @@ public class NetworkConnector extends Application {
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private List<Order> orderList = new ArrayList<>();
     private String ipAddress = "http://10.0.2.2:3000/";
+
+
+    private int actualorderid;
 
     private NetworkConnector(){
         Retrofit retrofit = RetrofitClient.getInstance();
@@ -166,6 +171,8 @@ public class NetworkConnector extends Application {
         }
         return catList;
     }
+
+    /*
     public void sendOrder(int _userId, SingleProductItem x){
         Log.i("myLog", "termék: " + x);
         //userID - productID - amount
@@ -180,6 +187,59 @@ public class NetworkConnector extends Application {
                 })
         );
     }
+*/
+
+    public void initOrder(int _userid, String _note){
+        actualorderid = 0;
+        Log.i("myLog", "InitOrder running...");
+        compositeDisposable.add(myAPI.initOrder(_userid, _note)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.code() >= 200 && response.code() < 300) {
+                        Log.i("myLog", "InitOrder ok, response: " + response + ", response message: " + response.message());
+                        JsonObject inputJSONObject = response.body().getAsJsonObject("result");
+                        Log.i("myLog", "resp adata: " + inputJSONObject.toString());
+                        int orderId = inputJSONObject.get("insertId").getAsInt();
+                        Log.i("myLog", "Új order száma: " + orderId);
+                        actualorderid = orderId;
+                    } else {
+                        Log.i("myLog", "InitOrder ok, response error: " + response.code() + " " + response.errorBody().string());
+                    }
+        }));
+    }
+
+    public void fillOrder(int _productid, int _amount) {
+        Log.i("myLog", "fillOrder start, actualorder id értéke: " + actualorderid);
+        Log.i("myLog", "fillOrder running...");
+        compositeDisposable.add(myAPI.fillOrder(actualorderid, _productid, _amount)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.code() >= 200 && response.code() < 300) {
+                        Log.i("myLog", "fillOrder ok, response: " + response + ", response message: " + response.message());
+                    } else {
+                        Log.i("myLog", "fillOrder ok, response error: " + response.code() + " " + response.errorBody().string());
+                    }
+                }));
+    }
+
+
+
+    public void initOrder_original(int _userid, String _note){
+        compositeDisposable.add(myAPI.initOrder(_userid, _note)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    Log.i("myLog", "CreateItem ok, code: " + response);
+                }, throwable -> {
+                    //Toast.makeText(this, "Drink added successfully!", Toast.LENGTH_SHORT).show();
+                    Log.i("myLog", "Miért throwable????");
+                })
+        );
+    }
+
+
     //**********************----*********************//
 
 
@@ -225,20 +285,17 @@ public class NetworkConnector extends Application {
             return false;
         }
     }
-    public void setOrderToCompleted(List<Integer> _orderIDs){
-        for(Integer id : _orderIDs){
-            compositeDisposable.add(myAPI.finalizeOrder(id, 1)
+    public void setOrderToCompleted(int _id){
+            compositeDisposable.add(myAPI.finalizeOrder(_id, 1)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
-                        //Log.i("myLog", response.body().toString());
                         if (response.code() >= 200 && response.code() < 300){
                             Log.i("myLog", "setOrderToCompleted response code: " + response.toString());
                         } else {
                             Log.i("myLog", "setOrderToCompleted error, code: " + response.toString());
                         }
                     }));
-        }
     }
     public void createNewItem(final Integer category, final String name, final String description, final Integer price,final String picture){
         Log.i("myLog", "createNewItem adatok: " + category + " " + name + " " + price + " " + picture);
@@ -271,8 +328,6 @@ public class NetworkConnector extends Application {
 
 
 
-
-
     public List<Order> downloadOrders(){
         if(!orderList.isEmpty()) {
             orderList.clear();
@@ -284,22 +339,27 @@ public class NetworkConnector extends Application {
                     if (response.code() >= 200 && response.code() < 300) {
                         JsonArray inputJSONArray = response.body().getAsJsonArray("orderlist");
                         for (int i = 0; i < inputJSONArray.size(); i++) {
-                            int tmpOrderid = Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("orderID").toString().replaceAll("\"", ""));
-                            String tmpCustomerName = inputJSONArray.get(i).getAsJsonObject().get("username").toString().replaceAll("\"", "");
-
+                            int tmpOrderID = Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("id").toString().replaceAll("\"", ""));
+                            String tmpCustomerName = inputJSONArray.get(i).getAsJsonObject().get("user_name").toString().replaceAll("\"", "");
                             String tmpCustomerAddress = inputJSONArray.get(i).getAsJsonObject().get("address").toString().replaceAll("\"", "");
                             String tmpCustomerPhoneNumber = inputJSONArray.get(i).getAsJsonObject().get("phonenumber").toString().replaceAll("\"", "");
+                            String tmpOrderNote = inputJSONArray.get(i).getAsJsonObject().get("note").toString().replaceAll("\"", "");
+                            String tmpOrderTime = inputJSONArray.get(i).getAsJsonObject().get("order_date").toString().replaceAll("\"", "");
 
-                            String tmpItemName = inputJSONArray.get(i).getAsJsonObject().get("name").toString().replaceAll("\"", "");
+
+
+                            String tmpItemName = inputJSONArray.get(i).getAsJsonObject().get("product_name").toString().replaceAll("\"", "");
                             int tmpAmount = Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("amount").toString().replaceAll("\"", ""));
                             int tmpPrice = Integer.parseInt(inputJSONArray.get(i).getAsJsonObject().get("price").toString().replaceAll("\"", ""));
 
-                            if (orderList.isEmpty() || !isCustomerHasOrder(tmpCustomerName)) {
-                                Log.i("myLog", "Üres lista: " + Boolean.toString(orderList.isEmpty()) + ", vagy nem létező felhasználó: " + Boolean.toString(!isCustomerHasOrder(tmpCustomerName)) + ", hozzáadás!");
-                                orderList.add(new Order(tmpCustomerName, tmpCustomerAddress, tmpCustomerPhoneNumber, "2020.02.22"));
+
+                            if (orderList.isEmpty() || !isOrderIDExist(tmpOrderID)) {
+                                Log.i("myLog", "Üres lista: " + orderList.isEmpty() + ", vagy még nem létező megrendelésszám: " + Boolean.toString(!isOrderIDExist(tmpOrderID)) + ", listához adás!");
+                                orderList.add(new Order(tmpOrderID, tmpCustomerName, tmpCustomerAddress, tmpCustomerPhoneNumber, tmpOrderNote,  tmpOrderTime));
                             }
-                            orderList.get(getOrderPosition(tmpCustomerName)).addSOIItem(tmpOrderid, tmpItemName, tmpAmount, tmpPrice);
+                            orderList.get(getOrderPosition(tmpOrderID)).addSOIItem(tmpItemName, tmpAmount, tmpPrice);
                         }
+                        Log.i("myLog", "Rendelések: " + orderList.toString());
                     }
                     else {
                         Log.i("myLog", "AdminOrders error: " + response.code() + " " + response.errorBody().string());
@@ -309,20 +369,18 @@ public class NetworkConnector extends Application {
         Log.i("myLog", "végleges orderList: " + orderList);
         return orderList;
     }
-    private boolean isCustomerHasOrder(String _name){
-        Log.i("myLog", "isCustomerHasOrder: " + _name);
+    private boolean isOrderIDExist(int _id){
         for(Order x : orderList){
-            if (x.getCustomer().equals(_name)) return true;
+            if (x.getOrderID() == _id) return true;
         }
         return false;
     }
-    private int getOrderPosition(String _name){
-        Log.i("myLog", "getOrderID: " + _name);
+
+    private int getOrderPosition(int _id){
         int i = 0;
-        while (!orderList.get(i).getCustomer().equals(_name)){
+        while (orderList.get(i).getOrderID() != _id){
             i++;
         }
-        Log.i("myLog", "getOrderID: " + i);
         return i;
     }
     //**********************-----*********************//

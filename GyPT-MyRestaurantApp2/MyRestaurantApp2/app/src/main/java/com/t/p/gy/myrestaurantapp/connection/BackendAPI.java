@@ -60,9 +60,14 @@ public interface BackendAPI {
     //order műveletek
     @FormUrlEncoded
     @POST("/api/v1/orders")
-    Observable<Response<JsonObject>> writeOrder(@Field("userid") int userID,
-                                                @Field("productid") int productID,
-                                                  @Field("amount") int amount);
+    Observable<Response<JsonObject>> initOrder(@Field("userid") int userid,
+                                                  @Field("note") String note);
+
+    @FormUrlEncoded
+    @POST("/api/v1/orders/items")
+    Observable<Response<JsonObject>> fillOrder(@Field("orderid") int orderid,
+                                               @Field("productid") int productid,
+                                                @Field("amount") int amount);
 
     @FormUrlEncoded
     @HTTP(method = "PUT", path = "/api/v1/orders/put/{id}", hasBody = true)

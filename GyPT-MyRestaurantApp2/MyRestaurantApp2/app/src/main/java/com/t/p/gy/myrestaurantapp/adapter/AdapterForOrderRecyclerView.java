@@ -19,6 +19,7 @@ import com.t.p.gy.myrestaurantapp.data.SingleProductItem;
 import com.t.p.gy.myrestaurantapp.other.AdminDialog;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterForOrderRecyclerView.ViewHolder> {
@@ -29,32 +30,32 @@ public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterFor
 
     //egy listaelem elemei
     protected class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView customerName,
+        private TextView orderID,
+                orderTime,
+                customerName,
                 customerAddress,
                 customerPhoneNumber,
                 itemList,
-                other;
+                note;
         private Button sentButton;
 
 
         private ViewHolder(View itemView) {
             super(itemView);
+            orderID = (TextView) itemView.findViewById(R.id.orders_listitem_idnumber);
+            orderTime = (TextView) itemView.findViewById(R.id.orders_listitem_time);
             customerName = (TextView) itemView.findViewById(R.id.orders_listitem_name);
             customerAddress = (TextView) itemView.findViewById(R.id.orders_listitem_address);
             customerPhoneNumber = (TextView) itemView.findViewById(R.id.orders_listitem_phonenumber);
             itemList = (TextView) itemView.findViewById(R.id.orders_listitem_items);
-            other = (TextView) itemView.findViewById(R.id.orders_listitem_other);
+            note = (TextView) itemView.findViewById(R.id.orders_listitem_other);
             sentButton = (Button) itemView.findViewById(R.id.orders_listitem_sentbutton);
         }
     }
 
     public AdapterForOrderRecyclerView(Context _context) {
         context = _context;
-        /*
-        if(ordersList != null && !ordersList.isEmpty()) {
-            ordersList.clear();
-        }
-*/
+
         if (ordersList != null) Log.i("myLog", "Order adapter listája get előtt: " + ordersList.toString());
         ordersList = myDp.getOrders_list();
         Log.i("myLog", "Order adapter listája get után: " + ordersList.toString());
@@ -79,13 +80,16 @@ public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterFor
     @Override
 //adatfeltöltés az egyes elemekhez
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Log.i("myLog", "Order adapter listája onBindViewHolder-ben: " + ordersList.toString());
+        //Log.i("myLog", "Order adapter listája onBindViewHolder-ben: " + ordersList.toString());
         final Order o = ordersList.get(position);
-        holder.customerName.setText(o.getCustomer());
+        holder.orderID.setText(Integer.toString(o.getOrderID()));
+        holder.orderTime.setText(o.getOrderTime());
+        holder.customerName.setText(o.getCustomerName());
         holder.customerAddress.setText(o.getCustomerAddress());
         holder.customerPhoneNumber.setText(o.getCustomerPhoneNumber());
         holder.itemList.setText(o.toString());
-        holder.other.setText(o.getOrderTime());
+        holder.note.setText(o.getOrderNote());
+
 
         holder.sentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +99,7 @@ public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterFor
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setPositiveButton("Igen", (dialog, id) -> {
-                    myDp.setOrderToCompleted(o.getOrderIDs());
+                    myDp.setOrderToCompleted(o.getOrderID());
                     Log.i("myLog", "Törölt elem: " + ordersList.get(holder.getLayoutPosition()).toString());
                     ordersList.remove(holder.getLayoutPosition());
                     notifyItemRemoved(holder.getLayoutPosition());
@@ -107,6 +111,7 @@ public class AdapterForOrderRecyclerView extends RecyclerView.Adapter<AdapterFor
                 alert.show();
             }
         });
+
     }
 }
 

@@ -3,7 +3,7 @@ import { conn } from '../../app';
 
 
 
-export default class Categories {
+export default class Category {
     constructor(categoryItem) {
         this.id = categoryItem.id;
         this.name = categoryItem.name;
