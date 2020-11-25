@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,7 +19,7 @@ import android.widget.Toast;
 import com.t.p.gy.myrestaurantapp.data.DataProcessor;
 
 public class MainActivity extends AppCompatActivity {
-    DataProcessor myDataProcessor = DataProcessor.getInstance();;
+    DataProcessor myDataProcessor = DataProcessor.getInstance();
 
     //UI
     ImageView logo_imageView, actual_story_imageView, menu_imageView, gallery_imageView, contact_imageView;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_v2);
-
+        Log.i("myLog", "Felhasználó jelenlegi adatai:\n" +  myDataProcessor.getUserName() + "\n" + myDataProcessor.getUserAddress() + "\n" + myDataProcessor.getUserPhoneNumber());
         initUI();
         if (myDataProcessor.isUserAdmin()) initAdmin();
 

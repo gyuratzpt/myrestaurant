@@ -11,8 +11,8 @@ public class SingleProductItem {
     private int price;
     private String imageName;
 
-    private int mOrderAmount; //listview miatt, különben scrollozáskor elfeljtheti a korábbi értéket
-    private int mCartAmount;
+    private int orderAmount; //listview miatt, különben scrollozáskor elfeljtheti a korábbi értéket
+    private int cartAmount;
 
     public SingleProductItem(Integer _id, int _cat, String _name, String _detail, int _price, String _imageName) {
         idNumber = _id;
@@ -21,8 +21,8 @@ public class SingleProductItem {
         detail = _detail;
         price = _price;
         imageName = _imageName;
-        mOrderAmount = 0;
-        mCartAmount = 0;
+        orderAmount = 0;
+        cartAmount = 0;
     }
 
     //GETTER-ek
@@ -39,55 +39,50 @@ public class SingleProductItem {
     public int getID() {
         return idNumber;
     }
-
-
     public int getPrice() {
         return price;
     }
     public int getOrderAmount(){
-        return mOrderAmount;
+        return orderAmount;
     }
     public int getCartAmount(){
-        return mCartAmount;
+        return cartAmount;
     }
 
 
     //SETTER-ek
 
-    public void setCategory(int mCategory) {
-        this.category = mCategory;
+    public void setCategory(int _category) {
+        this.category = _category;
     }
-    public void setName(String mName) {
-        this.name = mName;
+    public void setName(String _name) {
+        this.name = _name;
     }
-    public void setDetail(String mDetail) {
-        this.detail = mDetail;
+    public void setDetail(String _detail) {
+        this.detail = _detail;
     }
-    public void setPrice(int mPrice) {
-        this.price = mPrice;
+    public void setPrice(int _price) {
+        this.price = _price;
     }
-    public void setImageName(String mName) {this.imageName = mName;}
+    public void setImageName(String _imgName) {this.imageName = _imgName;}
     public void setOrderAmount(boolean bool){
         Log.i("Bool is", String.valueOf(bool));
         if (bool) {
-            Log.i("Előtte:", this.name + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
-            mOrderAmount++;
-            Log.i("Utána:", this.name + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
+            Log.i("Előtte:", this.name + ": " + String.valueOf(this.orderAmount)+" Cart: " + String.valueOf(this.cartAmount));
+            orderAmount++;
+            Log.i("Utána:", this.name + ": " + String.valueOf(this.orderAmount)+" Cart: " + String.valueOf(this.cartAmount));
         }
-        else if (!bool && mOrderAmount>0){
-            Log.i("Előtte:", this.name + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
-            mOrderAmount--;
-            Log.i("Utána:", this.name + ": " + String.valueOf(this.mOrderAmount)+" Cart: " + String.valueOf(this.mCartAmount));
+        else if (!bool && orderAmount >0){
+            Log.i("Előtte:", this.name + ": " + String.valueOf(this.orderAmount)+" Cart: " + String.valueOf(this.cartAmount));
+            orderAmount--;
+            Log.i("Utána:", this.name + ": " + String.valueOf(this.orderAmount)+" Cart: " + String.valueOf(this.cartAmount));
         }
     }
-    public void setCartAmount(int x){if (x>=0)this.mCartAmount=x;}
-
+    public void setCartAmount(int x){if (x>=0)this.cartAmount =x;}
     //egyéb
     public void resetOrderAmount(){
-        mOrderAmount=0;
+        orderAmount =0;
     }
-
-
 
 }
 

@@ -39,7 +39,7 @@ export function login_user(req, res) {
                     id: user.id,
                     email: user.email,
                     is_admin: user.is_admin,
-                    name: user.username,
+                    name: user.user_name,
                     address: user.address,
                     phonenumber: user.phonenumber                    
                 },
@@ -69,11 +69,27 @@ export function create_user(req, res) {
                 res.status(400).send(err);
                 return;
             } else {
-                res.status(200).send(
-                    `Inserted new user with the ID: ${insertId}`
-                );
+                res.status(200).json({insertId})
                 return;
             }
         });
     }
 }
+
+export function modify_users_item(req, res) {
+    User.modifyUserByID(
+        req.params.id,
+        req.body.name,
+        req.body.address,
+        req.body.phonenumber,
+        function(err, result) {
+            if (err) {
+                res.status(400).send(err);
+                return;
+            } else {
+                res.status(200).send({
+                    message: `Data successfully updated for ${req.params.id}!`});
+                return;
+            }
+        });
+    } 

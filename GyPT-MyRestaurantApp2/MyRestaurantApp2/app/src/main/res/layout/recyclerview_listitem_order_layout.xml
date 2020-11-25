@@ -163,11 +163,12 @@
         android:text="Egyéb információ"
         app:layout_constraintHorizontal_weight="2"
 
-        app:layout_constraintBottom_toBottomOf="@id/orders_listitem_sentbutton"
+        app:layout_constraintTop_toTopOf="@id/orders_listitem_other"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/orders_listitem_other"
 
-        android:layout_marginTop="10dp"
+
         android:layout_marginBottom="10dp"
         android:layout_marginStart="10dp"/>
 
@@ -178,10 +179,13 @@
         android:text="lorem ipsum"
         app:layout_constraintHorizontal_weight="2"
 
-        app:layout_constraintBottom_toBottomOf="@id/orders_listitem_othertitle"
+        app:layout_constraintTop_toBottomOf="@id/orders_listitem_items"
+
         app:layout_constraintStart_toEndOf="@id/orders_listitem_othertitle"
         app:layout_constraintEnd_toStartOf="@id/orders_listitem_sentbutton"
-    />
+
+        android:layout_marginTop="10dp"
+        />
 
     <Button
         android:id="@+id/orders_listitem_sentbutton"
@@ -191,12 +195,10 @@
         app:layout_constraintHorizontal_weight="1"
 
 
-        app:layout_constraintTop_toBottomOf="@id/orders_listitem_items"
-        app:layout_constraintBottom_toBottomOf="@id/orders_listitem_othertitle"
+        app:layout_constraintBottom_toBottomOf="@id/orders_listitem_other"
         app:layout_constraintStart_toEndOf="@id/orders_listitem_other"
         app:layout_constraintEnd_toEndOf="parent"
 
-        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         />
 

@@ -11,7 +11,6 @@ public class RetrofitClient {
     private static Retrofit instance;
     public static Retrofit getInstance() {
         if(instance == null)
-            Log.i("myLog", "új Retrofit születőben...");
             instance = new Retrofit.Builder()
                     // Use "10.0.2.2" ip if you deploy to virtual device
                     // Use "192.168.29.114" ip if you deploy to physical device

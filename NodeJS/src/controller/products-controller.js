@@ -46,8 +46,8 @@ export function delete_products_item(req, res) {
             res.status(404).send(errorMessages.get(404));
             return;
         } else {
-            res.status(200).send(
-                `Drinks item with ${req.params.id} name successfully deleted!`);
+            res.status(200).send({
+                message: `Product item with ${req.params.id} name successfully deleted!`});
             return;
         }
     });
@@ -62,8 +62,8 @@ export function delete_products_item(req, res) {
                 res.status(400).send(err);
                 return;
             } else {
-                res.status(200).send(
-                `Picked up new item with the ID: ${insertId}.`);
+                res.status(200).send({
+                message: `Picked up new item with the ID: ${insertId}.`});
                 return;
             }
         });

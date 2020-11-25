@@ -105,6 +105,4 @@ public class GalleryActivity extends AppCompatActivity {
     }
     //******************Action bar********************//
 
-
-
 }

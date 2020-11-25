@@ -19,7 +19,12 @@ export default function(router) {
     );
 
     router.post(
-        '/register', 
+        '/registration', 
         users.create_user
     );
+
+    router.put(
+        '/users/put/:id',
+        users.modify_users_item
+    )
 }

@@ -29,6 +29,29 @@ public class ContactActivity extends AppCompatActivity {
         Log.v("MyLog","ContactActivity OK");
     }
 
+    //******************Action bar********************//
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.cart:
+                Intent myIntent = new Intent(ContactActivity.this, CartActivity.class);
+                startActivity(myIntent);
+                return true;
+            case R.id.logout:
+                myDataProcessor.initLogoutOption(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    //******************Action bar********************//
+
     public void sendEmail(View view) {
         EditText messageField = (EditText) findViewById(R.id.emailEditText);
         Intent intent = new Intent(Intent.ACTION_SENDTO);
@@ -52,27 +75,4 @@ public class ContactActivity extends AppCompatActivity {
         }
 
     }
-
-    //******************Action bar********************//
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.cart:
-                Intent myIntent = new Intent(ContactActivity.this, CartActivity.class);
-                startActivity(myIntent);
-                return true;
-            case R.id.logout:
-                myDataProcessor.initLogoutOption(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-    //******************Action bar********************//
 }

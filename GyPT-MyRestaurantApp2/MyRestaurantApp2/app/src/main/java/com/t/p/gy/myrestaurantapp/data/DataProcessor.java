@@ -4,40 +4,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.t.p.gy.myrestaurantapp.CartActivity;
 import com.t.p.gy.myrestaurantapp.LoginActivity;
-import com.t.p.gy.myrestaurantapp.MainActivity;
-import com.t.p.gy.myrestaurantapp.R;
 import com.t.p.gy.myrestaurantapp.connection.NetworkConnector;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class DataProcessor {
     private static DataProcessor dataProcessorInstance;
 
     //user
     private User user;
-    Gson gson = new GsonBuilder().setLenient().create();
-    SharedPreferences settings;
+    private Gson gson = new GsonBuilder().setLenient().create();
+    private SharedPreferences localStoredSettings;
 
     //listák
     private List<SingleProductItem> cart = new ArrayList<>();
@@ -55,29 +44,27 @@ public class DataProcessor {
     }
     public static DataProcessor getInstance(){
         if (dataProcessorInstance == null){
-            Log.i("myLog", "új DataProcessor születőben...");
             dataProcessorInstance = new DataProcessor();
         }
         return dataProcessorInstance;
     }
 
-    //User
+    //**********************USER*********************//
     public void initSP(Context _context){
-        settings = PreferenceManager.getDefaultSharedPreferences(_context); //kell külön a context miatt!(?)
+        localStoredSettings = PreferenceManager.getDefaultSharedPreferences(_context); //kell külön a context miatt!(?)
     }
     public boolean checkUserToken(){
-        final String token = settings.getString("token", "not found");
-        Log.i("myLog", "usertoken: " + token);
-        final String userData = settings.getString("user", "not found");
-        Log.i("myLog", "userData: " + userData);
-        if(!userData.equals("not found")) user = gson.fromJson(settings.getString("user","{}"), User.class);
+        final String token = localStoredSettings.getString("token", "not found");
+        Log.i("myLog", "checkUserToken usertoken: " + token);
+        final String userData = localStoredSettings.getString("user", "not found");
+        Log.i("myLog", "checkUserToken userData: " + userData);
+        if(!userData.equals("not found")) user = gson.fromJson(localStoredSettings.getString("user","{}"), User.class);
         return !token.equals("not found") || !userData.equals("not found");
     }
     public boolean isUserAdmin(){
         if(user.getIs_admin()==1) return true;
         else return false;
     }
-
     public String getUserName(){
         return user.getName();
     }
@@ -87,83 +74,73 @@ public class DataProcessor {
     public String getUserPhoneNumber(){
         return user.getPhoneNumber();
     }
-
-    public void loginUserV2(String _email, String _password){
+    public void setUserName(String _newName){user.setName(_newName);}
+    public void setUserAddress(String _newAddress){user.setAddress(_newAddress);}
+    public void setUserPhoneNumber(String _newPhonenumber){user.setPhoneNumber(_newPhonenumber);}
+    public void loginUserV2(Context _context, String _email, String _password){
         try {
-            netConn.loginUserV2(settings, _email, _password );
+            netConn.loginUserV2(localStoredSettings, _context, _email, _password );
         }catch (Exception e){
             Log.i("myLog", "login hiba: " + e);
-            Log.i("myLog", settings.getString("user", "üres") + " " + e);
+            Log.i("myLog", localStoredSettings.getString("user", "üres") + " " + e);
         }
     }
-    public void registerUserV2(String _email, String _password, String _name, String _address, String _phone){
+    public void registerUserV2(Context _context, String _email, String _password, String _name, String _address, String _phoneNumber){
         try {
-            netConn.registerUserV2(_email, _password, _name, _address, _phone);
+            netConn.registerUserV2(_context, _email, _password, _name, _address, _phoneNumber);
+            //loginUserV2(_context, _email, _password);
         }catch (Exception e){
             Log.i("myLog", "registerUserV2 error, regisztráció hiba: " + e);
-            Log.i("myLog", "registerUserV2 error, user data: " + settings.getString("user", "üres"));
         }
     }
     public void logout(){
-        settings.edit().remove("token").apply();
-        settings.edit().remove("user").apply();
+        localStoredSettings.edit().remove("token").apply();
+        localStoredSettings.edit().remove("user").apply();
         cart.clear();
     }
-
-
-
-
-
-
-
-
-
-
-
-    //közös funkciók
-/*
-    public static Map getDrawableMap(){
-        return drawableMap;
+    public void updateUser(){
+        netConn.updateUser(user.getID(), user.getName(), user.getAddress(), user.getPhoneNumber());
     }
-    public void setDrawableMap(Map _drawableMap){
-        this.drawableMap = _drawableMap;
+    public void initLogoutOption(Context _context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+        builder.setPositiveButton("Igen", (dialog, id) -> {
+            logout();
+            _context.startActivity(new Intent(_context, LoginActivity.class));
+            Toast.makeText(_context, "Kilépés", Toast.LENGTH_LONG).show();
+        });
+        builder.setNegativeButton("Mégsem", (dialog, id) -> {
+        });
+        AlertDialog alert = builder.create();
+        alert.setTitle("Biztos kilépsz az alkalmazásból?");
+        alert.show();
     }
-*/
-
-
-
+    //**********************----*********************//
     //admin funkciók
-    //admin/database
     public void addItemToDatabase(int _category, String _name, String _desc, int _price, String _image){
         Log.i("myLog", "addItemToDatabase running...");
         netConn.createNewItem(_category, _name,  _desc,  _price,  _image);
     }
-    public void getItemFromDatabase(int _id, EditText etCategory, EditText etName, EditText etDescription, EditText etPrice, EditText etImage){
-        Log.i("myLog", "getItemFromDatabase running...");
-        netConn.getItem(_id, etCategory, etName, etDescription, etPrice, etImage);
+    public void getItemFromDatabase(int _id, Spinner _categorySpinner, EditText _etName, EditText _etDescription, EditText _etPrice, EditText _etImage){
+        //Log.i("myLog", "getItemFromDatabase running...");
+        netConn.getItem(_id, _categorySpinner, _etName, _etDescription, _etPrice, _etImage);
     }
     public void modifyDatabaseItem(int _id, int _category, String _name, String _desc, int _price, String _image){
         Log.i("myLog", "modifyDatabaseItem running...");
         netConn.modifyDatabaseItem(_id, _category, _name,  _desc,  _price,  _image);
     }
-    public void deleteProductItem(int _prodId){
-        netConn.deleteProduct(_prodId);
+    public void deleteProductItem(int _id){
+        netConn.deleteProduct(_id);
     }
-    //admin/list
     public void addItemToList(SingleProductItem _spi){
         productList.add(_spi);
     }
-
-    //admin/order
-    public List<Order> getOrders_list(){
+    public List<Order> getOrdersList(){
         return netConn.downloadOrders();
     }
     public void setOrderToCompleted(int _id){
         netConn.setOrderToCompleted(_id);
     }
-
     //user funkciók
-
     public List<SingleProductItem> getProductList(int _cat){
         if(_cat==0){
             return productList;
@@ -203,7 +180,6 @@ public class DataProcessor {
         }
         return sum;
     }
-
     //kosár funkciók
     public List<SingleProductItem> getCart(){
         return cart;
@@ -211,7 +187,7 @@ public class DataProcessor {
     public int getCartFullPrice(){
         int total = 0;
         for(SingleProductItem x : cart){
-            Log.i("myLog", x.getName() + " "+ x.getCartAmount());
+            //Log.i("myLog", x.getName() + " "+ x.getCartAmount());
             total += x.getCartAmount()*x.getPrice();
         }
         return total;
@@ -243,7 +219,6 @@ public class DataProcessor {
                     });
                     //Creating dialog box
                     AlertDialog alert = builder.create();
-
                     alert.setTitle(x.getName());
                     alert.show();
                 }
@@ -251,8 +226,8 @@ public class DataProcessor {
         }
         return notEmpty;
     }
-    public void deleteItemFromCart(SingleProductItem inputSPI, TextView _tv){
-        cart.remove(inputSPI);
+    public void deleteItemFromCart(SingleProductItem _inputSPI, TextView _tv){
+        cart.remove(_inputSPI);
         refreshCartFinalPrice(_tv);
     }
     public void refreshCartFinalPrice(TextView _tv){
@@ -261,40 +236,21 @@ public class DataProcessor {
     public void refreshCartActivityView(){
         CartActivity.refreshPriceTextView(getCartFullPrice());
     }
-
     //order
     public void initOrder(String _note) {
-        netConn.initOrder(user.getId(), _note);
+        netConn.initOrder(user.getID(), _note);
+    }
+    public int getActualOrderID(){
+        return netConn.getActualOrderID();
     }
     public void fillOrder() {
         for(SingleProductItem x : cart) {
             netConn.fillOrder(x.getID(), x.getCartAmount());
         }
     }
-
-
-    //BRIDGE metódusok NetworkConnector felé
     //közös
     public Bitmap getImage(String _dir, String _str){
         Bitmap bmp = netConn.getImage(_dir, _str);
         return bmp;
-    }
-    //LoginActivity
-
-
-
-
-    public void initLogoutOption(Context _context){
-        AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-        builder.setPositiveButton("Igen", (dialog, id) -> {
-            logout();
-            _context.startActivity(new Intent(_context, LoginActivity.class));
-            Toast.makeText(_context, "Kilépés", Toast.LENGTH_LONG).show();
-        });
-        builder.setNegativeButton("Mégsem", (dialog, id) -> {
-        });
-        AlertDialog alert = builder.create();
-        alert.setTitle("Biztos kilépsz az alkalmazásból?");
-        alert.show();
     }
 }

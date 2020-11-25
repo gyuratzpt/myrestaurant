@@ -26,11 +26,11 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 public class CartActivity extends AppCompatActivity{
     DataProcessor myDataProcessor = DataProcessor.getInstance();
+    RecyclerView.Adapter cartRecyclerViewAdapter;
 
     //UI
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter recyclerViewAdapter;
-    private TextView tv_price;
+    RecyclerView cartRecyclerView;
+    TextView tv_price;
     static TextView tv_price_new;
 
 
@@ -41,13 +41,13 @@ public class CartActivity extends AppCompatActivity{
 
         initUI();
 
-        recyclerView = (RecyclerView) findViewById(R.id.cart_layout_recyclerview) ;
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewAdapter = new AdapterForCartRecyclerView(getApplicationContext(), tv_price);
+        cartRecyclerView = (RecyclerView) findViewById(R.id.cart_layout_recyclerview) ;
+        cartRecyclerView.setHasFixedSize(true);
+        cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        cartRecyclerViewAdapter = new AdapterForCartRecyclerView(getApplicationContext(), tv_price);
         DividerItemDecoration decoration = new DividerItemDecoration(this, VERTICAL);
-        recyclerView.addItemDecoration(decoration);
-        recyclerView.setAdapter(recyclerViewAdapter);
+        cartRecyclerView.addItemDecoration(decoration);
+        cartRecyclerView.setAdapter(cartRecyclerViewAdapter);
         Log.v("MyLog","CartActivity Konstruktor kész");
     }
 
@@ -82,9 +82,12 @@ public class CartActivity extends AppCompatActivity{
         nextPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (myDataProcessor.getCart().size()>0) {
                 Intent myIntent = new Intent(CartActivity.this,
                         OrderInfoActivity.class);
                 startActivity(myIntent);
+
+                } else Toast.makeText(CartActivity.this, "Üres rendelést nem lehet leadni!", Toast.LENGTH_LONG).show();
             }
         });
     }

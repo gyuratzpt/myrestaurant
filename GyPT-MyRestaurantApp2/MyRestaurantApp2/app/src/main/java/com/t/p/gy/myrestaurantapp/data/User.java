@@ -13,7 +13,7 @@ public class User{
     private String phoneNumber;
     private Date updated_at;
 
-    public Integer getId() {
+    public Integer getID() {
         return id;
     }
     public String getEmail() {
@@ -34,23 +34,23 @@ public class User{
 
 
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setID(Integer _id) {
+        this.id = _id;
     }
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmail(String _email) {
+        this.email = _email;
     }
-    public void setIs_admin(int is_admin) {
-        this.is_admin = is_admin;
+    public void setIs_admin(int _is_admin) {
+        this.is_admin = _is_admin;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String _name) {
+        this.name = _name;
     }
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAddress(String _address) {
+        this.address = _address;
     }
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhoneNumber(String _phoneNumber) {
+        this.phoneNumber = _phoneNumber;
     }
 
 
@@ -58,7 +58,7 @@ public class User{
     public Date getUpdated_at() {
         return updated_at;
     }
-    public void setUpdated_at(Date updated_at) {
-        this.updated_at = updated_at;
+    public void setUpdated_at(Date _updated_at) {
+        this.updated_at = _updated_at;
     }
 }

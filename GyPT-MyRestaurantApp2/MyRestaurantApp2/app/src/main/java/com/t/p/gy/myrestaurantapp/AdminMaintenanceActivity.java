@@ -27,12 +27,10 @@ import java.util.List;
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 public class AdminMaintenanceActivity extends AppCompatActivity{
-    private RecyclerView.Adapter adminRecyclerViewAdapter;
+    RecyclerView.Adapter adminRecyclerViewAdapter;
 
     //UI
-    private RecyclerView adminRecyclerView;
-
-    //static Map<String, Integer> drawableMap;
+    RecyclerView adminRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

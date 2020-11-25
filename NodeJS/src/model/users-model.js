@@ -54,14 +54,14 @@ export default class User {
                     }
                     if (result.length === 0) {
                         console.log('No such registered email address, result length === 0');
-                        res('Wrong email address given', null);
+                        res('Nem létező email cím', null);
                     } else {
                         if (result[0].password == req.query.password){
                             console.log('Login OK');
                             res(null, result[0]);
                         }else{
                             console.log('Passord not matches');
-                            res('Wrong user password given!', null);
+                            res('A megadott jelszó nem megfelelő!', null);
                         }
                     }
                 }
@@ -77,7 +77,7 @@ export default class User {
                         return res(err, null);
                     }
                     else if (result.length > 0) {
-                        res('Email address already in use!', null);
+                        res('Ez az email cím már regisztrálva van!', null);
                         return;
                     } else {
                         conn.query(
@@ -138,6 +138,22 @@ export default class User {
                                 }
                             }
                         );
+                    }
+                }
+            );
+        }
+
+        static modifyUserByID(id, name, address, phonenumber, res) {
+            conn.query(
+                'UPDATE users SET user_name=?, address = ?, phonenumber = ? WHERE id = ?',
+                [name, address, phonenumber, id],
+                function(err, result) {
+                    if (err) {
+                        console.log('Error üzenet száll a szélben: ', err);
+                        res(err, null);
+                    } else {
+                        console.log('A %i ID-jú user adatainak módosítása sikeres! A result objektum tartalma: ', id, result.info);
+                        res(null, result);
                     }
                 }
             );

@@ -25,8 +25,10 @@ import retrofit2.Retrofit;
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 public class AdminOrdersActivity extends AppCompatActivity {
-    private RecyclerView orderRecyclerView;
-    private RecyclerView.Adapter orderRecyclerViewAdapter;
+    RecyclerView.Adapter orderRecyclerViewAdapter;
+
+    //UI
+    RecyclerView orderRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

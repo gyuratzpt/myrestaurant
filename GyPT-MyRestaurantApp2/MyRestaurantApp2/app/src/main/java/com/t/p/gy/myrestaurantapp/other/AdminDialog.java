@@ -43,17 +43,18 @@ public class AdminDialog {
         categorySpinnerArrayAdapter = new ArrayAdapter(_context, R.layout.spinner_item, DataProcessor.getInstance().getCustomizedCategoryList("Válassz..."));
         categorySpinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         categorySpinner.setAdapter(categorySpinnerArrayAdapter);
-
+        categorySpinner.setSelection(0);
 
         Button okButton = (Button) adminDialog.findViewById(R.id.dialog_additem_okbutton);
         Button cancelButton = (Button) adminDialog.findViewById(R.id.dialog_additem_cancelbutton);
         okButton.setText(_buttonTitle);
+
+
         if (_buttonTitle.equals("Módosít")) {
             Log.i("myLog", "Tétel id-ja: " + dbId);
-            dp.getItemFromDatabase(dbId, etCategory, etName, etDescription, etPrice, etImage);
+            dp.getItemFromDatabase(dbId, categorySpinner, etName, etDescription, etPrice, etImage);
         }
 
-        categorySpinner.setSelection(0);
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -94,7 +95,7 @@ public class AdminDialog {
                             etName.getText().toString(),
                             etDescription.getText().toString(),
                             Integer.parseInt(etPrice.getText().toString()),
-                            (etImage.getText().toString().length() > 0) ? etImage.getText().toString() : null
+                            (etImage.getText().toString().length() > 0) ? etImage.getText().toString() : "noimage"
                     );
 
                     Log.i("myLog", "Lista mérete hozzáadás után: " + dp.getProductList(0).size());

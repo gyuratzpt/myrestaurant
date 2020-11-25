@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,112 +16,39 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
-
-import com.auth0.android.jwt.JWT;
-import com.t.p.gy.myrestaurantapp.connection.BackendAPI;
-import com.t.p.gy.myrestaurantapp.connection.RetrofitClient;
 import com.t.p.gy.myrestaurantapp.data.DataProcessor;
-import com.t.p.gy.myrestaurantapp.data.User;
+
 
 public class LoginActivity extends AppCompatActivity {
-    //DataProcessor myDataProcessor = DataProcessor.getInstance();
     DataProcessor myDataProcessor;
-    //Gson gson = new GsonBuilder().setLenient().create(); //???
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-    //Retrofit retrofit = RetrofitClient.getInstance(); //retrofit library
-    //BackendAPI myAPI = retrofit.create(BackendAPI.class); //interface deklarálás a BackendAPI felé
 
     //UI
     Button loginButton, regButton, regButtonFinish;
     EditText emailEditText, passwordEditText,regETItems[];
     TextView forgotPasswordTextView, regTVItems[];
+    ImageView mainLogoImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-        //settings.edit().clear().apply();
-
-        ConnectivityManager cm =
-                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        ImageView mainLogoImageView = (ImageView) findViewById(R.id.mainLogoImageView);
-        if(isConnected){
+        if(checkInternet()){
             myDataProcessor = DataProcessor.getInstance();
-            mainLogoImageView.setImageBitmap(DataProcessor.getInstance().getImage("UI","logo"));
             Log.i("myLog", "van net! :)");
-            initUI();
+            initUI(true);
             //felhasználó ellenőrzése
             myDataProcessor.initSP(LoginActivity.this);
-            tryLogin("Activity");
+            tryLogin("LoginActivity");
         }
         else{
             Log.i("myLog", "nincs net! :(");
-            mainLogoImageView.setImageResource(R.drawable.nointernet);
+            initUI(false);
             Toast.makeText(this, "Az alkalmazás használatához internetkapcsolat szükséges!", Toast.LENGTH_LONG).show();
         }
-
-
     }
-
-    private void initUI(){
-        loginButton = (Button) findViewById(R.id.loginButton);
-        regButton = findViewById(R.id.regButton);
-        regButtonFinish = findViewById(R.id.regButtonFinish);
-        emailEditText = findViewById(R.id.emailEditText);
-        passwordEditText = findViewById(R.id.passwordEditText);
-        forgotPasswordTextView = findViewById(R.id.forgotPasswordTextView);
-        regTVItems = new TextView[]{findViewById(R.id.regNameText), findViewById(R.id.regAddressText), findViewById(R.id.regPhoneNumberText)};
-        regETItems = new EditText[]{findViewById(R.id.regNameEdittext), findViewById(R.id.regAddressEdittext), findViewById(R.id.regPhoneNumberEdittext)};
-
-        for (TextView tv : regTVItems) {
-            tv.setVisibility(View.INVISIBLE);
-        }
-        for (EditText et : regETItems) {
-            et.setVisibility(View.INVISIBLE);
-        }
-        regButtonFinish.setVisibility(View.INVISIBLE);
-
-        loginButton.setOnClickListener(v -> {
-            if (areFieldsFilled(emailEditText, passwordEditText))
-                loginUser(emailEditText.getText().toString(), passwordEditText.getText().toString());
-        });
-
-        regButton.setOnClickListener(v -> {
-
-                    if (areFieldsFilled(emailEditText, passwordEditText)){ //megnézi nem üres-e valamelyik mező
-                        Toast.makeText(LoginActivity.this, "Add meg a további kötelező adatokat a regisztrációhoz!", Toast.LENGTH_LONG).show();
-                        for (TextView tv : regTVItems) {
-                            tv.setVisibility(View.VISIBLE);
-                        }
-                        for (EditText et : regETItems) {
-                        et.setVisibility(View.VISIBLE);
-
-                        }
-                        regButtonFinish.setVisibility(View.VISIBLE);
-                        regButtonFinish.setOnClickListener(view -> {
-                            if (areRegFieldsFilled(regETItems)) {
-
-                            }
-                            registerUser(emailEditText.getText().toString(), passwordEditText.getText().toString(), regETItems[0].getText().toString(), regETItems[1].getText().toString(), regETItems[2].getText().toString());
-                        });
-                }
-
-        });
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -136,27 +64,78 @@ public class LoginActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-
-    private void startMainActivity(){
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+    private boolean checkInternet(){
+        ConnectivityManager cm =
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
-        //!!!!!!
-    private boolean isTokenUserStored(){
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
 
-        final String token = settings.getString("token", "not found");
-        //final String userString = settings.getString("token", "not found");//kétszer van a "token" key, helyette:
-        final String userString = settings.getString("user", "not found");
+    private void initUI(boolean _env){
+        mainLogoImageView = (ImageView) findViewById(R.id.mainLogoImageView);
+        loginButton = (Button) findViewById(R.id.loginButton);
+        regButton = findViewById(R.id.regButton);
+        regButtonFinish = findViewById(R.id.regButtonFinish);
+        emailEditText = findViewById(R.id.emailEditText);
+        passwordEditText = findViewById(R.id.passwordEditText);
+        forgotPasswordTextView = findViewById(R.id.forgotPasswordTextView);
+        forgotPasswordTextView.setVisibility(View.GONE);
+        regTVItems = new TextView[]{findViewById(R.id.regNameText), findViewById(R.id.regAddressText), findViewById(R.id.regPhoneNumberText)};
+        regETItems = new EditText[]{findViewById(R.id.regNameEdittext), findViewById(R.id.regAddressEdittext), findViewById(R.id.regPhoneNumberEdittext)};
+        for (TextView tv : regTVItems) {
+            tv.setVisibility(View.INVISIBLE);
+        }
+        for (EditText et : regETItems) {
+            et.setVisibility(View.INVISIBLE);
+        }
+        regButtonFinish.setVisibility(View.INVISIBLE);
 
-        return !token.equals("not found") || !userString.equals("not found");
+        if(_env) {
+            mainLogoImageView.setImageBitmap(DataProcessor.getInstance().getImage("UI","logo"));
+
+            loginButton.setOnClickListener(v -> {
+                if (areFieldsFilled(emailEditText, passwordEditText))
+                    loginUser(emailEditText.getText().toString(), passwordEditText.getText().toString());
+            });
+            regButton.setOnClickListener(v -> {
+
+                if (areFieldsFilled(emailEditText, passwordEditText)) { //megnézi nem üres-e valamelyik mező
+                    Toast.makeText(LoginActivity.this, "Add meg a további kötelező adatokat a regisztrációhoz!", Toast.LENGTH_LONG).show();
+                    for (TextView tv : regTVItems) {
+                        tv.setVisibility(View.VISIBLE);
+                    }
+                    for (EditText et : regETItems) {
+                        et.setVisibility(View.VISIBLE);
+
+                    }
+                    regButtonFinish.setVisibility(View.VISIBLE);
+                    regButtonFinish.setOnClickListener(view -> {
+                        if (areRegFieldsFilled(regETItems)) {
+                            registerUser(emailEditText.getText().toString(), passwordEditText.getText().toString(), regETItems[0].getText().toString(), regETItems[1].getText().toString(), regETItems[2].getText().toString());
+                        }
+                        else {
+                            Toast.makeText(LoginActivity.this, "Tölts ki minden mezőt!", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+
+            });
+        }
+        else{
+            mainLogoImageView.setImageResource(R.drawable.nointernet);
+            emailEditText.setEnabled(false);
+            passwordEditText.setEnabled(false);
+            loginButton.setClickable(false);
+            regButton.setClickable(false);
+        }
     }
 
     private boolean areFieldsFilled(EditText editText1, EditText editText2){
         Log.i("myLog", "Metódus: areFieldsFilled running...");
         if (editText1.getText().toString().equals("") || editText2.getText().toString().equals("")) {
             StringBuilder tmpStr = new StringBuilder();
-            Log.i("myLog", tmpStr.toString());
             if (editText1.getText().toString().equals("")) tmpStr.append("A név");
             if (editText2.getText().toString().equals("") && tmpStr.toString().equals("")) tmpStr.append("A jelszó");
             else if (editText2.getText().toString().equals("") && !tmpStr.toString().equals("")) tmpStr.append(" és a jelszó");
@@ -178,8 +157,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(final String email, final String password){
-        myDataProcessor.loginUserV2(email, password);
-        tryLogin("loginUser");
+        myDataProcessor.loginUserV2(this, email, password);
+        Handler h = new Handler();
+        Runnable r = () -> {
+            tryLogin("loginUser()");
+        };
+        h.postDelayed(r, 500);
     }
 
     private void registerUser(final String _email,
@@ -189,15 +172,38 @@ public class LoginActivity extends AppCompatActivity {
                               final String _phonenumber){
         Log.i("myLog", "registerUser running...");
         Log.i("myLog", "Adatok: " + emailEditText.getText().toString() + " " + passwordEditText.getText().toString() + " " + regETItems[0].getText().toString()+ " " + regETItems[1].getText().toString()+ " " + regETItems[2].getText().toString());
-        myDataProcessor.registerUserV2(_email, _password, _username, _address, _phonenumber);
-        //myDataProcessor.loginUserV2(email, password);
-        //tryLogin("registerUser");
+        myDataProcessor.registerUserV2(this, _email, _password, _username, _address, _phonenumber);
+        /*
+        Handler h = new Handler();
+        Runnable r = () -> {
+            tryLogin("registerUser()");
+        };
+        h.postDelayed(r, 500);
+
+         */
     }
 
     private void tryLogin(String _source){
         if (myDataProcessor.checkUserToken()) startMainActivity();
         else Log.i("myLog", "A(z) " + _source + " nem talál érvényes felhasználót!");
     }
+
+    private void startMainActivity(){
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
     /*
@@ -272,5 +278,3 @@ public class LoginActivity extends AppCompatActivity {
                 }));
     }
     */
-
-}

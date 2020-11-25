@@ -33,16 +33,14 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 public class MenuActivity extends AppCompatActivity {
     DataProcessor myDataProcessor = DataProcessor.getInstance();
-
-    private RecyclerView.Adapter menuRecyclerViewAdapter;
+    RecyclerView.Adapter menuRecyclerViewAdapter;
 
     //UI elemek
-    Spinner menuSpinner;
     RecyclerView menuRecyclerView;
+    Spinner menuSpinner;
     TextView placeholder;
-    static TextView tv_SummedPrice;
     Button addToCartbutton;
-
+    static TextView tv_SummedPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,22 +136,8 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
     }
-
     //actions
     public static void refreshPriceTextView(int x){
         tv_SummedPrice.setText(Integer.toString(x) + "Ft");
     }
-
 }
-
-    /*
-    //saját metódusok
-    @Override
-    protected void onResume() {
-        super.onResume();
-        for(SingleMenuItem x : foodProcessor.getFoodsList()){
-            x.resetOrderAmount(); //el és visszanavigálás után törli a korábbi értékeket
-        }
-        Log.i("MyLog","FoodActivity onResume");
-    }
-     */

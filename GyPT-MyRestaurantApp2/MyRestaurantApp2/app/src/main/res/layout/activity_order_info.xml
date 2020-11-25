@@ -119,14 +119,6 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <Button
-        android:id="@+id/order_info_backbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="backtocart"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <Button
         android:id="@+id/order_info_sendbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -135,6 +127,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
+
+        android:layout_marginBottom="10dp"
         />
 
 

@@ -1,19 +1,18 @@
 package com.t.p.gy.myrestaurantapp.data;
 
+import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Order {
-    int orderID;
-    String customerName;
-    String customerAddress;
-    String customerPhoneNumber;
-    String orderNote;
-    String orderTime;
-    List<ShortOrderInfo> orderItems = new ArrayList<>();
-    boolean isCompleted = false;
-
+    private int orderID;
+    private String customerName;
+    private String customerAddress;
+    private String customerPhoneNumber;
+    private String orderNote;
+    private String orderTime;
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     public Order(int _orderID,
                  String _customer,
@@ -26,7 +25,12 @@ public class Order {
         this.customerAddress = _customerAddress;
         this.customerPhoneNumber= _customerPhoneNumber;
         this.orderNote = _orderNote;
-        this.orderTime = _orderTime;
+
+        StringBuilder tmpStr = new StringBuilder(_orderTime);
+        Log.i("myLog", "tmpStr: " + tmpStr.toString());
+        tmpStr.delete(_orderTime.indexOf('.'), tmpStr.length());
+        tmpStr.setCharAt(10,' ');
+        this.orderTime = tmpStr.toString();
     }
 
     //getter
@@ -49,7 +53,7 @@ public class Order {
     }
     public int getFinalPrice(){
         int total = 0;
-        for (ShortOrderInfo soi : orderItems){
+        for (OrderItem soi : orderItems){
             total += soi.getAmount()*soi.getPrice();
         }
         return total;
@@ -57,31 +61,28 @@ public class Order {
 
     //setter
     public void addSOIItem(String _itemName, int _itemAmount, int _itemPrice){
-        orderItems.add(new ShortOrderInfo(_itemName, _itemAmount, _itemPrice));
+        orderItems.add(new OrderItem(_itemName, _itemAmount, _itemPrice));
     }
 
     @Override
     public String toString() {
         StringBuilder tmpString = new StringBuilder();
-        for(ShortOrderInfo soi : orderItems){
+        for(OrderItem soi : orderItems){
             tmpString.append("- " + soi.getName() + ", " + soi.getAmount() + "db. Részösszeg: " + soi.getAmount()*soi.getPrice() + "\n");
         }
         tmpString.append("\n  Ár összesen: " + getFinalPrice() + "Ft");
         return tmpString.toString();
     }
 
-    private class ShortOrderInfo{
-        String name;
-        int amount;
-        int price;
-
-
-        ShortOrderInfo(String _itemName, int _itemAmount, int _itemPrice){
+    private class OrderItem {
+        private String name;
+        private int amount;
+        private int price;
+        OrderItem(String _itemName, int _itemAmount, int _itemPrice){
             this.name = _itemName;
             this.amount = _itemAmount;
             this.price = _itemPrice;
         }
-
         public String getName() {
             return name;
         }
